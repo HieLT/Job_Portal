@@ -1,0 +1,41 @@
+.authLoginWrap {
+    .formWrap {
+        .content {
+            .header {
+                @apply font-semibold text-xl text-center
+            }
+
+            .headerDetail {
+                @apply text-center mb-10 mt-2 text-sm
+            }
+
+            @apply w-[85%]
+        }
+
+        @apply w-1/2 bg-[#766df4e6] text-white px-16 py-16 flex justify-center items-center
+    }
+
+    .viewWrap {
+        .logoWrap {
+            .company {
+                img {
+                    @apply w-4/12
+                }
+
+                @apply flex justify-center
+            }
+
+            .decorWrap {
+                img {
+                    @apply w-8/12
+                }
+
+                @apply flex justify-center
+            }
+        }
+
+        @apply flex justify-center justify-items-center items-center w-6/12 h-screen bg-[url('https://preview.keenthemes.com/metronic8/demo1/assets/media/misc/auth-bg.png')] bg-cover
+    }
+
+    @apply flex h-full
+}

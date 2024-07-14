@@ -1,0 +1,81 @@
+@import '../../assets/scss/variables';
+
+.boxMainLayout {
+    .headerBox {
+        @apply bg-gray-100 h-[74px] mb-[-74px]
+    }
+
+    @apply bg-gray-100
+}
+
+.mainLayoutWrap {
+    .mainWrap {
+        .mainContentWrap {
+            .headerMainWrap {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+
+                .titleWrap {
+                    font-size: 20px;
+                    color: $colorBlack;
+                }
+
+                .breadcrumbWrap {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    a {
+                        text-decoration: none;
+                    }
+                }
+            }
+
+            .content {
+                &::-webkit-scrollbar {
+                    @apply w-[5px] transition-all duration-200
+                }
+
+                &::-webkit-scrollbar-track {
+                    @apply bg-transparent rounded-md
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    @apply bg-transparent rounded-lg transition-all duration-200
+                }
+
+                &:hover::-webkit-scrollbar-thumb:vertical {
+                    @apply bg-black-75
+                }
+
+                &::-webkit-scrollbar-thumb:vertical:hover {
+                    @apply bg-black-75
+                }
+
+                @apply max-h-[calc(100vh_-_68px)] overflow-y-auto overflow-x-hidden py-[20px] px-[22px]
+            }
+
+            padding: 31px 22px 30px 22px;
+            @apply h-[calc(100vh_-_60px)] bg-gray-115 pt-[68px]
+        }
+
+        @apply w-[calc(100%_-_250px)] ml-[250px] h-[100vh] transition-all duration-500 relative
+    }
+
+    .mainWrapWithConditionSideBarClose {
+        @apply w-[calc(100%_-_64px)] ml-[64px]
+    }
+
+    @media only screen and (max-width: 1024px) {
+        .mainWrap {
+            @apply w-[calc(100%_-_64px)] ml-[64px] h-full transition-all duration-500
+        }
+        .mainWrapWithConditionSideBarClose {
+            @apply w-[calc(100%_-_64px)] ml-[64px]
+        }
+    }
+
+    @apply max-w-[1920px] m-auto
+}
