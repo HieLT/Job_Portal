@@ -1,0 +1,51 @@
+.base-input {
+    &:focus, &:hover, &:focus-within {
+        @apply border-none outline-none shadow-none
+    }
+
+    &.ant-input {
+        &:focus, &:hover, &:focus-within {
+            @apply outline-none shadow-none
+        }
+    }
+
+    ::placeholder {
+        @apply text-[#c2befa]
+    }
+
+    .ant-input {
+        @apply border-none text-white py-2.5 px-5 text-sm outline-none font-medium bg-[#9088f6] shadow-none
+    }
+
+    .ant-input-password {
+        .ant-input {
+            @apply border-none bg-[#9088f6] text-white
+        }
+
+        @apply border-none text-white py-2.5 px-5 text-sm outline-none font-medium bg-[#9088f6] shadow-none
+    }
+}
+
+.base-input-password {
+    &:focus, &:hover, &:focus-within {
+        @apply border-none outline-none shadow-none
+    }
+
+    &.ant-input {
+        &:focus, &:hover, &:focus-within {
+            @apply outline-none shadow-none
+        }
+    }
+
+    ::placeholder {
+        @apply text-[#c2befa]
+    }
+
+    .ant-input-password {
+        .ant-input {
+            @apply border-none bg-[#9088f6] text-white
+        }
+
+        @apply border-none text-white py-2.5 px-5 text-sm outline-none font-medium bg-[#9088f6] shadow-none
+    }
+}

@@ -1,0 +1,11 @@
+.forgot, .signup {
+    span {
+        @apply cursor-pointer text-sm
+    }
+
+    @apply text-right mt-3 text-white mb-4
+}
+
+.signup {
+    @apply text-center
+}
