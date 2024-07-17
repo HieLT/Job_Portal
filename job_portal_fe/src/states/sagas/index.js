@@ -6,7 +6,7 @@ import routeSaga from '../modules/routing/saga';
 export default function* sagas() {
     yield all([
         fork(routeSaga),
-        fork(profileSaga),
+        // fork(profileSaga),
         fork(appSaga),
     ]);
 }

@@ -1,4 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
+import {getAuthEmail} from "../../../utils/localStorage.js";
 
 const authSlice = createSlice({
     name: 'auth',
@@ -11,17 +12,20 @@ const authSlice = createSlice({
         },
         isLoadingBtnLogin: false,
 
+        /* Forgot password */
         errorForgotPassword: {
             email: ''
         },
         isLoadingBtnForgotPassword: false,
 
+        /* Reset password */
         errorResetPassword: {
             password: '',
             confirmPassword: ''
         },
         isLoadingBtnResetPassword: false,
 
+        /* Sign up */
         errorSignup: {
             username: '',
             first_name: '',
@@ -30,7 +34,13 @@ const authSlice = createSlice({
             mobile: '',
             password: '',
         },
-        isLoadingBtnSignup: false
+        isLoadingBtnSignup: false,
+
+        isLoadingVerifyEmail: false,
+        verifyResult: {
+            type: 0,
+            message: ''
+        }
     },
     reducers: {
         setErrorSignup: (state, action) => ({
@@ -53,6 +63,20 @@ const authSlice = createSlice({
             ...state,
             isLoadingBtnLogin: false
         }),
+
+        startRequestLoginWithGoogle: (state) => ({
+            ...state,
+            isLoadingBtnLogin: true
+        }),
+        startRequestLoginWithGoogleSuccess: (state) => ({
+            ...state,
+            isLoadingBtnLogin: false
+        }),
+        startRequestLoginWithGoogleFail: (state) => ({
+            ...state,
+            isLoadingBtnLogin: false
+        }),
+
         startRequestGetMe: (state) => ({
             ...state,
         }),
@@ -60,7 +84,13 @@ const authSlice = createSlice({
             return ({
                 ...state,
                 isAuthSuccess: true,
-                authUser: action.payload.data
+                authUser: {
+                    ...state.authUser,
+                    profile: {
+                        email: getAuthEmail(),
+                        ...action.payload.profile
+                    }
+                }
             })
         },
         startRequestGetMeFail: (state) => ({
@@ -117,10 +147,37 @@ const authSlice = createSlice({
             ...state,
             isLoadingBtnSignup: false
         }),
+
+        requestVerifyEmail: (state) => ({
+            ...state,
+            isLoadingVerifyEmail: true
+        }),
+        requestVerifyEmailSuccess: (state) => ({
+            ...state,
+            isLoadingVerifyEmail: false,
+            verifyResult: {
+                type: 1,
+                message: 'Xác thực email thành công'
+            }
+        }),
+        requestVerifyEmailFail: (state) => ({
+            ...state,
+            isLoadingVerifyEmail: false,
+            verifyResult: {
+                type: 0,
+                message: 'Xác thực email thất bại'
+            }
+        }),
+        setVerifyResult: (state, action) => ({
+            ...state,
+            verifyResult: action.payload
+        }),
     }
 })
 
 export const {
+    setVerifyResult,
+    startRequestLoginWithGoogle, startRequestLoginWithGoogleSuccess, startRequestLoginWithGoogleFail,
     requestSignup, requestSignupSuccess, requestSignupFail,
     setErrorSignup,
     setErrorLogin, setErrorForgotPassword, setErrorResetPassword, setAuthSuccess,
@@ -128,6 +185,7 @@ export const {
     startRequestGetMe, startRequestGetMeSuccess, startRequestGetMeFail,
     startRequestForgotPassword, startRequestForgotPasswordSuccess, startRequestForgotPasswordFail,
     startRequestResetPassword, startRequestResetPasswordSuccess, startRequestResetPasswordFail,
+    requestVerifyEmail, requestVerifyEmailSuccess, requestVerifyEmailFail
 } = authSlice.actions
 
 export default authSlice.reducer;

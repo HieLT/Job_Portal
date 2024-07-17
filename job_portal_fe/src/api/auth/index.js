@@ -2,29 +2,31 @@ import callApi from "../callApi";
 import {
     requestSignup,
     requestSignupFail,
-    requestSignupSuccess,
+    requestSignupSuccess, requestVerifyEmail, requestVerifyEmailFail, requestVerifyEmailSuccess,
     startRequestGetMe,
     startRequestGetMeFail,
     startRequestGetMeSuccess,
     startRequestLogin,
     startRequestLoginFail,
     startRequestLoginSuccess,
+    startRequestLoginWithGoogle,
+    startRequestLoginWithGoogleFail,
+    startRequestLoginWithGoogleSuccess,
     startRequestResetPassword,
     startRequestResetPasswordFail,
     startRequestResetPasswordSuccess,
 } from "../../states/modules/auth";
-
-const apiUrl = import.meta.env.VITE_USER_SERVICE_API_URL
+import store from "../../states/configureStore.js";
+import {USER_ROLE} from "../../utils/constants.js";
+import {getAuthRole} from "../../utils/localStorage.js";
 
 export const login = (data) => async (dispatch, getState) => {
     return callApi({
-        content: 'multipart/form-data',
-        url: apiUrl,
         method: 'post',
-        apiPath: `api/auth/login`,
+        apiPath: `login`,
         actionTypes: [startRequestLogin, startRequestLoginSuccess, startRequestLoginFail],
         variables: {
-            username: data.username,
+            email: data.email,
             password: data.password,
         },
         dispatch,
@@ -32,12 +34,26 @@ export const login = (data) => async (dispatch, getState) => {
     })
 }
 
-export const getMe = () => async (dispatch, getState) => {
+export const loginWithGoogle = (token) => async (dispatch, getState) => {
     return callApi({
-        content: "",
-        url: apiUrl,
+        method: "post",
+        apiPath: "auth/google",
+        actionTypes: [
+            startRequestLoginWithGoogle,
+            startRequestLoginWithGoogleSuccess,
+            startRequestLoginWithGoogleFail,
+        ],
+        headers: {Authorization: "Bearer " + token},
+        dispatch,
+        getState
+    })
+}
+
+export const getMe = () => async (dispatch, getState) => {
+    const isCandidate = getAuthRole() === USER_ROLE['CANDIDATE']
+    return callApi({
         method: 'get',
-        apiPath: `api/auth/info`,
+        apiPath: `${isCandidate ? 'candidate' : 'company'}` + '/get-profile',
         actionTypes: [startRequestGetMe, startRequestGetMeSuccess, startRequestGetMeFail],
         variables: {},
         dispatch,
@@ -62,12 +78,21 @@ export const resetPassword = (data) => async (dispatch, getState) => {
 
 export const signup = (data) => async (dispatch, getState) => {
     return callApi({
-        content: 'multipart/form-data',
-        url: apiUrl,
         method: 'post',
-        apiPath: `api/auth/register`,
+        apiPath: `register`,
         actionTypes: [requestSignup, requestSignupSuccess, requestSignupFail],
         variables: data,
+        dispatch,
+        getState
+    })
+}
+
+export const verifyEmail = (token) => async (dispatch, getState) => {
+    return callApi({
+        method: 'get',
+        apiPath: `gmail/verify/${token}`,
+        actionTypes: [requestVerifyEmail, requestVerifyEmailSuccess, requestVerifyEmailFail],
+        variables: {},
         dispatch,
         getState
     })
