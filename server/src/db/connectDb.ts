@@ -3,7 +3,7 @@ mongoose.set('strictQuery', true);
 
 async function connect() {
     try {
-        await mongoose.connect("mongodb://127.0.0.1:27017/job_portal");
+        await mongoose.connect(process.env.MONGO_URI);
         console.log("Successfully connected to database!");
     }
     catch(err:any) {
