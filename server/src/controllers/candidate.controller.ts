@@ -2,6 +2,7 @@ import {Request, Response} from "express";
 import candidateService from "../services/candidate.service";
 import accountModel from "../models/account.model";
 import fileModel from "../models/file.model";
+import bucket from "../config/firsebase";
 
 class CandidateController {
     async createCandidate(req: Request, res: Response) {
@@ -27,7 +28,8 @@ class CandidateController {
 
     async getCandidateById(req: Request, res: Response) {
         try {
-            const candidate = await candidateService.getCandidateById(req.params.id);
+            const id = req.query.id;
+            const candidate = await candidateService.getCandidateById(String(id));
             res.status(200).send(candidate);
         } catch (error) {
             res.status(500).send({message: error});
@@ -66,6 +68,31 @@ class CandidateController {
         catch(error) {
             res.status(500).send({message: error});
         }
+    }
+
+    async uploadAvatar(req: Request, res: Response) {
+        try {
+            const {id_candidate, img} = req.body;
+            const decodedImage = Buffer.from(img.uri, 'base64');
+
+            const fileName = `image/${Date.now()}.${img.type}`;
+            const file = bucket.file(fileName);
+
+            await file.save(decodedImage, {
+                metadata: {
+                    contentType: `image/${img.type}`,
+                },
+            });
+            const url = await file.getSignedUrl({
+                action: 'read',
+                expires: '12-12-2050'
+            });
+            await candidateService.uploadImage(id_candidate, url[0]);
+            res.status(200).send({message: 'Upload avatar successfully'});
+        }
+        catch(error) {
+            res.status(500).send({message: error});
+        } 
     }
 
     async updateCandidate(req: Request, res: Response) {

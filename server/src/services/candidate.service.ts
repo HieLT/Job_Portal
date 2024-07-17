@@ -58,6 +58,18 @@ class CandidateService {
         }
     }
 
+    async uploadImage(id: string, avatar: string) {
+        try {
+            await candidateModel.findByIdAndUpdate(id, {
+                avatar: avatar
+            }).exec();
+            return candidateModel.findById(id).exec();
+        }
+        catch (error) {
+            throw error;
+        }
+    } 
+
     async deleteCandidate(id: string) {
         try {
             await candidateModel.findByIdAndDelete(id).exec();

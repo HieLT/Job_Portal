@@ -50,7 +50,16 @@ class Auth {
                             verified: user.verified,
                             socket_id: user.socket_id,
                         };
-                        const profile = await candidateService.getCandidateById(String(user.candidate || user.company));
+                        let profile = null;
+                        if (user.candidate) {
+                            profile = await candidateService.getCandidateById(String(user.candidate));
+                        }
+                        else if (user.company) {
+                            // get profile company
+                        }
+                        else {
+                            // get profile admin
+                        }
                         res.status(200).send({
                             account: dataUser,
                             profile: profile
@@ -65,7 +74,7 @@ class Auth {
                 }
             }
             else {
-                res.status(404).send({message: 'User not found'});
+                res.status(401).send({message: 'User not found'});
             }
         }
         catch(err: any) {

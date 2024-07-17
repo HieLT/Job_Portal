@@ -5,6 +5,7 @@ interface ICandidate extends Document {
     last_name: string;
     birth: Date;
     phone: string;
+    avatar: string;
     gender: 'Male' | 'Female' | 'Other';
     bio: string;
     profile_description: string;
@@ -28,6 +29,7 @@ const Candidate = new Schema<ICandidate>({
     phone: {
         type: String
     },
+    avatar: {type: String},
     gender: {
         type: String,
         enum: ['Male', 'Female', 'Other']
