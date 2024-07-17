@@ -1,6 +1,7 @@
 import passport from "passport";
 import { Request } from "express";
 import {Strategy as GoogleStrategy} from "passport-google-oauth2";
+import jwt from "jsonwebtoken";
 import { config } from "dotenv";
 import accountModel from "../models/account.model";
 import candidateModel from "../models/candidate.model";
@@ -22,11 +23,13 @@ passport.use(new GoogleStrategy({
         let account = await accountModel.findOne({email: profile.emails[0].value}).exec();
         let profileUser = null;
         if (!account) {
+            const token = jwt.sign({email: profile.emails[0].value}, process.env.TOKEN_KEY!);
             account = new accountModel({
                 email: profile.emails[0].value,
                 role: request.query.role || 'Candidate',
                 isGoogleAccount: true,
-                socket_id: ''
+                socket_id: '',
+                token: token
             });
             await account.save();
         }
@@ -46,7 +49,8 @@ passport.use(new GoogleStrategy({
                 _id: account._id,
                 email: account.email,
                 role: account.role,
-                socket_id: account.socket_id
+                token: account.token,
+                socket_id: account.socket_id,
             },
             profileUser
         };
@@ -83,6 +87,7 @@ passport.deserializeUser(async (id: string, done) => {
                 id: account._id,
                 email: account.email,
                 role: account.role,
+                token: account.token,
                 socket_id: account.socket_id
             },
             profileUser

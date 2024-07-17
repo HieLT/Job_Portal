@@ -1,8 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import passport from "../config/passport";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import sendVerificationEmail from "../utils/mailValidation";
 import candidateService from "../services/candidate.service";
+import companyService from "../services/company.service";
+import adminService from "../services/admin.service";
 import accountModel from "../models/account.model";
 
 class Auth {
@@ -16,10 +19,12 @@ class Auth {
             }
             else {
                 const hashedPassword = await bcrypt.hash(password, 10);
+                const token = await jwt.sign({email: email}, process.env.TOKEN_KEY!);
                 const newUser = new accountModel({
                     email,
                     password: hashedPassword,
                     role,
+                    token,
                     verified: false,
                     socket_id: ''
                 });
@@ -49,6 +54,7 @@ class Auth {
                             role: user.role,
                             verified: user.verified,
                             socket_id: user.socket_id,
+                            token: user.token
                         };
                         let profile = null;
                         if (user.candidate) {
@@ -56,9 +62,11 @@ class Auth {
                         }
                         else if (user.company) {
                             // get profile company
+                            profile = await companyService.getProfile(String(user.company));
                         }
                         else {
                             // get profile admin
+                            profile = await adminService.getProfile(String(user.admin));
                         }
                         res.status(200).send({
                             account: dataUser,
