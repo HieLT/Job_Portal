@@ -49,3 +49,9 @@
         @apply border-none text-white py-2.5 px-5 text-sm outline-none font-medium bg-[#9088f6] shadow-none
     }
 }
+
+.checkbox-custom {
+    span {
+        @apply text-white
+    }
+}

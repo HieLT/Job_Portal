@@ -1,29 +1,41 @@
 import {redirect} from "react-router-dom";
 import store from "../states/configureStore";
 import {initialSaga} from "../states/modules/routing/index.js";
-import {convertQueryStringToObject, hasPermission} from "../utils/helper";
+import {convertQueryStringToObject, hasRole} from "../utils/helper";
 import {getMe} from "../api/auth/index.js";
-import {getAuthToken} from "../utils/localStorage";
+import {getAuthToken, getProfile, setProfile} from "../utils/localStorage";
 import {setLocation} from "../states/modules/app/index.js";
 
-export const rootLoader = async ({request, params}, requiredAuth, saga = null, permissions = null) => {
+export const rootLoader = async ({request, params}, requiredAuth, saga = null, roleRequired = null) => {
     const url = new URL(request.url);
     let {auth} = store.getState();
 
-    const firstCondition = !auth.isAuthSuccess && getAuthToken();
-    const secondCondition = url.pathname === '/profile';
+    const authRoutes = ['/login', '/signup', '/forgot-password', '/verify-email']
+    const firstCondition =  getAuthToken();
+    const secondCondition = url.pathname !== '/account/profile' && !authRoutes.includes(url.pathname);
 
-    if (firstCondition || secondCondition) {
+    if (!auth.isAuthSuccess && (firstCondition || secondCondition)) {
         await store.dispatch(getMe());
         auth = store.getState().auth;
+        setProfile(1)
+    }
+
+    if (url.pathname === '/account/profile') {
+        if (getProfile()) {
+            await store.dispatch(getMe());
+        }
     }
 
     if (requiredAuth) {
         if (auth.isAuthSuccess) {
-            if (permissions && !hasPermission(permissions)) {
+            if (roleRequired && !hasRole(roleRequired)) {
                 return redirect('/403');
             }
         } else {
+            let {app} = store.getState()
+            if (app.location.prevPathName === '/account/profile') {
+                return redirect('/account/profile');
+            }
             return redirect('/login');
         }
     } else if (auth.isAuthSuccess) {

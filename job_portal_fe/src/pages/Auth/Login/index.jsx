@@ -9,13 +9,14 @@ import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {setErrorLogin} from "../../../states/modules/auth/index.js";
 import _ from "lodash";
-import {handleCheckValidateConfirm} from "../../../utils/helper.js";
-import {login} from "../../../api/auth/index.js";
+import {getNotification, handleCheckValidateConfirm} from "../../../utils/helper.js";
+import {login, loginWithGoogle} from "../../../api/auth/index.js";
+import {GoogleLogin, GoogleOAuthProvider} from "@react-oauth/google";
 
 function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [datFormLogin, setDatFormLogin] = useState({
+    const [loginData, setDatFormLogin] = useState({
         email: '',
         password: ''
     })
@@ -39,7 +40,7 @@ function Login() {
         }
 
         let value = e.target.value;
-        let data = _.cloneDeep(datFormLogin);
+        let data = _.cloneDeep(loginData);
         data[type] = value
         setDatFormLogin(data)
     }
@@ -51,16 +52,16 @@ function Login() {
     }
 
     const handleConfirmLogin = () => {
-        const validate = handleCheckValidateConfirm(datFormLogin, errorLogin)
+        const validate = handleCheckValidateConfirm(loginData, errorLogin)
         if (!validate.isError) {
-            dispatch(login(datFormLogin))
+            dispatch(login(loginData))
         } else {
             dispatch(setErrorLogin(validate.dataError))
         }
     }
 
     return (
-        <AuthLayout title={'Đăng nhập'} description={'Cổng thông tin việc làm'} height={'h-screen'} width={'w-[900px]'}>
+        <AuthLayout title={'Đăng nhập'} description={'Cổng thông tin việc làm'} height={'h-screen'} width={'w-[1000px]'}>
             <div className={`input-wrap base-input`}>
                 <div className={'label-wrap'}>
                     Email
@@ -68,7 +69,7 @@ function Login() {
                 <Input
                     className={`${errorLogin && errorLogin.email?.length > 0 ? 'error-input !border-none' : ''}`}
                     placeholder={'Địa chỉ email'}
-                    value={datFormLogin.email}
+                    value={loginData.email}
                     onChange={(e) => handleChangeInput(e, 'email')}
                     onKeyDown={(e) => handleKeyDown(e)}
                 />
@@ -90,7 +91,7 @@ function Login() {
                 <Input.Password
                     className={`!pt-[9px] !pb-[9px] ${errorLogin && errorLogin.password?.length > 0 ? 'error-input !border-none' : ''}`}
                     placeholder={'Mật khẩu'}
-                    value={datFormLogin.password}
+                    value={loginData.password}
                     onChange={(e) => handleChangeInput(e, 'password')}
                     onKeyDown={(e) => handleKeyDown(e)}
                 />
@@ -135,6 +136,24 @@ function Login() {
                 <span onClick={() => navigate('/signup')} className={'underline'}>Đăng ký</span>
             </div>
 
+            <div className={'border-t-2 mt-8 text-center text-sm'}>
+                <p className={'mt-2'}>Hoặc</p>
+                <div className={styles.btnLoginWithGoogle}>
+                    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+                        <GoogleLogin
+                            type="standard"
+                            theme="filled_black"
+                            shape="pill"
+                            size="large"
+                            logo_alignment="left"
+                            locale="vi_VN"
+                            onSuccess={(response) => dispatch(loginWithGoogle(response.credential))}
+                            onError={() => getNotification("error", "Đăng nhập thất bại")}
+                            useOneTap={true}
+                        />
+                    </GoogleOAuthProvider>
+                </div>
+            </div>
         </AuthLayout>
     );
 }
