@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './styles.scss';
 import AuthLayout from '../../../layouts/AuthLayout';
-import {Button, Flex, Input} from "antd";
+import {Button, Checkbox, Flex, Input} from "antd";
 import styles from './styles.module.scss';
 import InlineSVG from "react-inlinesvg";
 import IconWarning from "../../../assets/images/icons/light/warning.svg";
@@ -11,16 +11,15 @@ import {setErrorSignup} from "../../../states/modules/auth/index.js";
 import _ from "lodash";
 import {handleCheckValidateConfirm} from "../../../utils/helper.js";
 import {signup} from "../../../api/auth/index.js";
+import {USER_ROLE} from "../../../utils/constants.js";
 
 function Signup() {
     const navigate = useNavigate();
     const [signupData, setSignupData] = useState({
-        first_name: '',
-        last_name: '',
         email: '',
-        phone: '',
         password: '',
-        confirm_password: ''
+        confirm_password: '',
+        role: USER_ROLE['CANDIDATE']
     });
     const errorSignup = useSelector(state => state.auth.errorSignup);
     const isLoadingBtnSignup = useSelector(state => state.auth.isLoadingBtnSignup);
@@ -28,21 +27,17 @@ function Signup() {
 
     useEffect(() => {
         dispatch(setErrorSignup({
-            first_name: '',
-            last_name: '',
             email: '',
-            phone: '',
             password: '',
             confirm_password: ''
         }))
     }, [dispatch])
 
-    const handleChangeInput = (e, type) => {
+    const handleChangeInput = (value, type) => {
         dispatch(setErrorSignup({
             ...errorSignup,
             [type]: ''
         }))
-        let value = e.target.value;
         let data = _.cloneDeep(signupData);
         data[type] = value
         setSignupData(data)
@@ -58,55 +53,15 @@ function Signup() {
         let validate = handleCheckValidateConfirm(signupData, errorSignup);
         dispatch(setErrorSignup(validate.dataError))
         if (!validate.isError) {
-            dispatch(signup(signupData))
+            // eslint-disable-next-line no-unused-vars
+            const {confirm_password, ...data} = signupData
+            dispatch(signup(data))
         }
     }
 
     return (
         <AuthLayout title={'Đăng ký tài khoản'} description={'Đăng ký để trải nghiệm các tính năng'}
-                    width={'w-[1100px]'}>
-            <div className={'input-wrap base-input'}>
-                <div className={'label-wrap'}>
-                    Họ
-                </div>
-                <Input
-                    className={`${errorSignup && errorSignup?.first_name?.length > 0 ? 'error-input !border-none' : ''}`}
-                    placeholder={'Họ'}
-                    value={signupData.first_name}
-                    onChange={(e) => handleChangeInput(e, 'first_name')}
-                    onKeyDown={(e) => handleKeyDown(e)}
-                />
-                {
-                    errorSignup && errorSignup.first_name?.length > 0 ?
-                        <span className={`error !text-[#fef300]`}>
-                            <div className={'icon'}>
-                              <InlineSVG src={IconWarning} width={14} height="auto"/>
-                            </div>
-                            {errorSignup.first_name}
-                        </span> : ''
-                }
-            </div>
-            <div className={'input-wrap base-input'}>
-                <div className={'label-wrap'}>
-                    Tên
-                </div>
-                <Input
-                    className={`${errorSignup && errorSignup?.last_name?.length > 0 ? 'error-input !border-none' : ''}`}
-                    placeholder={'Tên'}
-                    value={signupData.last_name}
-                    onChange={(e) => handleChangeInput(e, 'last_name')}
-                    onKeyDown={(e) => handleKeyDown(e)}
-                />
-                {
-                    errorSignup && errorSignup.last_name?.length > 0 ?
-                        <span className={`error !text-[#fef300]`}>
-                            <div className={'icon'}>
-                              <InlineSVG src={IconWarning} width={14} height="auto"/>
-                            </div>
-                            {errorSignup.last_name}
-                        </span> : ''
-                }
-            </div>
+                    height={'h-screen'} width={'w-[1000px]'}>
             <div className={'input-wrap base-input'}>
                 <div className={'label-wrap'}>
                     Email
@@ -115,7 +70,7 @@ function Signup() {
                     className={`${errorSignup && errorSignup?.email?.length > 0 ? 'error-input !border-none' : ''}`}
                     placeholder={'Email'}
                     value={signupData.email}
-                    onChange={(e) => handleChangeInput(e, 'email')}
+                    onChange={(e) => handleChangeInput(e.target.value, 'email')}
                     onKeyDown={(e) => handleKeyDown(e)}
                 />
                 {
@@ -128,27 +83,6 @@ function Signup() {
                         </span> : ''
                 }
             </div>
-            <div className={'input-wrap base-input'}>
-                <div className={'label-wrap'}>
-                    Số điện thoại (Tùy chọn)
-                </div>
-                <Input
-                    className={`${errorSignup && errorSignup?.phone?.length > 0 ? 'error-input !border-none' : ''}`}
-                    placeholder={'Số điện thoại'}
-                    value={signupData.phone}
-                    onChange={(e) => handleChangeInput(e, 'phone')}
-                    onKeyDown={(e) => handleKeyDown(e)}
-                />
-                {
-                    errorSignup && errorSignup.phone?.length > 0 ?
-                        <span className={`error !text-[#fef300]`}>
-                            <div className={'icon'}>
-                              <InlineSVG src={IconWarning} width={14} height="auto"/>
-                            </div>
-                            {errorSignup.phone}
-                        </span> : ''
-                }
-            </div>
             <div className={'input-wrap base-input-password'}>
                 <div className={'label-wrap'}>
                     Mật khẩu
@@ -157,7 +91,7 @@ function Signup() {
                     className={`${errorSignup && errorSignup?.password?.length > 0 ? 'error-input !border-none' : ''}`}
                     placeholder={'Mật khẩu'}
                     value={signupData.password}
-                    onChange={(e) => handleChangeInput(e, 'password')}
+                    onChange={(e) => handleChangeInput(e.target.value, 'password')}
                     onKeyDown={(e) => handleKeyDown(e)}
                 />
                 {
@@ -178,7 +112,7 @@ function Signup() {
                     className={`${errorSignup && errorSignup?.confirm_password?.length > 0 ? 'error-input !border-none' : ''}`}
                     placeholder={'Xác nhận mật khẩu'}
                     value={signupData.confirm_password}
-                    onChange={(e) => handleChangeInput(e, 'confirm_password')}
+                    onChange={(e) => handleChangeInput(e.target.value, 'confirm_password')}
                     onKeyDown={(e) => handleKeyDown(e)}
                 />
                 {
@@ -190,6 +124,18 @@ function Signup() {
                             {errorSignup.confirm_password}
                         </span> : ''
                 }
+            </div>
+            <div className={'input-wrap'}>
+                <div className={'label-wrap checkbox-custom'}>
+                    <Checkbox
+                        onChange={e => handleChangeInput(
+                            e.target.checked ? USER_ROLE['COMPANY'] : USER_ROLE['CANDIDATE'],
+                            'role'
+                        )}
+                    >
+                        Đăng ký tài khoản doanh nghiệp
+                    </Checkbox>
+                </div>
             </div>
 
             <Flex vertical gap="small" style={{width: '100%'}}>

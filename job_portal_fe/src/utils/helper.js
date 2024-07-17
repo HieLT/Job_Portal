@@ -34,6 +34,11 @@ export const hasPermission = (permissions) => {
     return isPermission;
 }
 
+export const hasRole = (role) => {
+    let {auth} = store.getState();
+    return role && auth.authUser.account.role.equals(role)
+}
+
 export const getNotification = (type, content, duration = 3, align = 'top') => {
     let typeNotification = handleGetTypeNotification(type);
     notification[type]({
