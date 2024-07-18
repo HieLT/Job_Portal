@@ -1,3 +1,2 @@
-/node_modules
-/.env
-server/job-portal-84299-firebase-adminsdk-7urxv-2afae5c3b6.json
+node_modules/
+.env
