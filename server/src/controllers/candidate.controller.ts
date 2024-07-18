@@ -52,7 +52,12 @@ class CandidateController {
                 } 
                 else {
                     const {id_candidate} = req.query;
-                    candidate = await candidateService.getCandidateById(String(id_candidate));
+                    if (id_candidate) {
+                        candidate = await candidateService.getCandidateById(String(id_candidate));
+                    }
+                    else {
+                        candidate = {};
+                    }
                 }
                 res.status(200).send(candidate);
             }

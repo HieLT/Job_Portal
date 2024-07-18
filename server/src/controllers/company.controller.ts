@@ -52,14 +52,19 @@ class CompanyController {
             const email = req.user;
             const account = await accountModel.findOne({email});
             if (account) {
-                if (account.role === "Company") {
+                if (account.role === "Company" && account.company) {
                     const company = await companyService.getProfile(String(account.company));
                     res.status(200).send(company);
                 }
                 else {
                     const {id_company} = req.query;
-                    const company = await companyService.getProfile(String(id_company));
-                    res.status(200).send(company);
+                    if (id_company) {
+                        const company = await companyService.getProfile(String(id_company));
+                        res.status(200).send(company);
+                    }
+                    else {
+                        res.status(200).send({});
+                    }
                 }
             }
             else {
