@@ -1,0 +1,62 @@
+@import '../../assets/scss/variables';
+
+.boxMainLayout {
+    .headerBox {
+        @apply bg-gray-100 h-[74px] mb-[-74px]
+    }
+
+    .mainLayoutWrap {
+        .mainWrap {
+            .mainContentWrap {
+                .content {
+                    @apply py-[30px] px-[200px] bg-[#f4f4f4]
+                }
+
+                @apply bg-gray-115 pt-[68px] px-28 pb-[40px]
+            }
+
+            @apply transition-all duration-500 relative
+        }
+
+        .mainWrapWithConditionSideBarClose {
+            @apply w-full ml-[64px]
+        }
+
+        @media only screen and (max-width: 1024px) {
+            .mainWrap {
+                @apply w-[calc(100%_-_64px)] ml-[64px] h-full transition-all duration-500
+            }
+            .mainWrapWithConditionSideBarClose {
+                @apply w-[calc(100%_-_64px)] ml-[64px]
+            }
+        }
+
+        @apply flex-1 flex flex-col
+    }
+
+    .footerBox {
+        @apply bg-[#fff] h-[300px]
+    }
+
+    @keyframes scaleIn {
+        0% {
+            transform: scale(0);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .scrollToTopButton {
+        button {
+            @apply cursor-pointer font-medium rounded-lg h-[40px] w-[40px]
+            flex justify-center items-center bg-[#766df4] text-[white] hover:bg-[white]
+        }
+
+        animation: scaleIn 0.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        transform-origin: center;
+        @apply bottom-9 left-[calc(100vw_-_100px)] sticky w-fit
+    }
+
+    @apply bg-gray-100 flex flex-col min-h-screen max-w-[1920px] m-auto relative
+}

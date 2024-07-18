@@ -1,7 +1,7 @@
 import React from 'react';
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import {createBrowserRouter} from 'react-router-dom';
 import Home from '../pages/Home';
-import { rootLoader } from "./rootLoader.js";
+import {rootLoader} from "./rootLoader.js";
 import Login from "../pages/Auth/Login";
 import AdminManagement from "../pages/AdminManagement/index.jsx";
 import AdminDashboard from "../pages/Admin/Dashboard/index.jsx";
@@ -13,34 +13,35 @@ import ResetPassword from "../pages/Auth/ResetPassword/index.jsx";
 import ForgotPassword from "../pages/Auth/ForgotPassword/index.jsx";
 import VerifyEmailResult from "../pages/Auth/VerifyEmailResult/index.jsx";
 import {USER_ROLE} from "../utils/constants.js";
+import ProfileRouting from "../pages/ProfileRouting/index.jsx";
 
 const router = createBrowserRouter([
     {
         path: '/login',
-        element: <Login />,
-        loader: ({ request, params }) => rootLoader(
-            { request, params }, false, 'LOAD_AUTH_PAGE'
+        element: <Login/>,
+        loader: ({request, params}) => rootLoader(
+            {request, params}, false, 'LOAD_AUTH_PAGE'
         )
     },
     {
         path: '/signup',
-        element: <Signup />,
-        loader: ({ request, params }) => rootLoader(
-            { request, params }, false, 'LOAD_AUTH_PAGE'
+        element: <Signup/>,
+        loader: ({request, params}) => rootLoader(
+            {request, params}, false, 'LOAD_AUTH_PAGE'
         )
     },
     {
         path: '/forgot-password',
-        element: <ForgotPassword />,
-        loader: ({ request, params }) => rootLoader(
-            { request, params }, false, 'LOAD_AUTH_PAGE'
+        element: <ForgotPassword/>,
+        loader: ({request, params}) => rootLoader(
+            {request, params}, false, 'LOAD_AUTH_PAGE'
         )
     },
     {
         path: '/reset-password',
-        element: <ResetPassword />,
-        loader: ({ request, params }) => rootLoader(
-            { request, params }, false, 'LOAD_AUTH_PAGE'
+        element: <ResetPassword/>,
+        loader: ({request, params}) => rootLoader(
+            {request, params}, false, 'LOAD_AUTH_PAGE'
         )
     },
     {
@@ -52,9 +53,9 @@ const router = createBrowserRouter([
     },
     {
         path: '',
-        element: <Home />,
-        loader: ({ request, params }) => rootLoader(
-            { request, params }, true, 'LOAD_HOME_PAGE'
+        element: <Home/>,
+        loader: ({request, params}) => rootLoader(
+            {request, params}, true, 'LOAD_HOME_PAGE'
         )
     },
     {
@@ -62,6 +63,13 @@ const router = createBrowserRouter([
         element: <AdminManagement/>,
         loader: ({request, params}) => rootLoader(
             {request, params}, true, 'LOAD_USER_PAGE', USER_ROLE['ADMIN']
+        )
+    },
+    {
+        path: '/account/profile',
+        element: <ProfileRouting/>,
+        loader: ({request, params}) => rootLoader(
+            {request, params}, false, 'LOAD_PROFILE_PAGE'
         )
     },
     {

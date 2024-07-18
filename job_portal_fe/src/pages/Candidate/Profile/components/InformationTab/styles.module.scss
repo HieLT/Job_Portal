@@ -1,0 +1,10 @@
+.cardWrap {
+    .title {
+        border-bottom: 1px solid #dbdfe9;
+        @apply font-medium text-[20px] px-10 py-6
+    }
+
+    box-shadow: 0 3px 4px 0 #00000008;
+    border: 1px solid #f1f1f4;
+    @apply bg-[white] rounded-[0.75rem] w-full h-full mt-3 pb-6
+}

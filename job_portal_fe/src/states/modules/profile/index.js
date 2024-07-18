@@ -1,69 +1,20 @@
 import {createSlice} from "@reduxjs/toolkit";
 
-const authSlice = createSlice({
+const profileSlice = createSlice({
     name: 'profile',
     initialState: {
-        errorInformation: {
-            name: '',
-            email: ''
-        },
-        isLoadingBtnInformation: false,
-        dataChangePassword: {
-            currentPassword: '',
-            password: '',
-            confirmPassword: '',
-        },
-        errorChangePassword: {
-            currentPassword: '',
-            password: '',
-            confirmPassword: '',
-        },
-        isLoadingBtnChangePassword: false,
+        tab: 'information'
     },
     reducers: {
-        setErrorInformation: (state, action) => ({
+        setTab: (state, action) => ({
             ...state,
-            errorInformation: action.payload
-        }),
-        startRequestUpdateInformation: state => ({
-            ...state,
-            isLoadingBtnInformation: true
-        }),
-        startRequestUpdateInformationSuccess: state => ({
-            ...state,
-            isLoadingBtnInformation: false
-        }),
-        startRequestUpdateInformationFail: state => ({
-            ...state,
-            isLoadingBtnInformation: false
-        }),
-        setErrorChangePassword: (state, action) => ({
-            ...state,
-            errorChangePassword: action.payload
-        }),
-        setDataChangePassword: (state, action) => ({
-            ...state,
-            dataChangePassword: action.payload
-        }),
-        startRequestChangePassword: state => ({
-            ...state,
-            isLoadingBtnChangePassword: true
-        }),
-        requestChangePasswordSuccess: state => ({
-            ...state,
-            isLoadingBtnChangePassword: false
-        }),
-        requestChangePasswordFail: state => ({
-            ...state,
-            isLoadingBtnChangePassword: false
-        }),
+            tab: action.payload
+        })
     }
 })
 
 export const {
-    setErrorInformation, setErrorChangePassword, setDataChangePassword,
-    startRequestUpdateInformation, startRequestUpdateInformationSuccess, startRequestUpdateInformationFail,
-    startRequestChangePassword, requestChangePasswordSuccess, requestChangePasswordFail
-} = authSlice.actions
+    setTab
+} = profileSlice.actions
 
-export default authSlice.reducer;
+export default profileSlice.reducer;
