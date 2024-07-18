@@ -15,7 +15,9 @@ export const rootLoader = async ({request, params}, requiredAuth, saga = null, r
     const secondCondition = url.pathname !== '/account/profile' && !authRoutes.includes(url.pathname);
 
     if (!auth.isAuthSuccess && (firstCondition || secondCondition)) {
-        await store.dispatch(getMe());
+        if (!url.pathname?.includes("/admin")) {
+            await store.dispatch(getMe());
+        } 
         auth = store.getState().auth;
         setProfile(1)
     }

@@ -1,0 +1,20 @@
+.card {
+    @apply flex-col justify-between gap-6 h-full bg-cover bg-no-repeat;
+    background-position: right top -1.7rem;
+}
+
+.card-img {
+    @apply w-7 mt-4 ms-5;
+}
+
+.card-content {
+    @apply flex flex-col gap-1 pb-4 px-5;
+}
+
+.card-title {
+    @apply text-3xl font-semibold text-gray-900;
+}
+
+.card-subtitle {
+    @apply font-medium text-gray-600;
+}

@@ -4,6 +4,9 @@
         }
 
         .itemHeaderLeft {
+            .title {
+                @apply text-white;
+            }
             .iconWrap {
                 @apply text-[22px] text-gray-50 transition-all duration-300
             }
@@ -37,6 +40,7 @@
     }
 
     .headerMiddleWrap {
+       
         .search {
             input {
                 @apply text-[16.5px]
