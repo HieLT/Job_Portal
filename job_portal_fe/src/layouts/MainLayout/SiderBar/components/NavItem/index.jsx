@@ -2,7 +2,7 @@ import React from 'react';
 import dark from './styles.module.scss';
 import {handleCheckRoute} from "../../../../../utils/helper";
 import {useLocation, useNavigate} from "react-router-dom";
-import {useSelector} from "react-redux";
+import {useSelector , useDispatch} from "react-redux";
 
 function NavItem(props) {
     const styles = dark;

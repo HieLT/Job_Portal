@@ -1,0 +1,20 @@
+.dashboard {
+    padding: 2rem;
+  
+    .title {
+      @apply text-3xl font-bold mb-8;
+    }
+  
+    .card-container {
+      @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8;
+    }
+  
+    .card {
+      @apply bg-white p-6 rounded-lg shadow-lg;
+    }
+  
+    .card-title {
+      @apply text-xl font-semibold mb-4;
+    }
+  }
+  
