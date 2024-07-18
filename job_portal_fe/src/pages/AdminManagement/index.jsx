@@ -225,7 +225,7 @@ export default function AdminManagement() {
                     isModalOpen={visibleModalCreateOrUpdate}
                     handleOk={() => handleToggleVisibleModalCreateOrUpdate()}
                     handleCancel={() => handleToggleVisibleModalCreateOrUpdate()}
-                    title={isTypeModalCreate ? 'Create account' : 'Update account'}
+                    title={isTypeModalCreate ? 'Create information' : 'Update information'}
                     width={850}
                 >
                     <CreateOrUpdate
