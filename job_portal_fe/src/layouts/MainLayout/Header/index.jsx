@@ -28,14 +28,17 @@ const Header = () => {
     }
 
     const authUser = useSelector((state) => state.auth.authUser);
-
-
+    const title = useSelector((state) => state.app.breadcrumb)
+    console.log(title);
     return (
         <header className={styles.headerWrap}>
             <div className={styles.headerLeftWrap}>
-
+                <div className={styles.title}>
+                    {title.breadcrumb}
+                </div>
             </div>
             <div className={`${styles.headerRightWrap}`}>
+
                 {/*<div className={`${styles.itemHeaderRight}`}>*/}
                 {/*  <div onClick={() => openFullScreen()} className={`${styles.iconWrap}`}>*/}
                 {/*    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18" width="18" height="18">*/}
@@ -62,7 +65,6 @@ const Header = () => {
                 {/*      </div>*/}
                 {/*  }*/}
                 {/*</div>*/}
-
                 <div className={`${styles.itemHeaderRight}`}>
                     <div onClick={() => openFullScreen()} className={`${styles.iconWrap}`}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20.571" width="18"
