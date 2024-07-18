@@ -2,9 +2,9 @@ const admin = require('firebase-admin');
 import { config } from "dotenv";
 config();
 
-const serviceAccount = require('../../job-portal-429605-firebase-adminsdk-gelew-e0479275ec.json');
+const serviceAccount = process.env.FIREBARE_JSON!;
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    credential: admin.credential.cert(require(serviceAccount)),
     storageBucket: process.env.STORAGE_BUCKET,
 });
 
