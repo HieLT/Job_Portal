@@ -6,9 +6,6 @@
 
 * {
     font-family: 'Inter', Helvetica, sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
 }
 
 /* Input */
@@ -294,3 +291,37 @@
 .ant-skeleton-input-lg {
     height: 44px !important;
 }
+
+.breadcrumb-custom {
+    .ant-breadcrumb-separator {
+        @apply text-[#99a1b7]
+    }
+
+    a {
+        @apply text-[#78829d] no-underline font-medium hover:bg-[transparent] text-[15px]
+    }
+
+    span {
+        @apply text-[#4b5675] font-medium text-[15px]
+    }
+}
+//
+//*::-webkit-scrollbar {
+//    @apply w-[8px] transition-all duration-200
+//}
+//
+//*::-webkit-scrollbar-track {
+//    @apply bg-transparent rounded-md
+//}
+//
+//*::-webkit-scrollbar-thumb {
+//    @apply bg-transparent rounded-lg transition-all duration-200
+//}
+//
+//*:hover::-webkit-scrollbar-thumb:vertical {
+//    @apply bg-black-75
+//}
+//
+//*::-webkit-scrollbar-thumb:vertical:hover {
+//    @apply bg-black-75
+//}

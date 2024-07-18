@@ -1,0 +1,23 @@
+.ant-popover-inner {
+    @apply p-0 bg-gray-100 rounded #{!important}
+}
+
+.ant-popover-arrow-content::before {
+    @apply bg-gray-100
+}
+
+.ant-badge-multiple-words {
+    @apply py-0 px-1
+}
+
+.ant-popover-arrow {
+    @apply hidden #{!important}
+}
+
+.drawer-custom {
+    .ant-drawer-wrapper-body {
+        .ant-drawer-body {
+            padding: 0
+        }
+    }
+}

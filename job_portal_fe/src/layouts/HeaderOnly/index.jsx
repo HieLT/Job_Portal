@@ -1,21 +1,41 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './styles.module.scss';
 import Header from "./Header";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {goToPageSuccess} from "../../states/modules/app";
-import SideBar from "./SiderBar/index.jsx";
-import {Breadcrumb} from "antd";
+import {ArrowUpOutlined} from '@ant-design/icons'
+import {Button} from "antd";
 
-function MainLayout(props) {
+function HeaderOnly(props) {
     const {children} = props;
     const isShowSideBar = useSelector(state => state.app.isShowSideBar);
     const isThemeLight = useSelector(state => state.app.isThemeLight);
-    const titlePage = useSelector(state => state.app.title);
-    const breadcrumb = useSelector(state => state.app.breadcrumb);
     const goToPage = useSelector(state => state.app.goToPage);
+    const [visibleScrollButton, setVisibleScrollButton] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    const handleGoToTop = () => {
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    const handleScroll = () => {
+        const currentTop = window.pageYOffset || document.documentElement.scrollTop
+        if (currentTop > 300) {
+            setVisibleScrollButton(true)
+        } else {
+            setVisibleScrollButton(false)
+        }
+    }
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll)
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+        }
+    }, [])
 
     useEffect(() => {
         if (goToPage.path && !goToPage.redirected) {
@@ -29,25 +49,22 @@ function MainLayout(props) {
         <div className={`${styles.boxMainLayout}`}>
             <div className={styles.headerBox}></div>
             <div className={styles.mainLayoutWrap}>
-                <SideBar
-                    isThemeLight={isThemeLight}
-                    isShowSideBar={isShowSideBar}
-                />
                 <div className={`${styles.mainWrap} ${!isShowSideBar ? styles.mainWrapWithConditionSideBarClose : ''}`}>
-                    <Header/>
+                    <Header isHeaderOnly/>
                     <main className={styles.mainContentWrap}>
-                        <div className={styles.headerMainWrap}>
-                            <div className={styles.titleWrap}>{titlePage}</div>
-                            <div className={styles.breadcrumbWrap}>
-                                {(breadcrumb && breadcrumb.length > 1) ? <Breadcrumb breadcrumb={breadcrumb}/> : ''}
-                            </div>
-                        </div>
                         {children}
                     </main>
                 </div>
             </div>
+            {
+                visibleScrollButton ? <div className={styles.scrollToTopButton} onClick={handleGoToTop}>
+                    <Button>
+                        <ArrowUpOutlined width={14} height={14}/>
+                    </Button>
+                </div> : ''
+            }
         </div>
     );
 }
 
-export default MainLayout;
+export default HeaderOnly;

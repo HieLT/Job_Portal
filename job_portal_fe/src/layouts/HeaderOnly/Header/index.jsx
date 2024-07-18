@@ -1,13 +1,12 @@
 import React from 'react';
 import styles from './styles.module.scss';
 import './styles.scss';
-import {Popover} from "antd";
-import ImageUser from '../../../../src/assets/images/logos/user_default.png'
+import {Breadcrumb, Popover} from "antd";
 import contentInfo from './components/PopoverProfile';
+import ImageUser from '../../../../src/assets/images/logos/user_default.png'
 import {useSelector} from "react-redux";
-import PopoverProfile from "./components/PopoverProfile/index.jsx";
 
-const Header = () => {
+const Header = ({isHeaderOnly}) => {
     const openFullScreen = () => {
         if (!document.fullscreenElement) {
             if (document.documentElement.requestFullscreen) {
@@ -29,17 +28,24 @@ const Header = () => {
     }
 
     const authUser = useSelector((state) => state.auth.authUser);
-    const title = useSelector((state) => state.app.breadcrumb)
-    console.log(title);
+    const breadcrumb = useSelector(state => state.app.breadcrumb);
+
     return (
-        <header className={styles.headerWrap}>
+        <header className={`${styles.headerWrap} ${isHeaderOnly && '!bg-[white]'}`}>
             <div className={styles.headerLeftWrap}>
-                <div className={styles.title}>
-                    {title.breadcrumb}
-                </div>
+                {
+                    isHeaderOnly ?
+                        <div className={styles.headerMainWrap}>
+                            <div className={`${styles.breadcrumbWrap} breadcrumb-custom`}>
+                                {
+                                    (breadcrumb && breadcrumb.length > 1) ?
+                                        <Breadcrumb items={breadcrumb} separator=">"/> : ''
+                                }
+                            </div>
+                        </div> : ''
+                }
             </div>
             <div className={`${styles.headerRightWrap}`}>
-
                 {/*<div className={`${styles.itemHeaderRight}`}>*/}
                 {/*  <div onClick={() => openFullScreen()} className={`${styles.iconWrap}`}>*/}
                 {/*    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18" width="18" height="18">*/}
@@ -66,6 +72,7 @@ const Header = () => {
                 {/*      </div>*/}
                 {/*  }*/}
                 {/*</div>*/}
+
                 <div className={`${styles.itemHeaderRight}`}>
                     <div onClick={() => openFullScreen()} className={`${styles.iconWrap}`}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20.571" width="18"
