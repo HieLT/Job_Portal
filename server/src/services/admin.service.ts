@@ -9,6 +9,16 @@ class AdminService {
             throw error;
         }
     }
+
+    async updateProfile(id: string, profile : any) {
+        try {
+            await adminModel.findByIdAndUpdate(id, profile).exec();
+            return adminModel.findById(id).exec();
+        }
+        catch(error) {
+            throw error;
+        }
+    }
 }
 
 export default new AdminService();

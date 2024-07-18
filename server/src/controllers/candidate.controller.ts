@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import candidateService from "../services/candidate.service";
 import accountModel from "../models/account.model";
-import bucket from "../config/firsebase";
+import firebaseService from "../services/firebase.service";
 
 class CandidateController {
     async createCandidate(req: Request, res: Response) {
@@ -10,7 +10,7 @@ class CandidateController {
             const account = await accountModel.findOne({email});
             const data = req.body;
             data["account"] = account?._id;
-            if (account) {
+            if (account && account.role === "Candidate") {
                 const candidate = await candidateService.createCandidate(data);
                 await accountModel.findByIdAndUpdate(account._id, {
                     candidate: candidate._id
@@ -18,10 +18,10 @@ class CandidateController {
                 res.status(201).send(candidate);
             }
             else {
-                res.status(400).send({message: 'Account not found'});
+                res.status(401).send({message: 'Account not found'});
             }
-        } catch (error) {
-            res.status(500).send({message: error});
+        } catch (error:any) {
+            res.status(500).send({message: error.message});
         }
     }
 
@@ -34,10 +34,10 @@ class CandidateController {
                 res.status(200).send(candidates);
             }
             else {
-                res.status(400).send({message: 'Account not found'});
+                res.status(401).send({message: 'Account not found'});
             }
-        } catch (error) {
-            res.status(500).send({message: error});
+        } catch (error: any) {
+            res.status(500).send({message: error.message});
         }
     }
 
@@ -52,16 +52,15 @@ class CandidateController {
                 } 
                 else {
                     const {id_candidate} = req.params;
-                    console.log(id_candidate);
                     candidate = await candidateService.getCandidateById(String(id_candidate));
                 }
                 res.status(200).send(candidate);
             }
             else {
-                res.status(400).send({message: 'Account not found'});
+                res.status(401).send({message: 'Account not found'});
             }
-        } catch (error) {
-            res.status(500).send({message: error});
+        } catch (error:any) {
+            res.status(500).send({message: error.message});
         }
     }
 
@@ -75,29 +74,13 @@ class CandidateController {
                     res.status(400).send({message: 'No file Uploaded'});
                 }
                 else {
-                    const fileName = `resumes/${req.file.originalname}`;
-                    const blob = bucket.file(fileName);
-                    const blobStream = blob.createWriteStream({
-                        resumable: false,
-                        metadata: {
-                            contentType: req.file.mimetype
-                        }
-                    });
-    
-                    blobStream.on('error', (err: any) => {
-                        res.status(500).send({message: err.message});
-                    });
-                    blobStream.on('finish', async () => {
-                        await blob.makePublic();
-                        const url = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
-                        await candidateService.updateResume(id_candidate, url);
-                        res.status(200).send({message: 'File uploaded successfully', url});
-                    });
-                    blobStream.end(req.file.buffer);
+                    const url = await firebaseService.uploadFile(req.file);
+                    await candidateService.updateResume(id_candidate, url);
+                    res.status(200).send({message: 'File uploaded successfully', url});
                 }
             }
             else {
-                res.status(400).send({message: 'Account not found'});
+                res.status(401).send({message: 'Account not found'});
             }
         }   
         catch(error: any) {
@@ -126,25 +109,12 @@ class CandidateController {
             if (account && account.role === "Candidate") {
                 const id_candidate = String(account.candidate);
                 const {img} = req.body;
-                const decodedImage = Buffer.from(img.uri, 'base64');
-    
-                const fileName = `images/${Date.now()}.${img.name}`;
-                const file = bucket.file(fileName);
-    
-                await file.save(decodedImage, {
-                    metadata: {
-                        contentType: img.type,
-                    },
-                });
-                const result = await file.getSignedUrl({
-                    action: 'read',
-                    expires: '12-12-2050'
-                });
-                await candidateService.uploadAvatar(id_candidate, String(result[0]));
+                const url = await firebaseService.uploadImage(img);
+                await candidateService.uploadAvatar(id_candidate, String(url));
                 res.status(200).send({message: 'Upload avatar successfully'});
             }
             else {
-                res.status(400).send({message: 'Account not found'});
+                res.status(401).send({message: 'Account not found'});
             }
         }
         catch(error: any) {
@@ -157,13 +127,13 @@ class CandidateController {
             const email = req.user;
             const account = await accountModel.findOne({email});
             if (account && account.role === "Candidate") {
-                const {dataUpdate} = req.body;
+                const dataUpdate = req.body;
                 const id_candidate = String(account.candidate);
                 const candidate = await candidateService.updateCandidate(id_candidate, dataUpdate);
                 res.status(200).send(candidate);
             }
             else {
-                res.status(400).send({message: 'Account not found'});
+                res.status(401).send({message: 'Account not found'});
             }
         } catch (error: any) {
             res.status(500).send({message: error.message});
@@ -179,8 +149,11 @@ class CandidateController {
                 await candidateService.deleteCandidate(id_candidate);
                 res.status(200).send({message: 'Delete candidate success'});
             }
-        } catch (error) {
-            res.status(500).send({message: error});
+            else {
+                res.status(401).send({message: 'Account not found'});
+            }
+        } catch (error:any) {
+            res.status(500).send({message: error.message});
         }
     }
 };

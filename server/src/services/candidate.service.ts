@@ -13,7 +13,9 @@ class CandidateService {
 
     async getCandidates() {
         try {
-            const candidates = await candidateModel.find().exec();
+            const candidates = await candidateModel.find().populate('account', 'email').select(
+                '_id first_name last_name phone avatar birth'
+            ).exec();
             return candidates;
         } catch (error) {
             throw error;

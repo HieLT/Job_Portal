@@ -32,7 +32,8 @@ const Company = new Schema<ICompany>({
     }],
     account: {
         type: Schema.Types.ObjectId,
-        ref: 'Account'
+        ref: 'Account',
+        required: true
     },
     is_deleted: {type: Boolean}
 }, {
