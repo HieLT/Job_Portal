@@ -19,12 +19,10 @@ class Auth {
             }
             else {
                 const hashedPassword = await bcrypt.hash(password, 10);
-                const token = await jwt.sign({email: email}, process.env.TOKEN_KEY!);
                 const newUser = new accountModel({
                     email,
                     password: hashedPassword,
                     role,
-                    token,
                     verified: false,
                     socket_id: ''
                 });
@@ -49,22 +47,25 @@ class Auth {
                 if (user.verified) {
                     const comparePass = await bcrypt.compare(password, user.password!);
                     if (comparePass) {
+                        const token = await jwt.sign({email: email}, process.env.TOKEN_KEY!, {
+                            expiresIn: '1h'
+                        });
                         const dataUser = {
                             email: user.email,
                             role: user.role,
+                            token,
                             verified: user.verified,
                             socket_id: user.socket_id,
-                            token: user.token
                         };
                         let profile = null;
-                        if (user.candidate) {
+                        if (user.candidate && user.role === "Candidate") {
                             profile = await candidateService.getCandidateById(String(user.candidate));
                         }
-                        else if (user.company) {
+                        else if (user.company && user.role === "Company") {
                             // get profile company
                             profile = await companyService.getProfile(String(user.company));
                         }
-                        else {
+                        else if (user.admin && user.role === "Admin") {
                             // get profile admin
                             profile = await adminService.getProfile(String(user.admin));
                         }

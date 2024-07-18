@@ -3,7 +3,6 @@ import { model, Schema } from "mongoose";
 interface IAccount extends Document {
     email: string;
     password?: string;
-    token: string;
     role: 'Candidate' | 'Company' | 'Admin';
     company?: Schema.Types.ObjectId;
     candidate?: Schema.Types.ObjectId;
@@ -22,9 +21,6 @@ const Account = new Schema<IAccount>({
     password: {
         type: String,
         required: function() {return !this.isGoogleAccount;}
-    },
-    token: {
-        type: String
     },
     role: {
         type: String,

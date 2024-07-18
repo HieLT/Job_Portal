@@ -58,7 +58,7 @@ class CandidateService {
         }
     }
 
-    async uploadImage(id: string, avatar: string) {
+    async uploadAvatar(id: string, avatar: string) {
         try {
             await candidateModel.findByIdAndUpdate(id, {
                 avatar: avatar

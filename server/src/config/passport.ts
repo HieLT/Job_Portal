@@ -23,13 +23,11 @@ passport.use(new GoogleStrategy({
         let account = await accountModel.findOne({email: profile.emails[0].value}).exec();
         let profileUser = null;
         if (!account) {
-            const token = jwt.sign({email: profile.emails[0].value}, process.env.TOKEN_KEY!);
             account = new accountModel({
                 email: profile.emails[0].value,
                 role: request.query.role || 'Candidate',
                 isGoogleAccount: true,
                 socket_id: '',
-                token: token
             });
             await account.save();
         }
@@ -44,12 +42,18 @@ passport.use(new GoogleStrategy({
                 profileUser = adminModel.findById(account.admin).lean();
             }
         }
+        if (profileUser === null) {
+            profileUser = profile;
+        }
+        const token = jwt.sign({email: profile.emails[0].value}, process.env.TOKEN_KEY!, {
+            expiresIn: '1h'
+        });
         const userSessionData = {
             account: {
                 _id: account._id,
                 email: account.email,
                 role: account.role,
-                token: account.token,
+                token: token,
                 socket_id: account.socket_id,
             },
             profileUser
@@ -81,13 +85,15 @@ passport.deserializeUser(async (id: string, done) => {
         } else if (account.admin) {
             profileUser = await adminModel.findById(account.admin).lean();
         }
-
+        const token = jwt.sign({email: account.email}, process.env.TOKEN_KEY!, {
+            expiresIn: '1h'
+        });
         const userSessionData = {
             account: {
                 id: account._id,
                 email: account.email,
                 role: account.role,
-                token: account.token,
+                token: token,
                 socket_id: account.socket_id
             },
             profileUser
