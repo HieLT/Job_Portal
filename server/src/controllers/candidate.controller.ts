@@ -114,8 +114,8 @@ class CandidateController {
                 res.status(200).send({message: 'File deleted successfully'});
             }
         }
-        catch(error) {
-            res.status(500).send({message: error});
+        catch(error: any) {
+            res.status(500).send({message: error.message});
         }
     }
 
