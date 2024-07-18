@@ -165,8 +165,8 @@ class CandidateController {
             else {
                 res.status(400).send({message: 'Account not found'});
             }
-        } catch (error) {
-            res.status(500).send({message: error});
+        } catch (error: any) {
+            res.status(500).send({message: error.message});
         }
     }
 
