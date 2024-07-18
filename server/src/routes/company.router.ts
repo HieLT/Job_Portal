@@ -5,7 +5,7 @@ import authentication  from "../middleware/authentication";
 const companyRouter = express.Router();
 
 companyRouter.post('/create', [authentication], companyController.createCompany);
-companyRouter.get('/get-profile/:name_company', [authentication], companyController.getProfile);
+companyRouter.get('/get-profile', [authentication], companyController.getProfile);
 companyRouter.post('/update-profile', [authentication], companyController.updateProfile);
 
 export default companyRouter;

@@ -51,7 +51,7 @@ class CandidateController {
                     candidate = await candidateService.getCandidateById(String(account.candidate));
                 } 
                 else {
-                    const {id_candidate} = req.params;
+                    const {id_candidate} = req.query;
                     candidate = await candidateService.getCandidateById(String(id_candidate));
                 }
                 res.status(200).send(candidate);

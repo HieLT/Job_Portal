@@ -57,8 +57,8 @@ class CompanyController {
                     res.status(200).send(company);
                 }
                 else {
-                    const {name_company} = req.params;
-                    const company = await companyModel.findOne({name: name_company});
+                    const {id_company} = req.query;
+                    const company = await companyService.getProfile(String(id_company));
                     res.status(200).send(company);
                 }
             }

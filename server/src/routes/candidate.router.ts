@@ -9,7 +9,7 @@ const upload = multer({storage});
 const candidateRouter = express.Router();
 
 candidateRouter.post('/create', [authentication], candidateController.createCandidate);
-candidateRouter.get('/get-profile/:id_candidate', [authentication], candidateController.getProfile);
+candidateRouter.get('/get-profile', [authentication], candidateController.getProfile);
 candidateRouter.post('/update-profile', [authentication], candidateController.updateCandidate);
 candidateRouter.post('/upload-resume', [upload.single('file'), authentication], candidateController.uploadResume);
 candidateRouter.post('/delete-resume', [authentication], candidateController.deleteResume);
