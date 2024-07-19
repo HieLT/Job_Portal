@@ -130,7 +130,7 @@ class Auth {
                 if (err) {
                     return next(err);
                 }
-                return res.redirect('http://localhost:3000');
+                return res.redirect('http://localhost:5174');
             });
         })(req, res, next);
     }
@@ -161,7 +161,7 @@ class Auth {
                     return res.status(500).send('Failed to destroy session.');
                 }
                 res.clearCookie('connect.sid'); // Ensure the session cookie is cleared
-                res.redirect('http://localhost:3000');
+                res.redirect('http://localhost:5174');
             });
         });
     }
