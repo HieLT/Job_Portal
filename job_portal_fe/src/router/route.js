@@ -7,6 +7,8 @@ import AdminManagement from "../pages/AdminManagement/index.jsx";
 import Signup from "../pages/Auth/Signup/index.jsx";
 import ResetPassword from "../pages/Auth/ResetPassword/index.jsx";
 import ForgotPassword from "../pages/Auth/ForgotPassword/index.jsx";
+import VerifyEmailResult from "../pages/Auth/VerifyEmailResult/index.jsx";
+import {USER_ROLE} from "../utils/constants.js";
 
 const router = createBrowserRouter([
     {
@@ -38,6 +40,13 @@ const router = createBrowserRouter([
         )
     },
     {
+        path: '/verify-email/:token',
+        element: <VerifyEmailResult/>,
+        loader: ({request, params}) => rootLoader(
+            {request, params}, false, 'LOAD_AUTH_PAGE'
+        )
+    },
+    {
         path: '',
         element: <Home/>,
         loader: ({request, params}) => rootLoader(
@@ -48,7 +57,7 @@ const router = createBrowserRouter([
         path: '/admins',
         element: <AdminManagement/>,
         loader: ({request, params}) => rootLoader(
-            {request, params}, false, 'LOAD_USER_PAGE'
+            {request, params}, true, 'LOAD_USER_PAGE', USER_ROLE['ADMIN']
         )
     }
 ]);

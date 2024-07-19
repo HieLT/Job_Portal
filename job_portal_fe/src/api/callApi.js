@@ -7,7 +7,6 @@ import {setAuthSuccess} from "../states/modules/auth/index.js";
 export default async function callApi(
     {
         content,
-        url,
         method,
         apiPath,
         actionTypes: [requestType, successType, failureType],
@@ -28,7 +27,7 @@ export default async function callApi(
     dispatch(requestType())
 
     return axios({
-        baseURL: url,
+        baseURL: import.meta.env.VITE_API_URL,
         headers: headers ? {...headers, ...header} : header,
         method: method,
         url: apiPath,
