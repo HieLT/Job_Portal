@@ -4,6 +4,7 @@ import {initialSaga} from "../states/modules/routing/index.js";
 import {convertQueryStringToObject, hasRole} from "../utils/helper";
 import {getMe} from "../api/auth/index.js";
 import {getAuthToken} from "../utils/localStorage";
+import {getAuthToken} from "../utils/localStorage";
 import {setLocation} from "../states/modules/app/index.js";
 import _ from "lodash";
 import {USER_ROLE} from "../utils/constants.js";
@@ -19,6 +20,7 @@ export const rootLoader = async ({request, params}, requiredAuth, saga = null, r
     if (firstCondition || secondCondition) {
         await store.dispatch(getMe());
         auth = store.getState().auth;
+        setProfile(1)
     }
 
     if (requiredAuth) {
