@@ -13,6 +13,9 @@ import {setAuthEmail, setAuthRole, setAuthToken, setProfile} from "../../../util
 import {getMe} from "../../../api/auth/index.js";
 import {goToPage} from "../app/index.js";
 import {getNotification} from "../../../utils/helper.js";
+import {USER_ROLE} from "../../../utils/constants.js";
+import store from "../../configureStore.js";
+import {setAuthUser} from "../profile/index.js";
 
 function* loadRouteData() {
     //
@@ -22,24 +25,24 @@ function* handleActions() {
     yield takeLatest(startRequestLoginSuccess, function* (action) {
         let token = action.payload.account.token;
         let email = action.payload.account.email;
-        let role = action.payload.account.role;
         setAuthToken(token);
         setAuthEmail(email);
-        setAuthRole(role);
-        if (!action.payload.profile) {
-            setProfile(0)
+        store.dispatch(setAuthUser(action.payload.account))
+        if (action.payload.account.role === USER_ROLE['ADMIN']) {
+            yield put(goToPage({
+                path: "/admin/dashboard"
+            }))
         } else {
-            setProfile(1)
+            yield put(goToPage({
+                path: "/account/profile"
+            }))
         }
-        yield put(goToPage({
-            path: "/account/profile"
-        }))
         // yield put(getMe());
     });
 
     yield takeLatest(startRequestLoginFail, function (action) {
         let statusError = action.payload.status
-        if (statusError === 401) {
+        if (statusError === 400) {
             getNotification('error', 'Email hoặc mật khẩu không đúng!');
         } else if (statusError === 404) {
             getNotification('error', 'Người dùng không tồn tại!');
