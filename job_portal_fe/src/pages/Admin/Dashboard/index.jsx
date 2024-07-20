@@ -69,7 +69,6 @@ function Dashboard() {
         }));
     }, []);
     const title = useSelector((state) => state.app.breadcrumb)
-    console.log(title);
 
     return (
         <MainLayout>

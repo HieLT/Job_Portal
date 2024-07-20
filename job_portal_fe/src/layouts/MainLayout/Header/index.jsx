@@ -30,7 +30,7 @@ const Header = () => {
 
     const authUser = useSelector((state) => state.auth.authUser);
     const title = useSelector((state) => state.app.breadcrumb)
-    console.log(title);
+
     return (
         <header className={styles.headerWrap}>
             <div className={styles.headerLeftWrap}>
