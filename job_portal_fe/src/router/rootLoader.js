@@ -20,7 +20,6 @@ export const rootLoader = async ({request, params}, requiredAuth, saga = null, r
     if (firstCondition || secondCondition) {
         await store.dispatch(getMe());
         auth = store.getState().auth;
-        setProfile(1)
     }
 
     if (requiredAuth) {
