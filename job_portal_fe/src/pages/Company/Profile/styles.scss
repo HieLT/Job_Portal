@@ -1,0 +1,13 @@
+.avatar-custom {
+    .ant-avatar-circle {
+        @apply border-[#17c653] border-[3px]
+    }
+}
+
+.tab-custom {
+    .ant-tabs-tab-active {
+        .ant-tabs-tab-btn {
+            @apply font-medium text-[#766df4]
+        }
+    }
+}

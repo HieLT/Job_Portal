@@ -9,7 +9,7 @@ import {
     startRequestLoginFail,
     startRequestLoginSuccess
 } from "./index.js";
-import {setAuthEmail, setAuthRole, setAuthToken} from "../../../utils/localStorage";
+import {setAuthEmail, setAuthRole, setAuthToken, setProfile} from "../../../utils/localStorage";
 import {getMe} from "../../../api/auth/index.js";
 import {goToPage} from "../app/index.js";
 import {getNotification} from "../../../utils/helper.js";
@@ -26,6 +26,11 @@ function* handleActions() {
         setAuthToken(token);
         setAuthEmail(email);
         setAuthRole(role);
+        if (!action.payload.profile) {
+            setProfile(0)
+        } else {
+            setProfile(1)
+        }
         yield put(goToPage({
             path: "/account/profile"
         }))

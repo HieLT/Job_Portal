@@ -1,38 +1,30 @@
 import callApi from "../callApi.js";
 import {
-    requestChangePasswordFail,
-    requestChangePasswordSuccess,
-    startRequestChangePassword,
-    startRequestUpdateInformation,
-    startRequestUpdateInformationFail,
-    startRequestUpdateInformationSuccess
-} from "../../states/modules/profile/index.js";
+    startRequestCreateCandidate,
+    startRequestCreateCandidateFail,
+    startRequestCreateCandidateSuccess,
+    startRequestUpdateCandidate,
+    startRequestUpdateCandidateFail,
+    startRequestUpdateCandidateSuccess
+} from "../../states/modules/profile/information/index.js";
 
-export const updateInformation = (data) => async (dispatch, getState) => {
+export const createCandidate = (data) => async (dispatch, getState) => {
     return callApi({
         method: 'post',
-        apiPath: `update-profile`,
-        actionTypes: [startRequestUpdateInformation, startRequestUpdateInformationSuccess, startRequestUpdateInformationFail],
-        variables: {
-            name: data.name,
-            email: data.email,
-        },
+        apiPath: `candidate/create`,
+        actionTypes: [startRequestCreateCandidate, startRequestCreateCandidateSuccess, startRequestCreateCandidateFail],
+        variables: {...data},
         dispatch,
         getState
     })
 }
 
-
-export const changePassword = (data) => async (dispatch, getState) => {
+export const updateCandidateProfile = (data) => async (dispatch, getState) => {
     return callApi({
-        method: 'post',
-        apiPath: `change-password`,
-        actionTypes: [startRequestChangePassword, requestChangePasswordSuccess, requestChangePasswordFail],
-        variables: {
-            current_password: data.currentPassword,
-            password: data.password,
-            password_confirmation: data.confirmPassword,
-        },
+        method: 'put',
+        apiPath: `candidate/update`,
+        actionTypes: [startRequestUpdateCandidate, startRequestUpdateCandidateSuccess, startRequestUpdateCandidateFail],
+        variables: {...data},
         dispatch,
         getState
     })

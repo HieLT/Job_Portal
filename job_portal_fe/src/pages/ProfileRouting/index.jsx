@@ -1,9 +1,8 @@
-import {useSelector} from "react-redux";
 import CandidateProfile from "../Candidate/Profile/index.jsx";
+import CompanyProfile from "../Company/Profile/index.jsx";
 import React from "react";
+import {getAuthRole} from "../../utils/localStorage.js";
 
 export default function ProfileRouting() {
-    const userRole = useSelector(state => state.auth.authUser)
-
-    return userRole !== 'Candidate' ? <CandidateProfile/> : ''
+    return getAuthRole() === 'Candidate' ? <CandidateProfile/> : <CompanyProfile/>
 }
