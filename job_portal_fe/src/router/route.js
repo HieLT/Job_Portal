@@ -69,35 +69,35 @@ const router = createBrowserRouter([
         path: '/account/profile',
         element: <ProfileRouting/>,
         loader: ({request, params}) => rootLoader(
-            {request, params}, false, 'LOAD_PROFILE_PAGE'
+            {request, params}, true, 'LOAD_PROFILE_PAGE'
         )
     },
     {
         path: '/admin/dashboard',
         element: <AdminDashboard />,
         loader: ({ request, params }) => rootLoader(
-            { request, params }, false, 'LOAD_ADMIN_PAGE'
+            { request, params }, true, 'LOAD_ADMIN_PAGE'
         )
     },
     {
         path: '/admin/candidates',
         element: <AdminCandidates />,
         loader: ({ request, params }) => rootLoader(
-            { request, params }, false, 'LOAD_ADMIN_PAGE'
+            { request, params }, true, 'LOAD_ADMIN_PAGE'
         )
     },
     {
         path: '/admin/companies',
         element: <AdminCompanies />,
         loader: ({ request, params }) => rootLoader(
-            { request, params }, false, 'LOAD_ADMIN_PAGE'
+            { request, params }, true, 'LOAD_ADMIN_PAGE'
         )
     },
     {
         path: '/admin/posted-jobs',
         element: <AdminPostedJobs />,
         loader: ({ request, params }) => rootLoader(
-            { request, params }, false, 'LOAD_ADMIN_PAGE'
+            { request, params }, true, 'LOAD_ADMIN_PAGE'
         )
     },
 ]);
