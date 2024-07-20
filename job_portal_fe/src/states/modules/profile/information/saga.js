@@ -5,6 +5,7 @@ function loadRouteData() {
 }
 
 function* handleActions() {
+    
 }
 
 export default function* loadInformationSaga() {

@@ -9,6 +9,7 @@ import {isValidate} from "./validate.js";
 import moment from "moment";
 import {isValidateLesson} from "./validates/validateLesson.js";
 import {validateBook} from "./validates/validateBook.js";
+import {validateCandidate} from "./validates/validateCandidate.js";
 
 export const VALIDATE_EMAIL_REGEX = /^[a-zA-Z0-9][a-zA-Z0-9_.+-]{1,}@[a-z0-9]{1,}(\.[a-z0-9]{1,}){1,2}$/
 export const VALIDATE_PASSWORD_REGEX = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{6,50}$/
@@ -130,8 +131,8 @@ export const handleCheckValidateConfirm = (data, errors, type) => {
     keys.map(key => {
         let validate
         switch (type) {
-            case 'book':
-                validate = validateBook(data, key, dataError);
+            case 'candidate':
+                validate = validateCandidate(data, key, dataError);
                 break;
             default:
                 validate = isValidate(data, key, dataError);

@@ -5,7 +5,7 @@ import React from "react";
 import 'ckeditor5/ckeditor5.css';
 import 'ckeditor5-premium-features/ckeditor5-premium-features.css';
 
-function CustomCKEditor() {
+function CustomCKEditor({placeholder, handleChangeInput}) {
     return (
         <CKEditor
             editor={ ClassicEditor }
@@ -20,7 +20,7 @@ function CustomCKEditor() {
                 mention: {
                     // Mention configuration
                 },
-                initialData: '<p>Hello from CKEditor 5 in React!</p>',
+                initialData: {placeholder},
             } }
         />
     );

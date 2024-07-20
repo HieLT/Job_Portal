@@ -19,6 +19,14 @@ export const setAuthRole = (role) => {
     return localStorage.setItem(AUTH_ROLE_STORE_KEY, role);
 }
 
+export const removeAuthRole = () => {
+    return localStorage.removeItem(AUTH_ROLE_STORE_KEY);
+}
+
+export const removeProfile = () => {
+    return localStorage.removeItem(AUTH_PROFILE_STORE_KEY);
+}
+
 export const setAuthEmail = (email) => {
     return localStorage.setItem(AUTH_EMAIL_STORE_KEY, email);
 }

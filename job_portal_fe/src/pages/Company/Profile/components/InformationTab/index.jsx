@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import './styles.scss';
-import {Avatar, Button, DatePicker, Flex, Input, Select} from "antd";
+import {Avatar, Button, DatePicker, Flex, Input} from "antd";
 import IconWarning from "../../../../../assets/images/icons/light/warning.svg";
 import InlineSVG from "react-inlinesvg";
 import {useDispatch, useSelector} from "react-redux";
@@ -13,39 +13,36 @@ import {
 import styles from './styles.module.scss'
 import User from '../../../../../assets/images/logos/user_default.png'
 import CustomCKEditor from "../../../../../components/CKEditor/index.jsx";
-import {handleCheckValidateConfirm} from "../../../../../utils/helper.js";
-import {createCandidate, updateCandidateProfile} from "../../../../../api/profile/index.js";
-import {getProfile} from "../../../../../utils/localStorage.js";
 
 export default function InformationTab() {
     const dispatch = useDispatch();
 
-    const candidateProfile = useSelector(state => state.information.candidateProfile);
-    const errorUpdateCandidateProfile = useSelector(state => state.information.errorUpdateCandidateProfile);
-    const isLoadingBtnUpdate = useSelector(state => state.information.isLoadingBtnUpdateCandidate);
+    const companyProfile = useSelector(state => state.information.companyProfile);
+    const errorUpdateCompanyProfile = useSelector(state => state.information.errorUpdateCompanyProfile);
+    const isLoadingBtnUpdate = useSelector(state => state.information.isLoadingBtnUpdateCompany);
 
     useEffect(() => {
         dispatch(setErrorUpdateCandidateProfile({
-            ...initialInformationState.errorUpdateCandidateProfile
+            ...initialInformationState.errorUpdateCompanyProfile
         }))
     }, [dispatch])
 
     const handleChangeInput = (value, type) => {
         /* Hiding error message */
-        if (errorUpdateCandidateProfile[type]?.length !== 0) {
+        if (errorUpdateCompanyProfile[type]?.length !== 0) {
             dispatch(setErrorUpdateCandidateProfile({
-                ...errorUpdateCandidateProfile,
+                ...errorUpdateCompanyProfile,
                 [type]: ''
             }))
         }
 
-        let data = _.cloneDeep(candidateProfile);
+        let data = _.cloneDeep(companyProfile);
         data[type] = value
         dispatch(setCandidateProfile(data))
     }
 
     const handleChangeInputEditor = (e) => {
-        let data = _.cloneDeep(candidateProfile);
+        let data = _.cloneDeep(companyProfile);
         data['profile_description'] = e.target.value
         dispatch(setCandidateProfile(data))
     }
@@ -57,12 +54,12 @@ export default function InformationTab() {
     }
 
     const handleUpdateProfile = () => {
-        const validate = handleCheckValidateConfirm(candidateProfile, errorUpdateCandidateProfile, 'candidate')
-        if (!validate.isError) {
-            getProfile() === '0' ? dispatch(createCandidate(candidateProfile)) : dispatch(updateCandidateProfile(candidateProfile))
-        } else {
-            dispatch(setErrorUpdateCandidateProfile(validate.dataError))
-        }
+        // const validate = handleCheckValidateConfirm(companyProfile, errorUpdateCompanyProfile)
+        // if (!validate.isError) {
+        //     dispatch(login(companyProfile))
+        // } else {
+        //     dispatch(setErrorLogin(validate.dataError))
+        // }
     }
 
     return (
@@ -80,44 +77,44 @@ export default function InformationTab() {
                     <div className={'flex flex-col w-1/3 justify-start'}>
                         <div className={`input-wrap`}>
                             <div className={'label-wrap'}>
-                                Họ <span className={'required'}>*</span>
+                                Tên công ty <span className={'required'}>*</span>
                             </div>
                             <Input
-                                className={`main-input ${errorUpdateCandidateProfile && errorUpdateCandidateProfile.first_name?.length > 0 ? 'error-input !border-none' : ''}`}
-                                placeholder={'Nhập họ'}
-                                value={candidateProfile.first_name}
-                                onChange={(e) => handleChangeInput(e.target.value, 'first_name')}
+                                className={`main-input ${errorUpdateCompanyProfile && errorUpdateCompanyProfile.name?.length > 0 ? 'error-input !border-none' : ''}`}
+                                placeholder={'Nhập tên công ty'}
+                                value={companyProfile.name}
+                                onChange={(e) => handleChangeInput(e.target.value, 'name')}
                                 onKeyDown={(e) => handleKeyDown(e)}
                             />
                             {
-                                errorUpdateCandidateProfile && errorUpdateCandidateProfile.first_name?.length > 0 ?
+                                errorUpdateCompanyProfile && errorUpdateCompanyProfile.name?.length > 0 ?
                                     <span className={`error`}>
                             <div className={`icon`}>
                               <InlineSVG src={IconWarning} width={14} height="auto"/>
                             </div>
-                                        {errorUpdateCandidateProfile.first_name}
+                                        {errorUpdateCompanyProfile.name}
                       </span> : ''
                             }
                         </div>
 
                         <div className={`input-wrap`}>
                             <div className={'label-wrap'}>
-                                Tên <span className={'required'}>*</span>
+                                Năm thành lập
                             </div>
                             <Input
-                                className={`main-input ${errorUpdateCandidateProfile && errorUpdateCandidateProfile.last_name?.length > 0 ? 'error-input !border-none' : ''}`}
-                                placeholder={'Nhập tên'}
-                                value={candidateProfile.last_name}
-                                onChange={(e) => handleChangeInput(e.target.value, 'last_name')}
+                                className={`main-input ${errorUpdateCompanyProfile && errorUpdateCompanyProfile.founded_year?.length > 0 ? 'error-input !border-none' : ''}`}
+                                placeholder={'Nhập năm thành lập'}
+                                value={companyProfile.founded_year}
+                                onChange={(e) => handleChangeInput(e.target.value, 'founded_year')}
                                 onKeyDown={(e) => handleKeyDown(e)}
                             />
                             {
-                                errorUpdateCandidateProfile && errorUpdateCandidateProfile.last_name?.length > 0 ?
+                                errorUpdateCompanyProfile && errorUpdateCompanyProfile.founded_year?.length > 0 ?
                                     <span className={`error`}>
                             <div className={`icon`}>
                               <InlineSVG src={IconWarning} width={14} height="auto"/>
                             </div>
-                                        {errorUpdateCandidateProfile.last_name}
+                                        {errorUpdateCompanyProfile.founded_year}
                       </span> : ''
                             }
                         </div>
@@ -127,19 +124,19 @@ export default function InformationTab() {
                                 Số điện thoại
                             </div>
                             <Input
-                                className={`main-input ${errorUpdateCandidateProfile && errorUpdateCandidateProfile.phone?.length > 0 ? 'error-input !border-none' : ''}`}
+                                className={`main-input ${errorUpdateCompanyProfile && errorUpdateCompanyProfile.phone?.length > 0 ? 'error-input !border-none' : ''}`}
                                 placeholder={'Nhập số điện thoại'}
-                                value={candidateProfile.phone}
+                                value={companyProfile.phone}
                                 onChange={(e) => handleChangeInput(e.target.value, 'phone')}
                                 onKeyDown={(e) => handleKeyDown(e)}
                             />
                             {
-                                errorUpdateCandidateProfile && errorUpdateCandidateProfile.phone?.length > 0 ?
+                                errorUpdateCompanyProfile && errorUpdateCompanyProfile.phone?.length > 0 ?
                                     <span className={`error`}>
                             <div className={`icon`}>
                               <InlineSVG src={IconWarning} width={14} height="auto"/>
                             </div>
-                                        {errorUpdateCandidateProfile.phone}
+                                        {errorUpdateCompanyProfile.phone}
                       </span> : ''
                             }
                         </div>
@@ -153,35 +150,8 @@ export default function InformationTab() {
                             <DatePicker
                                 className={'main-datepicker w-full'}
                                 placeholder={'Nhập ngày sinh'}
-                                value={candidateProfile.birth}
+                                value={companyProfile.birth}
                                 onChange={(e) => handleChangeInput(e, 'birth')}
-                                onKeyDown={(e) => handleKeyDown(e)}
-                            />
-                        </div>
-
-                        <div className={`input-wrap`}>
-                            <div className={'label-wrap'}>
-                                Giới tính
-                            </div>
-                            <Select
-                                defaultValue={'Male'}
-                                className={`main-select w-full`}
-                                value={candidateProfile.gender || 'Male'}
-                                options={[
-                                    {
-                                        label: 'Nam',
-                                        value: 'Male',
-                                    },
-                                    {
-                                        label: 'Nữ',
-                                        value: 'Female',
-                                    },
-                                    {
-                                        label: 'Khác',
-                                        value: 'Other',
-                                    }
-                                ]}
-                                onChange={(e) => handleChangeInput(e, 'gender')}
                                 onKeyDown={(e) => handleKeyDown(e)}
                             />
                         </div>
@@ -219,5 +189,6 @@ export default function InformationTab() {
                 </Flex>
             </div>
         </div>
-    );
+    )
+        ;
 }

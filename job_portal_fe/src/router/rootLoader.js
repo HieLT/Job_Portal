@@ -14,16 +14,19 @@ export const rootLoader = async ({request, params}, requiredAuth, saga = null, r
     const firstCondition =  getAuthToken();
     const secondCondition = url.pathname !== '/account/profile' && !authRoutes.includes(url.pathname);
 
+    if (url.pathname !== '/account/profile' && getAuthToken() && !auth.isAuthSuccess && getProfile() === '0') {
+        return redirect('/account/profile')
+    }
+
     if (!auth.isAuthSuccess && (firstCondition || secondCondition)) {
-        if (!url.pathname?.includes("/admin")) {
+        if (!url.pathname?.includes("/admin") && getProfile() === '1') {
             await store.dispatch(getMe());
-        } 
+        }
         auth = store.getState().auth;
-        setProfile(1)
     }
 
     if (url.pathname === '/account/profile') {
-        if (getProfile()) {
+        if (getProfile() === '1') {
             await store.dispatch(getMe());
         }
     }

@@ -7,7 +7,7 @@ export const initialInformationState = {
         last_name: '',
         email: '',
         birth: '',
-        gender: '',
+        gender: 'Male',
         phone: '',
         bio: '',
         profile_description: '',
@@ -16,7 +16,20 @@ export const initialInformationState = {
     errorUpdateCandidateProfile: {
         first_name: '',
         last_name: '',
+        phone: ''
+    },
+    companyProfile: {
+        avatar: '',
+        name: '',
         email: '',
+        founded_year: '',
+        phone: '',
+        bio: '',
+        profile_description: '',
+    },
+    errorUpdateCompanyProfile: {
+        name: '',
+        founded_year: '',
         phone: ''
     }
 }
@@ -28,7 +41,12 @@ const informationSlice = createSlice({
         candidateProfile: initialInformationState.candidateProfile,
         errorUpdateCandidateProfile: initialInformationState.errorUpdateCandidateProfile,
 
-        isLoadingBtnUpdate: false
+        /* company */
+        companyProfile: initialInformationState.companyProfile,
+        errorUpdateCompanyProfile: initialInformationState.errorUpdateCompanyProfile,
+
+        isLoadingBtnUpdateCandidate: false,
+        isLoadingBtnUpdateCompany: false
     },
     reducers: {
         setCandidateProfile: (state, action) => ({
@@ -38,6 +56,38 @@ const informationSlice = createSlice({
         setErrorUpdateCandidateProfile: (state, action) => ({
             ...state,
             errorUpdateCandidateProfile: action.payload
+        }),
+        setCompanyProfile: (state, action) => ({
+            ...state,
+            companyProfile: action.payload
+        }),
+        setErrorUpdateCompanyProfile: (state, action) => ({
+            ...state,
+            errorUpdateCompanyProfile: action.payload
+        }),
+        startRequestCreateCandidate: (state) => ({
+            ...state,
+            isLoadingBtnUpdateCandidate: true
+        }),
+        startRequestCreateCandidateSuccess: (state) => ({
+            ...state,
+            isLoadingBtnUpdateCandidate: false
+        }),
+        startRequestCreateCandidateFail: (state) => ({
+            ...state,
+            isLoadingBtnUpdateCandidate: false
+        }),
+        startRequestUpdateCandidate: (state) => ({
+            ...state,
+            isLoadingBtnUpdateCandidate: true
+        }),
+        startRequestUpdateCandidateSuccess: (state) => ({
+            ...state,
+            isLoadingBtnUpdateCandidate: false
+        }),
+        startRequestUpdateCandidateFail: (state) => ({
+            ...state,
+            isLoadingBtnUpdateCandidate: false
         }),
         refreshState: (state, action) => {
             // TODO
@@ -49,6 +99,9 @@ const informationSlice = createSlice({
 })
 
 export const {
+    startRequestUpdateCandidate, startRequestUpdateCandidateSuccess, startRequestUpdateCandidateFail,
+    startRequestCreateCandidate, startRequestCreateCandidateSuccess, startRequestCreateCandidateFail,
+    setCompanyProfile, setErrorUpdateCompanyProfile,
     setCandidateProfile, setErrorUpdateCandidateProfile
 } = informationSlice.actions
 
