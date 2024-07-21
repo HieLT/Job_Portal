@@ -111,6 +111,54 @@ class Auth {
         // })(req, res);
     };
 
+    async checkLoggedIn(req: Request, res: Response) {
+        if (req.user) {
+            const email = req.user;
+            const account = await accountModel.findOne({email});
+            if (account) {
+                let profile = null;
+                if (account.role === "Admin") {
+                    if (account.admin) {
+                        profile = await adminService.getProfile(String(account.admin));
+                    }
+                    else {
+                        profile = {};
+                    }
+                }
+                else if (account.role === "Candidate") {
+                    if (account.candidate) {
+                        profile = await candidateService.getCandidateById(String(account.candidate));
+                    }
+                    else {
+                        profile = {};
+                    }
+                }
+                else {
+                    if (account.company) {
+                        profile = await companyService.getProfile(String(account.company));
+                    }
+                    else {
+                        profile = {};
+                    }
+                }
+                res.status(200).send({
+                    account: {
+                        email: account.email,
+                        role: account.role,
+                        verified: account.verified,
+                        socket_id: account.socket_id
+                    },
+                    profile
+                });
+            }
+            else {
+                res.status(401).send({message: 'Account not found'});
+            }
+        } else {
+            res.status(403).send({ message: "Not Authorized" });
+        }
+    }
+
     async loginGoogle(req: Request, res: Response, next: NextFunction) {
         // Login with Google logic
         passport.authenticate('google', {
