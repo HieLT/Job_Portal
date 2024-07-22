@@ -1,45 +1,41 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./styles.module.scss";
 import MainLayout from "../../../layouts/MainLayout";
+import { getAllCompany } from "../../../api/admin";
+import { setBreadcrumb } from '../../../states/modules/app/index.js';
+import { useSelector, useDispatch } from "react-redux";
 
 const AdminCompanies = () => {
-    const jobs = [
-        {
-            id: 1,
-            title: 'Software Engineer',
-            description: 'Develop and maintain web applications.',
-            datePosted: '2024-07-01',
-        },
-        {
-            id: 2,
-            title: 'Project Manager',
-            description: 'Oversee project development and ensure timely delivery.',
-            datePosted: '2024-06-25',
-        },
-        {
-            id: 3,
-            title: 'Data Analyst',
-            description: 'Analyze data and provide insights to the team.',
-            datePosted: '2024-07-10',
-        },
-    ];
+    const dispatch = useDispatch(); 
+    const companies = useSelector((state) => state.admin.allCompany);
+    console.log(companies);
+
+    useEffect(() => {
+        dispatch(setBreadcrumb({
+            breadcrumb: 'Danh sách công ty'
+        }));
+        dispatch(getAllCompany());
+    }, [dispatch]);
 
     return (
         <MainLayout>
             <div className={styles.container}>
-                <h1 className={styles.title}>Company Listings</h1>
-                <div className={styles.grid}>
-                    {jobs.map(job => (
-                        <div key={job.id} className={styles.card}>
-                            <div className={styles.cardContent}>
-                                <h2 className={styles.cardTitle}>{job.title}</h2>
-                                <p className={styles.cardSubtitle}>{job.description}</p>
-                                <p className={styles.cardDate}>Posted on {new Date(job.datePosted).toLocaleDateString()}</p>
+                <div className={styles.barContainer}>
+                    {companies.map((company) => (
+                        <div key={company._id} className={styles.bar}>
+                            <div className={styles.barContent}>
+                                <img src={company.logo} alt={company.name} className={styles.barLogo} />
+                                <h2 className={styles.barTitle}>{company.name}</h2>
+                                <p className={styles.barDescription}>{company.email}</p>
+                                <p className={styles.barDate}>Founded on {new Date(company.founded_year).toLocaleDateString()}</p>
+                                <a href={company.website_url} target="_blank" rel="noopener noreferrer" className={styles.barWebsite}>
+                                    Visit Website
+                                </a>
                             </div>
                         </div>
                     ))}
                 </div>
-             </div>
+            </div>
         </MainLayout>
     );
 };

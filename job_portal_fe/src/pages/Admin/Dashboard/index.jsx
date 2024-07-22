@@ -85,17 +85,17 @@ function Dashboard() {
                 <div className={styles['card-container']}>
                     <div className={styles.card}>                                       
                         <Card   count = {countCompanies}
-                                cardTitle = 'Company'
+                                cardTitle = 'Công ty'
                         />
                     </div>
                     <div className={styles.card}>                                       
                         <Card   count={countCandidates}  
-                                cardTitle = 'Candidate'
+                                cardTitle = 'Ứng viên'
                         />
                     </div>
                     <div className={styles.card}>                                       
                         <Card   count= {countJobs}
-                                cardTitle = 'Job'
+                                cardTitle = 'Công việc'
                         />
                     </div>
                     <div className={styles.card}>
