@@ -1,60 +1,64 @@
-/* src/pages/Admin/PostedJobs/styles.module.scss */
-
 .container {
-    margin-left: auto;
-    margin-right: auto;
-    padding: 1rem;
+    padding: 20px;
 }
 
 .title {
-    font-size: 1.5rem; /* 2xl */
-    font-weight: 700;  /* bold */
-    margin-bottom: 1rem; /* mb-4 */
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
 }
 
-.grid {
-    display: grid;
-    gap: 1rem; /* gap-4 */
+.barContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-@media (min-width: 768px) {
-    .grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr)); /* md:grid-cols-2 */
+.bar {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        background: #fff;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 }
 
-@media (min-width: 1024px) {
-    .grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr)); /* lg:grid-cols-3 */
-    }
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
 }
 
-.card {
-    background-color: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06); /* shadow-md */
-    border-radius: 0.5rem; /* rounded-lg */
-    padding: 1.5rem; /* p-6 */
-    transition: box-shadow 0.3s ease-in-out; /* transition-shadow duration-300 */
+.barContent {
+    display: flex;
+    flex-direction: column;
 }
 
-.card:hover {
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05); /* hover:shadow-lg */
+.barTitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
 }
 
-.cardContent {
-    /* Additional styles if needed */
+.barSubtitle {
+    font-size: 1rem;
+    color: #666;
+    margin: 5px 0;
 }
 
-.cardTitle {
-    font-size: 1.125rem; /* text-lg */
-    font-weight: 600; /* font-semibold */
-}
-
-.cardSubtitle {
-    color: rgba(55, 65, 81, 1); /* text-gray-700 */
-}
-
-.cardDate {
-    color: rgba(107, 114, 128, 1); /* text-gray-500 */
-    font-size: 0.875rem; /* text-sm */
+.barInfo {
+    font-size: 0.875rem;
+    color: #999;
+    margin: 2px 0;
 }
