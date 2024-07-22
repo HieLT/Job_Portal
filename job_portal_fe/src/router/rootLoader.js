@@ -4,7 +4,6 @@ import {initialSaga} from "../states/modules/routing/index.js";
 import {convertQueryStringToObject, hasRole} from "../utils/helper";
 import {getMe} from "../api/auth/index.js";
 import {getAuthToken} from "../utils/localStorage";
-import {getAuthToken} from "../utils/localStorage";
 import {setLocation} from "../states/modules/app/index.js";
 import _ from "lodash";
 import {USER_ROLE} from "../utils/constants.js";
