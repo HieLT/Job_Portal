@@ -1,15 +1,10 @@
 import React from 'react';
 import styles from "./styles.module.scss";
-import {
-    getProfile,
-    removeAuthEmail,
-    removeAuthRole,
-    removeAuthToken,
-    removeProfile
-} from "../../../../../utils/localStorage.js";
+import {removeAuthToken} from "../../../../../utils/localStorage.js";
 import {startRequestGetMeFail} from "../../../../../states/modules/auth/index.js";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
+import _ from "lodash";
 
 function PopoverProfile() {
     const navigate = useNavigate();
@@ -18,9 +13,6 @@ function PopoverProfile() {
 
     const handleConfirmLogout = () => {
         removeAuthToken();
-        removeAuthEmail();
-        removeAuthRole();
-        removeProfile();
         dispatch(startRequestGetMeFail())
         navigate('/login');
     }
@@ -29,12 +21,9 @@ function PopoverProfile() {
         <div className={styles.modalInfoWrap}>
             <div className={styles.personalInformationWrap}>
                 {
-                    getProfile() === '1' ? <>
-                        <div className={styles.name}>
-                            {authUser.user.username}
-                        </div>
+                    !_.isEmpty(authUser.profile) ? <>
                         <div className={styles.role}>
-                            {authUser.user.email || 'Updating...'}
+                            {authUser.account.email}
                         </div>
                     </> : ''
                 }
@@ -42,7 +31,7 @@ function PopoverProfile() {
             <div className={styles.mainModalInfoWrap}>
                 <ul className={styles.menuInfoWrap}>
                     {
-                        getProfile() === '1' ? <li
+                        !_.isEmpty(authUser.profile) ? <li
                             onClick={() => navigate('/account/profile')}
                             className={`${styles.itemInfoWrap}`}
                         >

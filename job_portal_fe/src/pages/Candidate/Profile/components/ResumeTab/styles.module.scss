@@ -14,6 +14,7 @@
         outline: none;
         border: none;
     }
+
     border-radius: 6px;
     background-color: #f9f9f9;
     width: 100%;
@@ -23,6 +24,8 @@
 
 .deleteBtn {
     svg {
-        @apply hover:fill-[red] cursor-pointer
+        @apply w-6 h-4 fill-[red] mr-1.5
     }
+
+    @apply text-[red] flex items-center justify-center cursor-pointer
 }

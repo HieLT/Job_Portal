@@ -33,7 +33,8 @@ export default function ModalDeleteDefault(props) {
                         className={`main-btn-close mx-[5px]`}
                         size={'large'}
                         onClick={() => handleCancel()}
-                    >Close
+                    >
+                        Hủy
                     </Button>
                     <Button
                         loading={loading}

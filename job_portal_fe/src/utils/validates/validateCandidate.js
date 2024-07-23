@@ -1,4 +1,5 @@
 import _ from "lodash";
+import {isValidPhone} from "../helper.js";
 
 export const validateCandidate = (data, type, errors) => {
     let error = false
@@ -19,6 +20,19 @@ export const validateCandidate = (data, type, errors) => {
                 error = true;
             } else {
                 dataError.last_name = '';
+            }
+            break;
+        case 'phone':
+            if (data.phone) {
+                if (!isValidPhone(data.phone)) {
+                    dataError.phone = 'Số điện thoại không đúng định dạng!';
+                    error = true;
+                } else if (data.phone?.length > 200) {
+                    dataError.phone = 'Kí tự tối đa cho phép là 200 kí tự!';
+                    error = true;
+                } else {
+                    dataError.phone = '';
+                }
             }
             break;
     }

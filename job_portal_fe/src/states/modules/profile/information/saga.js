@@ -1,11 +1,42 @@
-import {all, fork} from "redux-saga/effects";
+import {all, fork, takeLatest, put} from "redux-saga/effects";
+import {
+    startRequestCreateCandidateFail,
+    startRequestCreateCandidateSuccess,
+    startRequestUpdateCandidateFail,
+    startRequestUpdateCandidateSuccess, startRequestUploadCandidateAvatarFail, startRequestUploadCandidateAvatarSuccess
+} from "./index.js";
+import {getNotification} from "../../../../utils/helper.js";
+import {getMe} from "../../../../api/auth/index.js";
 
-function loadRouteData() {
-    // TODO
+function* loadRouteData() {
+    yield put(getMe())
 }
 
 function* handleActions() {
-    
+    yield takeLatest(startRequestCreateCandidateSuccess, function* () {
+        getNotification('success', 'Cập nhật thành công')
+        yield put(getMe())
+    });
+
+    yield takeLatest(startRequestCreateCandidateFail, function () {
+        getNotification('error', 'Đã có lỗi xảy ra, vui lòng thử lại sau')
+    });
+
+    yield takeLatest(startRequestUpdateCandidateSuccess, function () {
+        getNotification('success', 'Cập nhật thành công')
+    })
+
+    yield takeLatest(startRequestUpdateCandidateFail, function () {
+        getNotification('error', 'Đã có lỗi xảy ra, vui lòng thử lại sau')
+    })
+
+    yield takeLatest(startRequestUploadCandidateAvatarSuccess, function () {
+        getNotification('success', 'Cập nhật thành công')
+    })
+
+    yield takeLatest(startRequestUploadCandidateAvatarFail, function () {
+        getNotification('error', 'Đã có lỗi xảy ra, vui lòng thử lại sau')
+    })
 }
 
 export default function* loadInformationSaga() {

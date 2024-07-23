@@ -8,8 +8,9 @@ import User from '../../../assets/images/logos/user_default.png'
 import './styles.scss'
 import {MailOutlined, PhoneOutlined} from '@ant-design/icons'
 import InformationTab from "./components/InformationTab/index.jsx";
-import {getProfile} from "../../../utils/localStorage.js";
+import _ from "lodash";
 import {setTab} from "../../../states/modules/profile/index.js";
+import ResumeTab from "./components/ResumeTab/index.jsx";
 
 export default function CandidateProfile() {
     const dispatch = useDispatch()
@@ -27,48 +28,49 @@ export default function CandidateProfile() {
     }, [])
 
     const authUser = useSelector(state => state.auth.authUser)
+    const isProfileEmpty = _.isEmpty(authUser.profile)
 
     return <HeaderOnly>
         <div className={'w-full'}>
             <div className={styles.backgroundWrap}>
                 <div className={`${styles.avatarWrap} avatar-custom`}>
-                    <Avatar src={User} className={'w-[100px] h-[100px]'}/>
+                    <Avatar src={isProfileEmpty ? User : authUser.profile.avatar} className={'w-[100px] h-[100px]'}/>
                 </div>
                 <div className={'font-semibold text-xl mt-3'}>
                     {
-                        getProfile() === '0' ? <i>Đang cập nhật</i>
-                            : authUser.profile.first_name + ' ' + authUser.profile.last_name
+                        isProfileEmpty ? <i>Đang cập nhật</i>
+                            : authUser.profile?.first_name + ' ' + authUser.profile?.last_name
                     }
                 </div>
                 <div className={'flex justify-center items-center text-[#78829d] mt-2.5'}>
                     <div className={`${styles.info} mr-8`}>
                         <PhoneOutlined className={'mr-1.5'}/>
                         {
-                            getProfile() === '1' ?
-                                <a href={`tel:${authUser.profile.phone}`}>{authUser.profile.phone}</a>
+                            !isProfileEmpty ?
+                                <a href={`tel:${authUser.profile?.phone}`}>{authUser.profile?.phone}</a>
                                 : <i>Đang cập nhật</i>
                         }
                     </div>
                     <div className={styles.info}>
                         <MailOutlined className={'mr-1.5'}/>
-                        <a href={`mailto:minhtuanng12@gmail.com}`}>minhtuanng12@gmail.com</a>
+                        <a href={`mailto:${authUser.account.email}`}>{authUser.account.email}</a>
                     </div>
                 </div>
             </div>
             <div className={'mt-[-45px] tab-custom'}>
                 <Tabs
-                    onChange={(e) => console.log(e)}
+                    onChange={(tab) => dispatch(setTab(tab))}
                     defaultActiveKey="1"
                     items={[
                         {
                             label: 'Thông tin',
-                            key: 'info',
+                            key: 'information',
                             children: <InformationTab/>,
                         },
                         {
                             label: 'Quản lý CV',
                             key: 'cv',
-                            children: 'Tab 2',
+                            children: <ResumeTab/>,
                         },
                         {
                             label: 'Đổi mật khẩu',
