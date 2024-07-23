@@ -5,8 +5,8 @@ import {Breadcrumb, Popover} from "antd";
 import contentInfo from './components/PopoverProfile';
 import ImageUser from '../../../../src/assets/images/logos/user_default.png'
 import {useSelector} from "react-redux";
-import {getProfile} from "../../../utils/localStorage.js";
 import User from '../../../assets/images/logos/user_default.png'
+import _ from "lodash";
 
 const Header = ({isHeaderOnly}) => {
     const openFullScreen = () => {
@@ -35,7 +35,7 @@ const Header = ({isHeaderOnly}) => {
     return (
         <header className={`${styles.headerWrap} ${isHeaderOnly && '!bg-[white]'}`}>
             {
-                getProfile() === '1' ?
+                !_.isEmpty(authUser.profile) ?
                     <div className={styles.headerLeftWrap}>
                         {
                             isHeaderOnly ?

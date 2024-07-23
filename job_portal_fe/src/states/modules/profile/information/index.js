@@ -46,6 +46,7 @@ const informationSlice = createSlice({
         errorUpdateCompanyProfile: initialInformationState.errorUpdateCompanyProfile,
 
         isLoadingBtnUpdateCandidate: false,
+        isLoadingBtnUpdateCandidateAvatar: false,
         isLoadingBtnUpdateCompany: false
     },
     reducers: {
@@ -81,14 +82,30 @@ const informationSlice = createSlice({
             ...state,
             isLoadingBtnUpdateCandidate: true
         }),
-        startRequestUpdateCandidateSuccess: (state) => ({
-            ...state,
-            isLoadingBtnUpdateCandidate: false
-        }),
+        startRequestUpdateCandidateSuccess: (state, action) => {
+            return ({
+                ...state,
+                isLoadingBtnUpdateCandidate: false,
+                authUser: action.payload
+            })
+        },
         startRequestUpdateCandidateFail: (state) => ({
             ...state,
             isLoadingBtnUpdateCandidate: false
         }),
+        startRequestUploadCandidateAvatar: (state) => ({
+            ...state,
+            isLoadingBtnUpdateCandidateAvatar: true
+        }),
+        startRequestUploadCandidateAvatarSuccess: (state) => ({
+            ...state,
+            isLoadingBtnUpdateCandidateAvatar: false
+        }),
+        startRequestUploadCandidateAvatarFail: (state) => ({
+            ...state,
+            isLoadingBtnUpdateCandidateAvatar: false
+        }),
+
         refreshState: (state, action) => {
             // TODO
             return ({
@@ -99,6 +116,7 @@ const informationSlice = createSlice({
 })
 
 export const {
+    startRequestUploadCandidateAvatar, startRequestUploadCandidateAvatarSuccess, startRequestUploadCandidateAvatarFail,
     startRequestUpdateCandidate, startRequestUpdateCandidateSuccess, startRequestUpdateCandidateFail,
     startRequestCreateCandidate, startRequestCreateCandidateSuccess, startRequestCreateCandidateFail,
     setCompanyProfile, setErrorUpdateCompanyProfile,

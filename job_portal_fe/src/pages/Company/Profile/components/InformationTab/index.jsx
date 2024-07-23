@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import './styles.scss';
 import {Avatar, Button, DatePicker, Flex, Input} from "antd";
 import IconWarning from "../../../../../assets/images/icons/light/warning.svg";
@@ -7,7 +7,6 @@ import {useDispatch, useSelector} from "react-redux";
 import _ from "lodash";
 import {
     initialInformationState,
-    setCandidateProfile,
     setErrorUpdateCandidateProfile
 } from "../../../../../states/modules/profile/information/index.js";
 import styles from './styles.module.scss'
@@ -17,7 +16,7 @@ import CustomCKEditor from "../../../../../components/CKEditor/index.jsx";
 export default function InformationTab() {
     const dispatch = useDispatch();
 
-    const companyProfile = useSelector(state => state.information.companyProfile);
+    const [companyProfile, setCompanyProfile] = useState({})
     const errorUpdateCompanyProfile = useSelector(state => state.information.errorUpdateCompanyProfile);
     const isLoadingBtnUpdate = useSelector(state => state.information.isLoadingBtnUpdateCompany);
 
@@ -38,13 +37,13 @@ export default function InformationTab() {
 
         let data = _.cloneDeep(companyProfile);
         data[type] = value
-        dispatch(setCandidateProfile(data))
+        setCompanyProfile(data)
     }
 
     const handleChangeInputEditor = (e) => {
         let data = _.cloneDeep(companyProfile);
         data['profile_description'] = e.target.value
-        dispatch(setCandidateProfile(data))
+        setCompanyProfile(data)
     }
 
     const handleKeyDown = (event) => {

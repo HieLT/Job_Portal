@@ -9,13 +9,11 @@ import {
     startRequestLoginFail,
     startRequestLoginSuccess
 } from "./index.js";
-import {setAuthEmail, setAuthRole, setAuthToken, setProfile} from "../../../utils/localStorage";
-import {getMe} from "../../../api/auth/index.js";
+import {setAuthToken} from "../../../utils/localStorage";
 import {goToPage} from "../app/index.js";
 import {getNotification} from "../../../utils/helper.js";
 import {USER_ROLE} from "../../../utils/constants.js";
-import store from "../../configureStore.js";
-import {setAuthUser} from "../profile/index.js";
+import _ from "lodash";
 
 function* loadRouteData() {
     //
@@ -24,18 +22,21 @@ function* loadRouteData() {
 function* handleActions() {
     yield takeLatest(startRequestLoginSuccess, function* (action) {
         let token = action.payload.account.token;
-        let email = action.payload.account.email;
         setAuthToken(token);
-        setAuthEmail(email);
-        store.dispatch(setAuthUser(action.payload.account))
-        if (action.payload.account.role === USER_ROLE['ADMIN']) {
+        if (!_.isEmpty(action.payload.profile)) {
             yield put(goToPage({
-                path: "/admin/dashboard"
+                path: '/'
             }))
         } else {
-            yield put(goToPage({
-                path: "/account/profile"
-            }))
+            if (action.payload.account.role === USER_ROLE['ADMIN']) {
+                yield put(goToPage({
+                    path: "/admin/dashboard"
+                }))
+            } else {
+                yield put(goToPage({
+                    path: "/account/profile"
+                }))
+            }
         }
         // yield put(getMe());
     });

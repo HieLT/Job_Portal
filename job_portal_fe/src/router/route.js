@@ -14,6 +14,7 @@ import ForgotPassword from "../pages/Auth/ForgotPassword/index.jsx";
 import VerifyEmailResult from "../pages/Auth/VerifyEmailResult/index.jsx";
 import {USER_ROLE} from "../utils/constants.js";
 import ProfileRouting from "../pages/ProfileRouting/index.jsx";
+import Forbidden from "../components/Forbidden/index.jsx";
 
 const router = createBrowserRouter([
     {
@@ -76,28 +77,35 @@ const router = createBrowserRouter([
         path: '/admin/dashboard',
         element: <AdminDashboard />,
         loader: ({ request, params }) => rootLoader(
-            { request, params }, true, 'LOAD_ADMIN_PAGE'
+            { request, params }, true, 'LOAD_ADMIN_PAGE', USER_ROLE['ADMIN']
         )
     },
     {
         path: '/admin/candidates',
         element: <AdminCandidates />,
         loader: ({ request, params }) => rootLoader(
-            { request, params }, true, 'LOAD_ADMIN_PAGE'
+            { request, params }, true, 'LOAD_ADMIN_PAGE', USER_ROLE['ADMIN']
         )
     },
     {
         path: '/admin/companies',
         element: <AdminCompanies />,
         loader: ({ request, params }) => rootLoader(
-            { request, params }, true, 'LOAD_ADMIN_PAGE'
+            { request, params }, true, 'LOAD_ADMIN_PAGE', USER_ROLE['ADMIN']
         )
     },
     {
         path: '/admin/posted-jobs',
         element: <AdminPostedJobs />,
         loader: ({ request, params }) => rootLoader(
-            { request, params }, true, 'LOAD_ADMIN_PAGE'
+            { request, params }, true, 'LOAD_ADMIN_PAGE', USER_ROLE['ADMIN']
+        )
+    },
+    {
+        path: '/forbidden',
+        element: <Forbidden />,
+        loader: ({ request, params }) => rootLoader(
+            { request, params }, true
         )
     },
 ]);
