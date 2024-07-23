@@ -1,6 +1,7 @@
 import {model, Schema, Document} from "mongoose";
 
-interface ICompany extends Document {
+export interface ICompany extends Document {
+    _id: Schema.Types.ObjectId;
     name: string;
     logo: string;
     description: string;

@@ -1,7 +1,7 @@
-import candidateModel from "../models/candidate.model";
+import candidateModel, {ICandidate} from "../models/candidate.model";
 
 class CandidateService {
-    async createCandidate(candidate: any) {
+    async createCandidate(candidate: Partial<ICandidate>) : Promise<ICandidate> {
         try {
             const newCandidate = new candidateModel(candidate);
             await newCandidate.save();
@@ -11,7 +11,7 @@ class CandidateService {
         }
     }
 
-    async getCandidates() {
+    async getCandidates() : Promise<ICandidate[]> {
         try {
             const candidates = await candidateModel.find().populate('account', 'email').select(
                 '_id first_name last_name phone avatar birth'
@@ -22,7 +22,7 @@ class CandidateService {
         }
     }
 
-    async getCandidateById(id: string) {
+    async getCandidateById(id: string) : Promise<ICandidate | null> {
         try {
             const candidate = await candidateModel.findById(id).exec();
             return candidate;
@@ -31,48 +31,48 @@ class CandidateService {
         }
     }
 
-    async updateCandidate(id: string, candidate: any) {
+    async updateCandidate(id: string, candidate: Partial<ICandidate>) : Promise<ICandidate | null> {
         try {
-            await candidateModel.findByIdAndUpdate(id, candidate).exec();
-            return candidateModel.findById(id).exec();
+            const updatedCandidate = candidateModel.findByIdAndUpdate(id, candidate, {new: true}).exec();
+            return updatedCandidate;
         } catch (error) {
             throw error;
         }
     }
 
-    async updateResume(id: string, resume: string) {
+    async updateResume(id: string, resume: string) : Promise<ICandidate | null> {
         try {
-            await candidateModel.findByIdAndUpdate(id, {resume_path: resume}).exec();
-            return candidateModel.findById(id).exec();
+            const updatedCandidate = await candidateModel.findByIdAndUpdate(id, {resume_path: resume}, {new: true}).exec();
+            return updatedCandidate;
         }
         catch (error) {
             throw error;
         }
     } 
 
-    async deleteResume(id: string) {
+    async deleteResume(id: string) : Promise<ICandidate | null> {
         try {
-            await candidateModel.findByIdAndUpdate(id, {resume_path: ''}).exec();
-            return candidateModel.findById(id).exec();
+            const updatedCandidate = await candidateModel.findByIdAndUpdate(id, {resume_path: ''}, {new: true}).exec();
+            return updatedCandidate;
         }
         catch(error) {
             throw error;
         }
     }
 
-    async uploadAvatar(id: string, avatar: string) {
+    async uploadAvatar(id: string, avatar: string) : Promise<ICandidate | null> {
         try {
-            await candidateModel.findByIdAndUpdate(id, {
+            const updatedCandidate = await candidateModel.findByIdAndUpdate(id, {
                 avatar: avatar
-            }).exec();
-            return candidateModel.findById(id).exec();
+            }, {new: true}).exec();
+            return updatedCandidate;
         }
         catch (error) {
             throw error;
         }
     } 
 
-    async deleteCandidate(id: string) {
+    async deleteCandidate(id: string) : Promise<{message: string}> {
         try {
             await candidateModel.findByIdAndDelete(id).exec();
             return {message: 'Candidate deleted successfully'};

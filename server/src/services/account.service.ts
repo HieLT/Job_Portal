@@ -1,7 +1,7 @@
-import accountModel from "../models/account.model";
+import accountModel, {IAccount} from "../models/account.model";
 
 class AccountService {
-    async createAccount(email: string, password: string, role: string) {
+    async createAccount(email: string, password: string, role: string) : Promise<IAccount> {
         try {
             const account = new accountModel({
                 email,

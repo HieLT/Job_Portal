@@ -8,9 +8,9 @@ const adminRouter = express.Router();
 
 adminRouter.get('/get-candidate', [authentication], candidateController.getCandidates);
 adminRouter.get('/get-company', [authentication], companyController.getAllCompanys);
-adminRouter.post('/delete-candidate', [authentication], candidateController.deleteCandidate);
-adminRouter.post('/delete-company', [authentication], companyController.deleteCompany);
+adminRouter.delete('/delete-candidate', [authentication], candidateController.deleteCandidate);
+adminRouter.delete('/delete-company', [authentication], companyController.deleteCompany);
 adminRouter.get('/get-profile', [authentication], adminController.getProfile);
-adminRouter.post('/update-profile', [authentication], adminController.updateProfile);
+adminRouter.put('/update-profile', [authentication], adminController.updateProfile);
 
 export default adminRouter;

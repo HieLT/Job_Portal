@@ -1,6 +1,7 @@
 import mongoose, { Schema, model, Document } from 'mongoose';
 
-interface IChatMessage extends Document {
+export interface IChatMessage extends Document {
+    _id: Schema.Types.ObjectId;
     participants: mongoose.Types.ObjectId[];
     messages: {
         to: mongoose.Types.ObjectId;

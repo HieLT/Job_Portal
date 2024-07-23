@@ -3,7 +3,7 @@ import accountModel from "../models/account.model";
 import adminService from "../services/admin.service";
 
 class AdminController {
-    async getProfile(req: Request, res: Response) {
+    async getProfile(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;
             const account = await accountModel.findOne({email});
@@ -25,7 +25,7 @@ class AdminController {
         }
     }
 
-    async updateProfile(req: Request, res: Response) {
+    async updateProfile(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;
             const account = await accountModel.findOne({email});

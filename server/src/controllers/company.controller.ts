@@ -4,7 +4,7 @@ import companyService from "../services/company.service";
 import firebaseService from "../services/firebase.service";
 
 class CompanyController {
-    async createCompany(req: Request, res: Response) {
+    async createCompany(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;
             const account = await accountModel.findOne({email: email});
@@ -29,7 +29,7 @@ class CompanyController {
         }
     }
 
-    async getAllCompanys(req: Request, res: Response) {
+    async getAllCompanys(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;
             const account = await accountModel.findOne({email: email});
@@ -46,7 +46,7 @@ class CompanyController {
         }
     }
 
-    async getProfile(req: Request, res: Response) {
+    async getProfile(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;
             const account = await accountModel.findOne({email});
@@ -75,7 +75,7 @@ class CompanyController {
         }
     }
 
-    async updateProfile(req: Request, res: Response) {
+    async updateProfile(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;
             const account = await accountModel.findOne({email});
@@ -92,7 +92,7 @@ class CompanyController {
         }
     }
 
-    async deleteCompany(req: Request, res: Response) {
+    async deleteCompany(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;
             const account = await accountModel.findOne({email});

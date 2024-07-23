@@ -1,6 +1,7 @@
 import {model, Schema, Document} from "mongoose";
 
-interface IApplication extends Document {
+export interface IApplication extends Document {
+    _id: Schema.Types.ObjectId;
     job_id: Schema.Types.ObjectId;
     candidate_id: Schema.Types.ObjectId;
     resume_path: string;

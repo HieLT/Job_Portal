@@ -1,6 +1,7 @@
 import { model, Schema } from "mongoose";
 
-interface IAccount extends Document {
+export interface IAccount extends Document {
+    _id: Schema.Types.ObjectId;
     email: string;
     password?: string;
     role: 'Candidate' | 'Company' | 'Admin';

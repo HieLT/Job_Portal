@@ -4,7 +4,7 @@ import accountModel from "../models/account.model";
 import firebaseService from "../services/firebase.service";
 
 class CandidateController {
-    async createCandidate(req: Request, res: Response) {
+    async createCandidate(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;
             const account = await accountModel.findOne({email});
@@ -25,7 +25,7 @@ class CandidateController {
         }
     }
 
-    async getCandidates(req: Request, res: Response) {
+    async getCandidates(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;
             const account = await accountModel.findOne({email});
@@ -41,7 +41,7 @@ class CandidateController {
         }
     }
 
-    async getProfile(req: Request, res: Response) {
+    async getProfile(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;
             const account = await accountModel.findOne({email});
@@ -69,7 +69,7 @@ class CandidateController {
         }
     }
 
-    async uploadResume(req: Request, res: Response) {
+    async uploadResume(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;
             const account = await accountModel.findOne({email});
@@ -93,7 +93,7 @@ class CandidateController {
         }
     }
 
-    async deleteResume(req: Request, res: Response) {
+    async deleteResume(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;
             const account = await accountModel.findOne({email});
@@ -107,7 +107,7 @@ class CandidateController {
         }
     }
 
-    async uploadAvatar(req: Request, res: Response) {
+    async uploadAvatar(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;
             const account = await accountModel.findOne({email});
@@ -127,7 +127,7 @@ class CandidateController {
         } 
     }
 
-    async updateCandidate(req: Request, res: Response) {
+    async updateCandidate(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;
             const account = await accountModel.findOne({email});
@@ -145,7 +145,7 @@ class CandidateController {
         }
     }
 
-    async deleteCandidate(req: Request, res: Response) {
+    async deleteCandidate(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;
             const account = await accountModel.findOne({email});

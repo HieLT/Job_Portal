@@ -1,7 +1,7 @@
-import adminModel from "../models/admin.model";
+import adminModel, {IAdmin} from "../models/admin.model";
 
 class AdminService {
-    async getProfile(id: string) {
+    async getProfile(id: string) : Promise<IAdmin | null>{
         try {
             const profile = await adminModel.findById(id).exec();
             return profile;
@@ -10,10 +10,10 @@ class AdminService {
         }
     }
 
-    async updateProfile(id: string, profile : any) {
+    async updateProfile(id: string, profile : Partial<IAdmin>) : Promise<IAdmin | null> {
         try {
-            await adminModel.findByIdAndUpdate(id, profile).exec();
-            return adminModel.findById(id).exec();
+            const updatedAdmin = await adminModel.findByIdAndUpdate(id, profile, {new: true}).exec();
+            return updatedAdmin;
         }
         catch(error) {
             throw error;

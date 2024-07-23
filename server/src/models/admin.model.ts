@@ -1,6 +1,7 @@
 import {model, Schema} from "mongoose";
 
-interface IAdmin extends Document {
+export interface IAdmin extends Document {
+    _id: Schema.Types.ObjectId;
     name: string;
     avatar: string;
     account: Schema.Types.ObjectId;

@@ -1,6 +1,7 @@
 import {model, Schema} from "mongoose";
 
-interface IJob extends Document {
+export interface IJob extends Document {
+    _id: string;
     title: string;
     description: string;
     type: 'INTERNSHIP' | 'PART-TIME' | 'FREELANCE' | 'CONTRACT' | 'FULL-TIME';

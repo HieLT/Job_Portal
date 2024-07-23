@@ -1,6 +1,7 @@
 import {model, Schema} from "mongoose";
 
-interface ICandidate extends Document {
+export interface ICandidate extends Document {
+    _id: Schema.Types.ObjectId;
     first_name: string;
     last_name: string;
     birth: Date;

@@ -9,7 +9,7 @@ import adminService from "../services/admin.service";
 import accountModel from "../models/account.model";
 
 class Auth {
-    async register(req: Request, res: Response) {
+    async register(req: Request, res: Response) : Promise<void> {
         // Register logic
         const {email, password, role} = req.body;
         try {
@@ -38,7 +38,7 @@ class Auth {
         }
     }
     
-    async login(req: Request, res: Response) {
+    async login(req: Request, res: Response) : Promise<void> {
         // Login logic
         try {
             const {email, password} = req.body;
@@ -111,7 +111,7 @@ class Auth {
         // })(req, res);
     };
 
-    async checkLoggedIn(req: Request, res: Response) {
+    async checkLoggedIn(req: Request, res: Response) : Promise<void> {
         if (req.user) {
             const email = req.user;
             const account = await accountModel.findOne({email});
@@ -159,14 +159,14 @@ class Auth {
         }
     }
 
-    async loginGoogle(req: Request, res: Response, next: NextFunction) {
+    async loginGoogle(req: Request, res: Response, next: NextFunction) : Promise<void> {
         // Login with Google logic
         passport.authenticate('google', {
             scope: ['email', 'profile']
         })(req, res, next);
     }
 
-    async googleCallback(req: Request, res: Response, next: NextFunction) {
+    async googleCallback(req: Request, res: Response, next: NextFunction) : Promise<void> {
         passport.authenticate('google', (err: any, user: Express.User, info: any) => {
             if (err) {
                 return next(err);
@@ -183,7 +183,7 @@ class Auth {
         })(req, res, next);
     }
 
-    async googleLoginSuccess(req: Request, res: Response) {
+    async googleLoginSuccess(req: Request, res: Response) : Promise<void> {
         if (req.user) {
             res.status(200).send({
                 user: req.user
@@ -193,11 +193,11 @@ class Auth {
         }
     }
 
-    async googleFailure(req: Request, res: Response) {
+    async googleFailure(req: Request, res: Response) : Promise<void> {
         res.send('Something went wrong...');
     }
 
-    async googleLogout(req: Request, res: Response) {
+    async googleLogout(req: Request, res: Response) : Promise<void> {
         req.logout((err: any) => {
             if (err) {
                 console.error("Error during logout:", err);
