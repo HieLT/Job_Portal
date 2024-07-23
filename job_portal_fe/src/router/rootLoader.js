@@ -5,6 +5,7 @@ import {convertQueryStringToObject, hasRole} from "../utils/helper";
 import {getMe} from "../api/auth/index.js";
 import {getAuthToken} from "../utils/localStorage";
 import {setLocation} from "../states/modules/app/index.js";
+import _ from "lodash";
 
 export const rootLoader = async ({request, params}, requiredAuth, saga = null, roleRequired = null) => {
     const url = new URL(request.url);
@@ -12,6 +13,7 @@ export const rootLoader = async ({request, params}, requiredAuth, saga = null, r
 
     const firstCondition = !auth.isAuthSuccess && getAuthToken();
     const secondCondition = url.pathname === '/account/profile';
+    const extraUrls = ['/forbidden']
 
     if (firstCondition || secondCondition) {
         await store.dispatch(getMe());
@@ -21,7 +23,12 @@ export const rootLoader = async ({request, params}, requiredAuth, saga = null, r
     if (requiredAuth) {
         if (auth.isAuthSuccess) {
             if (roleRequired && !hasRole(roleRequired)) {
-                return redirect('/403');
+                return redirect('/forbidden');
+            }
+            if (url.pathname !== '/account/profile' && !extraUrls.includes(url.pathname)
+                && _.isEmpty(auth.authUser.profile)
+            ) {
+                return redirect('/account/profile')
             }
         } else {
             return redirect('/login');

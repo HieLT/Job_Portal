@@ -1,5 +1,4 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {getAuthEmail} from "../../../utils/localStorage.js";
 
 const authSlice = createSlice({
     name: 'auth',
@@ -84,13 +83,7 @@ const authSlice = createSlice({
             return ({
                 ...state,
                 isAuthSuccess: true,
-                authUser: {
-                    ...state.authUser,
-                    profile: {
-                        email: getAuthEmail(),
-                        ...action.payload.profile
-                    }
-                }
+                authUser: action.payload
             })
         },
         startRequestGetMeFail: (state) => ({

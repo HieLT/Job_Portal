@@ -2,7 +2,10 @@ import callApi from "../callApi";
 import {
     requestSignup,
     requestSignupFail,
-    requestSignupSuccess, requestVerifyEmail, requestVerifyEmailFail, requestVerifyEmailSuccess,
+    requestSignupSuccess,
+    requestVerifyEmail,
+    requestVerifyEmailFail,
+    requestVerifyEmailSuccess,
     startRequestGetMe,
     startRequestGetMeFail,
     startRequestGetMeSuccess,
@@ -16,9 +19,6 @@ import {
     startRequestResetPasswordFail,
     startRequestResetPasswordSuccess,
 } from "../../states/modules/auth";
-import store from "../../states/configureStore.js";
-import {USER_ROLE} from "../../utils/constants.js";
-import {getAuthRole} from "../../utils/localStorage.js";
 
 export const login = (data) => async (dispatch, getState) => {
     return callApi({
@@ -50,10 +50,9 @@ export const loginWithGoogle = (token) => async (dispatch, getState) => {
 }
 
 export const getMe = () => async (dispatch, getState) => {
-    const isCandidate = getAuthRole() === USER_ROLE['CANDIDATE']
     return callApi({
         method: 'get',
-        apiPath: `${isCandidate ? 'candidate' : 'company'}` + '/get-profile',
+        apiPath: 'logged-in',
         actionTypes: [startRequestGetMe, startRequestGetMeSuccess, startRequestGetMeFail],
         variables: {},
         dispatch,

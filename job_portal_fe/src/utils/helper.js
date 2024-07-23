@@ -36,8 +36,8 @@ export const hasPermission = (permissions) => {
 }
 
 export const hasRole = (role) => {
-    let {profile} = store.getState();
-    return profile && profile.authUser.role.equals(role)
+    let {auth} = store.getState();
+    return role && auth.authUser?.account?.role === role
 }
 
 export const getNotification = (type, content, duration = 3, align = 'top') => {
