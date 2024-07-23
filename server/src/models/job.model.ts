@@ -3,13 +3,13 @@ import {model, Schema} from "mongoose";
 interface IJob extends Document {
     title: string;
     description: string;
-    type: string;
-    salary: number | string;
+    type: 'INTERNSHIP' | 'PART-TIME' | 'FREELANCE' | 'CONTRACT' | 'FULL-TIME';
+    salary: string;
     number_of_recuirement: number;
     position: string;
     status: string;
     expired_at: Date;
-    experience_required: string;
+    experience_required: 'NOT REQUIRED' | 'LESS THAN 1 YEAR' | '1-3 YEARS' | 'MORE THAN 3 YEARS';
     company_id: Schema.Types.ObjectId;
     applied_candidates: Schema.Types.ObjectId[];
     category_id: Schema.Types.ObjectId;
@@ -27,10 +27,11 @@ const Job = new Schema<IJob>({
     },
     type: {
         type: String,
-        required: true
+        required: true,
+        enum: ['INTERNSHIP', 'PART-TIME', 'FREELANCE', 'CONTRACT', 'FULL-TIME']
     },
     salary: {
-        type: Number || String,
+        type: String,
         required: true
     },
     number_of_recuirement: {
@@ -38,11 +39,12 @@ const Job = new Schema<IJob>({
         required: true
     },
     position: {
-        type: String
+        type: String,
+        default: 'Nhân viên'
     },
     status: {
         type: String,
-        default: 'Open'
+        default: 'Open',
     },
     expired_at: {
         type: Date,
@@ -50,6 +52,8 @@ const Job = new Schema<IJob>({
     },
     experience_required: {
         type: String,
+        enum: ['NOT REQUIRED', 'LESS THAN 1 YEAR', '1-3 YEARS', 'MORE THAN 3 YEARS'],
+        default: 'NOT REQUIRED'
     },
     company_id: {
         type: Schema.Types.ObjectId,
@@ -64,7 +68,10 @@ const Job = new Schema<IJob>({
         type: Schema.Types.ObjectId,
         ref: 'Category',
     },
-    is_deleted: {type: Boolean}
+    is_deleted: {
+        type: Boolean,
+        default: false
+    }
 }, {
     timestamps: true
 });

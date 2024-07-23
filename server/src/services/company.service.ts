@@ -50,6 +50,20 @@ class CompanyService {
             throw error;
         }
     }
+
+    async addJob(id: string, job: string) {
+        try {
+            await companyModel.findByIdAndUpdate(id, {
+                $push: {
+                    jobs: job
+                }
+            });
+            return {message: 'Add successfully'};
+        }
+        catch(error: any) {
+            throw error;
+        }
+    }
 }
 
 export default new CompanyService();
