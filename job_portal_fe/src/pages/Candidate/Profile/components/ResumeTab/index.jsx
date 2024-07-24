@@ -10,6 +10,8 @@ import {deleteCandidateCv, uploadCandidateCv} from "../../../../../api/profile/i
 import _ from "lodash";
 import ModalDeleteDefault from "../../../../../components/ModalDelete/index.jsx";
 import {setIsOpenModalDelete, setNewFile} from "../../../../../states/modules/profile/cv/index.js";
+import InlineSVG from "react-inlinesvg";
+import IconWarning from "../../../../../assets/images/icons/light/warning.svg";
 
 const getBuffer = (file, callback) => {
     const reader = new FileReader();
@@ -28,6 +30,7 @@ const beforeUploadCV = (file) => {
 export default function ResumeTab() {
     const dispatch = useDispatch();
 
+    const authUser = useSelector(state => state.auth.authUser)
     const candidateProfile = useSelector(state => state.information.candidateProfile)
     const isLoadingBtnUploadCv = useSelector(state => state.cv.isLoadingBtnUploadCv)
     const isLoadingDelete = useSelector(state => state.cv.isLoadingDelete)
@@ -97,6 +100,7 @@ export default function ResumeTab() {
                     <div className={'mt-3 input-wrap'}>
                         <Upload
                             name="file"
+                            disabled={_.isEmpty(authUser?.profile)}
                             customRequest={({file, onSuccess}) => {
                                 setTimeout(() => {
                                     const uploadedFileUrl = URL.createObjectURL(file);
@@ -109,6 +113,7 @@ export default function ResumeTab() {
                         >
                             <Button icon={<UploadOutlined/>} loading={loadingCv}
                                     className={'h-[40px] w-[150px] font-medium'}
+                                    disabled={_.isEmpty(authUser?.profile)}
                             >
                                 Tải CV (.pdf)
                             </Button>
@@ -131,6 +136,17 @@ export default function ResumeTab() {
                                     </div> : <i className={'text-gray-500'}>Không có bản CV nào</i>
                             }
                         </div>
+                        {
+                            _.isEmpty(authUser?.profile) ?
+                                <div className={'input-wrap mt-3'}>
+                                        <span className={`error !text-[#bdbe63]`}>
+                                            <div className={`icon`}>
+                                              <InlineSVG src={IconWarning} width={14} height="auto"/>
+                                            </div>
+                                            Vui lòng cập nhật thông tin cá nhân trước!
+                                        </span>
+                                </div> : ''
+                        }
                     </div>
                 </div>
             </div>
