@@ -1,20 +1,15 @@
 import React from 'react';
 import styles from './styles.module.scss';
 
-function Card() {
+function Card(props) {
     return (
-        <div className={`${styles.card}`}>
-            <img
-                alt=""
-                className={styles['card-img']}
-                src="/static/metronic/tailwind/dist/assets/media/brand-logos/linkedin-2.svg"
-            />
-            <div className={styles['card-content']}>
-                <span className={styles['card-title']}>
-                    9
+        <div className={styles.card}>
+            <div className={styles.cardContent}>
+                <span className={styles.cardTitle}>
+                    {props.count}
                 </span>
-                <span className={styles['card-subtitle']}>
-                    Jobs
+                <span className={styles.cardSubtitle}>
+                    {props.cardTitle}
                 </span>
             </div>
         </div>

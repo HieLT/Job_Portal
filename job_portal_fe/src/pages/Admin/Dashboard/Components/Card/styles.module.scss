@@ -1,20 +1,31 @@
 .card {
-    @apply flex-col justify-between gap-6 h-full bg-cover bg-no-repeat;
-    background-position: right top -1.7rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 250px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
 }
 
-.card-img {
-    @apply w-7 mt-4 ms-5;
+.cardContent {
+    text-align: center;
 }
 
-.card-content {
-    @apply flex flex-col gap-1 pb-4 px-5;
+.cardTitle {
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+    color: #333;
 }
 
-.card-title {
-    @apply text-3xl font-semibold text-gray-900;
-}
-
-.card-subtitle {
-    @apply font-medium text-gray-600;
+.cardSubtitle {
+    display: block;
+    font-size: 1.2em;
+    color: #666;
 }

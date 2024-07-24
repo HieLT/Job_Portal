@@ -29,14 +29,11 @@ const Header = () => {
     }
 
     const authUser = useSelector((state) => state.auth.authUser);
-    const title = useSelector((state) => state.app.breadcrumb)
+
 
     return (
         <header className={styles.headerWrap}>
             <div className={styles.headerLeftWrap}>
-                <div className={styles.title}>
-                    {title.breadcrumb}
-                </div>
             </div>
             <div className={`${styles.headerRightWrap}`}>
                 <div className={`${styles.itemHeaderRight}`}>

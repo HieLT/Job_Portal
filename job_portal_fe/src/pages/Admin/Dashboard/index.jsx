@@ -6,6 +6,7 @@ import Card from './Components/Card/index.jsx';
 import styles from './styles.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { setBreadcrumb } from '../../../states/modules/app/index.js';
+import { getAllCompany , getAllCandidate} from '../../../api/admin/index.js';
 
 const barData = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -58,30 +59,44 @@ const pieData = {
             hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
         },
     ],
-};
+}
+
+  
+
+
 
 function Dashboard() {
     const dispatch = useDispatch();
-
+    const countCompanies = useSelector((state) =>state.admin.allCompany).length;
+    const countCandidates = useSelector ((state) => state.admin.allCandidate).length;
+    const countJobs = 20;
     useEffect(() => {
         dispatch(setBreadcrumb({
             breadcrumb: 'Dashboard'
         }));
+        dispatch(getAllCompany())
+        dispatch(getAllCandidate())
     }, []);
-    const title = useSelector((state) => state.app.breadcrumb)
 
+    const title = useSelector((state) => state.app.breadcrumb)
     return (
         <MainLayout>
             <div className={styles.dashboard}>
                 <div className={styles['card-container']}>
-                    <div className={styles.card}>
-                        <Card />
+                    <div className={styles.card}>                                       
+                        <Card   count = {countCompanies}
+                                cardTitle = 'Công ty'
+                        />
                     </div>
-                    <div className={styles.card}>
-                        <Card />
+                    <div className={styles.card}>                                       
+                        <Card   count={countCandidates}  
+                                cardTitle = 'Ứng viên'
+                        />
                     </div>
-                    <div className={styles.card}>
-                        <Card />
+                    <div className={styles.card}>                                       
+                        <Card   count= {countJobs}
+                                cardTitle = 'Công việc'
+                        />
                     </div>
                     <div className={styles.card}>
                         <h2 className={styles['card-title']}>Bar Chart</h2>
