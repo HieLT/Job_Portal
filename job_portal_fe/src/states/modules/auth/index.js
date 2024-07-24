@@ -39,7 +39,9 @@ const authSlice = createSlice({
         verifyResult: {
             type: 0,
             message: ''
-        }
+        },
+
+        isLoadingGetMe: false
     },
     reducers: {
         setErrorSignup: (state, action) => ({
@@ -78,17 +80,20 @@ const authSlice = createSlice({
 
         startRequestGetMe: (state) => ({
             ...state,
+            isLoadingGetMe: true
         }),
         startRequestGetMeSuccess: (state, action) => {
             return ({
                 ...state,
                 isAuthSuccess: true,
+                isLoadingGetMe: false,
                 authUser: action.payload
             })
         },
         startRequestGetMeFail: (state) => ({
             ...state,
             isAuthSuccess: false,
+            isLoadingGetMe: false,
             authUser: {}
         }),
         setErrorForgotPassword: (state, action) => ({

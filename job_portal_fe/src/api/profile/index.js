@@ -3,9 +3,15 @@ import {
     startRequestCreateCandidate,
     startRequestCreateCandidateFail,
     startRequestCreateCandidateSuccess,
+    startRequestCreateCompany,
+    startRequestCreateCompanyFail,
+    startRequestCreateCompanySuccess,
     startRequestUpdateCandidate,
     startRequestUpdateCandidateFail,
     startRequestUpdateCandidateSuccess,
+    startRequestUpdateCompany,
+    startRequestUpdateCompanyFail,
+    startRequestUpdateCompanySuccess,
     startRequestUploadCandidateAvatar,
     startRequestUploadCandidateAvatarFail,
     startRequestUploadCandidateAvatarSuccess
@@ -33,6 +39,28 @@ export const updateCandidateProfile = (data) => async (dispatch, getState) => {
         method: 'post',
         apiPath: `candidate/update-profile`,
         actionTypes: [startRequestUpdateCandidate, startRequestUpdateCandidateSuccess, startRequestUpdateCandidateFail],
+        variables: {...data},
+        dispatch,
+        getState
+    })
+}
+
+export const createCompany = (data) => async (dispatch, getState) => {
+    return callApi({
+        method: 'post',
+        apiPath: `company/create`,
+        actionTypes: [startRequestCreateCompany, startRequestCreateCompanySuccess, startRequestCreateCompanyFail],
+        variables: {...data},
+        dispatch,
+        getState
+    })
+}
+
+export const updateCompanyProfile = (data) => async (dispatch, getState) => {
+    return callApi({
+        method: 'post',
+        apiPath: `company/update-profile`,
+        actionTypes: [startRequestUpdateCompany, startRequestUpdateCompanySuccess, startRequestUpdateCompanyFail],
         variables: {...data},
         dispatch,
         getState

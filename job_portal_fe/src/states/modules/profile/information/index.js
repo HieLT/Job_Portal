@@ -14,23 +14,28 @@ export const initialInformationState = {
         resume_path: ''
     },
     errorUpdateCandidateProfile: {
-        first_name: '',
-        last_name: '',
-        phone: ''
+        name: '',
+        phone: '',
+        headcount: '',
+        location: '',
+        website_url: ''
     },
     companyProfile: {
-        avatar: '',
+        logo: '',
         name: '',
         email: '',
         founded_year: '',
         phone: '',
-        bio: '',
-        profile_description: '',
+        headcount: null,
+        description: '',
+        website_url: '',
+        location: ''
     },
     errorUpdateCompanyProfile: {
         name: '',
-        founded_year: '',
-        phone: ''
+        phone: '',
+        location: '',
+        headcount: ''
     }
 }
 
@@ -40,16 +45,17 @@ const informationSlice = createSlice({
         /* candidate */
         candidateProfile: initialInformationState.candidateProfile,
         errorUpdateCandidateProfile: initialInformationState.errorUpdateCandidateProfile,
+        isLoadingBtnUpdateCandidate: false,
+        isLoadingBtnUpdateCandidateAvatar: false,
 
         /* company */
         companyProfile: initialInformationState.companyProfile,
         errorUpdateCompanyProfile: initialInformationState.errorUpdateCompanyProfile,
+        isLoadingBtnUpdateCompany: false,
 
-        isLoadingBtnUpdateCandidate: false,
-        isLoadingBtnUpdateCandidateAvatar: false,
-        isLoadingBtnUpdateCompany: false
     },
     reducers: {
+        /* candidate */
         setCandidateProfile: (state, action) => ({
             ...state,
             candidateProfile: action.payload
@@ -58,14 +64,7 @@ const informationSlice = createSlice({
             ...state,
             errorUpdateCandidateProfile: action.payload
         }),
-        setCompanyProfile: (state, action) => ({
-            ...state,
-            companyProfile: action.payload
-        }),
-        setErrorUpdateCompanyProfile: (state, action) => ({
-            ...state,
-            errorUpdateCompanyProfile: action.payload
-        }),
+
         startRequestCreateCandidate: (state) => ({
             ...state,
             isLoadingBtnUpdateCandidate: true
@@ -78,6 +77,7 @@ const informationSlice = createSlice({
             ...state,
             isLoadingBtnUpdateCandidate: false
         }),
+
         startRequestUpdateCandidate: (state) => ({
             ...state,
             isLoadingBtnUpdateCandidate: true
@@ -93,6 +93,7 @@ const informationSlice = createSlice({
             ...state,
             isLoadingBtnUpdateCandidate: false
         }),
+
         startRequestUploadCandidateAvatar: (state) => ({
             ...state,
             isLoadingBtnUpdateCandidateAvatar: true
@@ -104,6 +105,45 @@ const informationSlice = createSlice({
         startRequestUploadCandidateAvatarFail: (state) => ({
             ...state,
             isLoadingBtnUpdateCandidateAvatar: false
+        }),
+
+        /* company */
+        setCompanyProfile: (state, action) => ({
+            ...state,
+            companyProfile: action.payload
+        }),
+        setErrorUpdateCompanyProfile: (state, action) => ({
+            ...state,
+            errorUpdateCompanyProfile: action.payload
+        }),
+
+        startRequestUpdateCompany: (state) => ({
+            ...state,
+            isLoadingBtnUpdateCompany: true
+        }),
+        startRequestUpdateCompanySuccess: (state, action) => {
+            return ({
+                ...state,
+                isLoadingBtnUpdateCompany: false,
+                authUser: action.payload
+            })
+        },
+        startRequestUpdateCompanyFail: (state) => ({
+            ...state,
+            isLoadingBtnUpdateCompany: false
+        }),
+
+        startRequestCreateCompany: (state) => ({
+            ...state,
+            isLoadingBtnUpdateCompany: true
+        }),
+        startRequestCreateCompanySuccess: (state) => ({
+            ...state,
+            isLoadingBtnUpdateCompany: false
+        }),
+        startRequestCreateCompanyFail: (state) => ({
+            ...state,
+            isLoadingBtnUpdateCompany: false
         }),
 
         refreshState: (state, action) => {
@@ -119,8 +159,11 @@ export const {
     startRequestUploadCandidateAvatar, startRequestUploadCandidateAvatarSuccess, startRequestUploadCandidateAvatarFail,
     startRequestUpdateCandidate, startRequestUpdateCandidateSuccess, startRequestUpdateCandidateFail,
     startRequestCreateCandidate, startRequestCreateCandidateSuccess, startRequestCreateCandidateFail,
+    setCandidateProfile, setErrorUpdateCandidateProfile,
     setCompanyProfile, setErrorUpdateCompanyProfile,
-    setCandidateProfile, setErrorUpdateCandidateProfile
+    startRequestUpdateCompany, startRequestUpdateCompanySuccess, startRequestUpdateCompanyFail,
+    startRequestCreateCompany, startRequestCreateCompanySuccess, startRequestCreateCompanyFail,
+
 } = informationSlice.actions
 
 export default informationSlice.reducer;

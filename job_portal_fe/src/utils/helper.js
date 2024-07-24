@@ -8,12 +8,13 @@ import warning from '../assets/images/icons/notification/warning_16x16.svg';
 import {isValidate} from "./validate.js";
 import moment from "moment";
 import {isValidateLesson} from "./validates/validateLesson.js";
-import {validateBook} from "./validates/validateBook.js";
 import {validateCandidate} from "./validates/validateCandidate.js";
+import {validateCompany} from "./validates/validateCompany.js";
 
 export const VALIDATE_EMAIL_REGEX = /^[a-zA-Z0-9][a-zA-Z0-9_.+-]{1,}@[a-z0-9]{1,}(\.[a-z0-9]{1,}){1,2}$/
 export const VALIDATE_PASSWORD_REGEX = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{6,50}$/
 export const VALIDATE_PHONE_REGEX_RULE = /^[0-9]{3}[0-9]{3}[0-9]{4}$/
+export const VALIDATE_WEBSITE_URL_REGEX = /^((http|https):\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\.[a-zA-Z]{2,})?((\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)*)?$/
 
 export const hasPermission = (permissions) => {
     let {auth} = store.getState();
@@ -105,6 +106,15 @@ export const isValidPassword = (password) => {
     return result
 }
 
+export const isValidWebsiteUrl = (url) => {
+    let result = false
+    if (url && typeof url === 'string') {
+        const regex = RegExp(VALIDATE_WEBSITE_URL_REGEX);
+        result = regex.test(url.trim())
+    }
+    return result
+}
+
 export const isValidPhone = (phone) => {
     let result = false
 
@@ -133,6 +143,9 @@ export const handleCheckValidateConfirm = (data, errors, type) => {
         switch (type) {
             case 'candidate':
                 validate = validateCandidate(data, key, dataError);
+                break;
+            case 'company':
+                validate = validateCompany(data, key, dataError);
                 break;
             default:
                 validate = isValidate(data, key, dataError);
