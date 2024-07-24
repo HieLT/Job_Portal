@@ -2,8 +2,12 @@ import {all, fork, takeLatest, put} from "redux-saga/effects";
 import {
     startRequestCreateCandidateFail,
     startRequestCreateCandidateSuccess,
+    startRequestCreateCompanySuccess,
     startRequestUpdateCandidateFail,
-    startRequestUpdateCandidateSuccess, startRequestUploadCandidateAvatarFail, startRequestUploadCandidateAvatarSuccess
+    startRequestUpdateCandidateSuccess, startRequestUpdateCompanyFail,
+    startRequestUpdateCompanySuccess,
+    startRequestUploadCandidateAvatarFail,
+    startRequestUploadCandidateAvatarSuccess
 } from "./index.js";
 import {getNotification} from "../../../../utils/helper.js";
 import {getMe} from "../../../../api/auth/index.js";
@@ -13,6 +17,7 @@ function* loadRouteData() {
 }
 
 function* handleActions() {
+    /* Candidate */
     yield takeLatest(startRequestCreateCandidateSuccess, function* () {
         getNotification('success', 'Cập nhật thành công')
         yield put(getMe())
@@ -35,6 +40,24 @@ function* handleActions() {
     })
 
     yield takeLatest(startRequestUploadCandidateAvatarFail, function () {
+        getNotification('error', 'Đã có lỗi xảy ra, vui lòng thử lại sau')
+    })
+
+    /* Company */
+    yield takeLatest(startRequestCreateCompanySuccess, function* () {
+        getNotification('success', 'Cập nhật thành công')
+        yield put(getMe())
+    });
+
+    yield takeLatest(startRequestCreateCompanySuccess, function () {
+        getNotification('error', 'Đã có lỗi xảy ra, vui lòng thử lại sau')
+    });
+
+    yield takeLatest(startRequestUpdateCompanySuccess, function () {
+        getNotification('success', 'Cập nhật thành công')
+    })
+
+    yield takeLatest(startRequestUpdateCompanyFail, function () {
         getNotification('error', 'Đã có lỗi xảy ra, vui lòng thử lại sau')
     })
 }
