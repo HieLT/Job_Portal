@@ -9,27 +9,12 @@ export default function Menu() {
     const location = useSelector(state => state.app.location)
 
     const menu = [
-        {
-            title: 'Home',
-            path: '/'
-        },
-        {
-            title: 'Books',
-            path: '/books'
-        },
-        {
-            title: 'Mobiles',
-            path: '/mobiles'
-        },
-        {
-            title: 'Clothes',
-            path: '/clothes'
-        },
+
     ]
 
     return <div className={`${styles.menuWrap}`}>
         {
-            menu.map(item => (
+            menu?.map(item => (
                 <div key={item.path}
                      onClick={() => navigate(item.path)}
                      className={`border-b-2 h-14 flex items-center px-6 py-8 cursor-pointer ${styles.item} 

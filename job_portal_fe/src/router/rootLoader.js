@@ -6,6 +6,7 @@ import {getMe} from "../api/auth/index.js";
 import {getAuthToken} from "../utils/localStorage";
 import {setLocation} from "../states/modules/app/index.js";
 import _ from "lodash";
+import {USER_ROLE} from "../utils/constants.js";
 
 export const rootLoader = async ({request, params}, requiredAuth, saga = null, roleRequired = null) => {
     const url = new URL(request.url);
@@ -25,8 +26,11 @@ export const rootLoader = async ({request, params}, requiredAuth, saga = null, r
             if (roleRequired && !hasRole(roleRequired)) {
                 return redirect('/forbidden');
             }
+            if (auth.authUser?.account?.role === USER_ROLE['ADMIN'] && !url.pathname?.includes('/admin')) {
+                return redirect('/admin/dashboard')
+            }
             if (url.pathname !== '/account/profile' && !extraUrls.includes(url.pathname)
-                && _.isEmpty(auth.authUser.profile)
+                && _.isEmpty(auth.authUser.profile) && !url.pathname?.includes('admin')
             ) {
                 return redirect('/account/profile')
             }
