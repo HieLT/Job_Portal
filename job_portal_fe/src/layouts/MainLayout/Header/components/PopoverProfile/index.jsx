@@ -26,14 +26,6 @@ function PopoverProfile() {
             <div className={styles.mainModalInfoWrap}>
                 <ul className={styles.menuInfoWrap}>
                     <li
-                        onClick={() => navigate('/account/profile')}
-                        className={`${styles.itemInfoWrap}`}
-                    >
-                        <div>
-                            <span className={styles.text}>Hồ sơ cá nhân</span>
-                        </div>
-                    </li>
-                    <li
                         onClick={() => handleConfirmLogout()}
                         className={styles.itemInfoWrap}
                     >
