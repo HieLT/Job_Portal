@@ -150,6 +150,7 @@ export default function InformationTab() {
                     <div className={'w-1/4 flex flex-col items-center mt-12 ml-5'}>
                         <div className={'w-fit border-[3px] rounded-[50%] h-fit hover:border-dashed'}>
                             <Upload
+                                disabled={_.isEmpty(authUser?.profile)}
                                 name="avatar"
                                 customRequest={({file, onSuccess}) => {
                                     setTimeout(() => {
@@ -185,6 +186,17 @@ export default function InformationTab() {
                                 Cập nhật ảnh đại diện
                             </Button>
                         </Flex>
+                        {
+                            _.isEmpty(authUser?.profile) ?
+                                <div className={'input-wrap mt-2'}>
+                                    <span className={`error !text-[#bdbe63]`}>
+                                        <div className={`icon`}>
+                                          <InlineSVG src={IconWarning} width={14} height="auto"/>
+                                        </div>
+                                        Vui lòng cập nhật thông tin cá nhân trước!
+                                    </span>
+                                </div> : ''
+                        }
                     </div>
 
                     <div className={'w-2/3'}>
