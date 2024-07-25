@@ -82,14 +82,14 @@ class JobController {
         }
     }
 
-    async getTotalCandidateApploed(req: Request, res: Response) : Promise<void> {
+    async getTotalCandidateApplied(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;
             const account = await accountModel.findOne({email});
             if (account) {
                 if (account.role === 'Admin') {
                     const totalCandidateApplied = await jobService.getCandidateApplied();
-                    res.status(200).send(totalCandidateApplied);
+                    res.status(200).send({total: totalCandidateApplied});
                 }
                 else {
                     res.status(403).send({message: "You are not authorized to get total candidate applied"});
