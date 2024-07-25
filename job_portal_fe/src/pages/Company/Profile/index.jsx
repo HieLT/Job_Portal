@@ -35,8 +35,11 @@ export default function CompanyProfile() {
                 {
                     isLoadingGetMe ? <Skeleton active={isLoadingGetMe}/> : <>
                         <div className={`${styles.avatarWrap} avatar-custom`}>
-                            <Avatar src={!_.isEmpty(authUser.profile) ? authUser.profile.logo : DefaultLogo}
-                                    className={'w-[100px] h-[100px]'}/>
+                            <Avatar
+                                src={(!_.isEmpty(authUser.profile) && authUser.profile.logo) ?
+                                    authUser.profile.logo : DefaultLogo}
+                                className={'w-[100px] h-[100px]'}
+                            />
                         </div>
                         <div className={'font-semibold text-xl mt-3'}>
                             {
@@ -48,7 +51,8 @@ export default function CompanyProfile() {
                             <div className={`${styles.info} mr-8`}>
                                 <PhoneOutlined className={'mr-1.5'}/>
                                 {
-                                    !_.isEmpty(authUser.profile) ? <span>{authUser.profile.phone}</span> :
+                                    (!_.isEmpty(authUser.profile) && authUser.profile?.phone) ?
+                                        <span>{authUser.profile.phone}</span> :
                                         <i>Đang cập nhật</i>
                                 }
                             </div>

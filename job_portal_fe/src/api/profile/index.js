@@ -36,7 +36,7 @@ export const createCandidate = (data) => async (dispatch, getState) => {
 
 export const updateCandidateProfile = (data) => async (dispatch, getState) => {
     return callApi({
-        method: 'post',
+        method: 'put',
         apiPath: `candidate/update-profile`,
         actionTypes: [startRequestUpdateCandidate, startRequestUpdateCandidateSuccess, startRequestUpdateCandidateFail],
         variables: {...data},
@@ -58,7 +58,7 @@ export const createCompany = (data) => async (dispatch, getState) => {
 
 export const updateCompanyProfile = (data) => async (dispatch, getState) => {
     return callApi({
-        method: 'post',
+        method: 'put',
         apiPath: `company/update-profile`,
         actionTypes: [startRequestUpdateCompany, startRequestUpdateCompanySuccess, startRequestUpdateCompanyFail],
         variables: {...data},
@@ -70,7 +70,7 @@ export const updateCompanyProfile = (data) => async (dispatch, getState) => {
 export const uploadCandidateCv = (data) => async (dispatch, getState) => {
     return callApi({
         content: 'multipart/form-data',
-        method: 'post',
+        method: 'put',
         apiPath: `candidate/upload-resume`,
         actionTypes: [startRequestUploadCv, startRequestUploadCvSuccess, startRequestUploadCvFail],
         variables: data,
@@ -81,7 +81,7 @@ export const uploadCandidateCv = (data) => async (dispatch, getState) => {
 
 export const deleteCandidateCv = () => async (dispatch, getState) => {
     return callApi({
-        method: 'post',
+        method: 'delete',
         apiPath: `candidate/delete-resume`,
         actionTypes: [startRequestDeleteCv, startRequestDeleteCvSuccess, startRequestDeleteCvFail],
         variables: {},
@@ -92,7 +92,7 @@ export const deleteCandidateCv = () => async (dispatch, getState) => {
 
 export const uploadCandidateAvatar = (data) => async (dispatch, getState) => {
     return callApi({
-        method: 'post',
+        method: 'put',
         apiPath: `candidate/upload-avatar`,
         actionTypes: [
             startRequestUploadCandidateAvatar,

@@ -8,6 +8,7 @@ import {handleCheckRoute} from "../../../utils/helper";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {handleSetIsShowSideBar} from "../../../states/modules/app";
+import _ from "lodash";
 
 SideBar.prototype = {
     isShowSideBar: PropTypes.bool.isRequired,
@@ -51,6 +52,10 @@ function SideBar(props) {
         setMenuSub([]);
     }
 
+    const hasPermissions = (requiredPermissions) => {
+        return (!_.isEmpty(requiredPermissions) && requiredPermissions?.includes(authUser?.account?.role))
+    }
+
     return (
         <div
             onMouseLeave={() => handleLeaveMenuNavItem()}
@@ -77,44 +82,22 @@ function SideBar(props) {
             <div className={`${styles.navbarWrap}`}>
                 <ul className={`${styles.menuNav}`}>
                     {
-                        routeMap.map((route, index) => {
-                            if (route.path === '/admins') {
-                                if (authUser.user.role === 2) {
-                                    return (
-                                        <li
-                                            onMouseEnter={(e) => handleHoverMenuNavItem(e, route)}
-                                            onClick={() => handleToggleMenu(index, route)}
-                                            key={route.path}
-                                            className={`
-                    ${styles.menuNavItem}
-                    ${handleCheckRoute(route.routeActive, location.pathname) ? styles.menuNavItemActive : ''}
-                  `}>
-                                            <NavItem
-                                                route={route}
-                                                isShowMenu={index === indexNavItemSelect}
-                                            />
-                                        </li>
-                                    )
-                                } else {
-                                    return null
-                                }
-                            }
-                            return (
+                        routeMap.map((route, index) =>
+                            hasPermissions(route.permissions) ?
                                 <li
                                     onMouseEnter={(e) => handleHoverMenuNavItem(e, route)}
                                     onClick={() => handleToggleMenu(index, route)}
                                     key={route.path}
                                     className={`
-                    ${styles.menuNavItem}
-                    ${handleCheckRoute(route.routeActive, location.pathname) ? styles.menuNavItemActive : ''}
-                  `}>
+                                            ${styles.menuNavItem}
+                                            ${handleCheckRoute(route.routeActive, location.pathname) ? styles.menuNavItemActive : ''}
+                                          `}>
                                     <NavItem
                                         route={route}
                                         isShowMenu={index === indexNavItemSelect}
                                     />
-                                </li>
-                            )
-                        })
+                                </li> : ''
+                        )
                     }
                 </ul>
             </div>

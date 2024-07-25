@@ -25,13 +25,13 @@ function VerifyEmailResult() {
                     <Result
                         status={verifyResult.type === 1 ? "success" : 'error'}
                         title={verifyResult.message}
-                        extra={[
+                        extra={verifyResult.type === 1 ? [
                             <Button type="primary" className={'auth-btn'}
-                                    key="console" onClick={() => navigate('/')}
+                                    key="console" onClick={() => navigate('/login')}
                             >
-                                Về trang chủ
+                                Về trang đăng nhập
                             </Button>,
-                        ]}
+                        ] : []}
                     />
             }
         </div>

@@ -20,7 +20,7 @@ function PopoverProfile() {
         <div className={styles.modalInfoWrap}>
             <div className={styles.personalInformationWrap}>
                 <div className={styles.role}>
-                    {authUser.account.email}
+                    {authUser?.account?.email}
                 </div>
             </div>
             <div className={styles.mainModalInfoWrap}>
