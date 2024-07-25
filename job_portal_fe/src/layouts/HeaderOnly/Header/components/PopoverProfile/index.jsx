@@ -5,11 +5,14 @@ import {startRequestGetMeFail} from "../../../../../states/modules/auth/index.js
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import _ from "lodash";
+import {USER_ROLE} from "../../../../../utils/constants.js";
 
 function PopoverProfile() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const authUser = useSelector(state => state.auth.authUser);
+
+    const isCompany = authUser?.account?.role === USER_ROLE['COMPANY']
 
     const handleConfirmLogout = () => {
         removeAuthToken();
@@ -21,9 +24,9 @@ function PopoverProfile() {
         <div className={styles.modalInfoWrap}>
             <div className={styles.personalInformationWrap}>
                 {
-                    !_.isEmpty(authUser.profile) ? <>
+                    !_.isEmpty(authUser?.profile) ? <>
                         <div className={styles.role}>
-                            {authUser.account.email}
+                            {authUser?.account?.email}
                         </div>
                     </> : ''
                 }
@@ -31,7 +34,17 @@ function PopoverProfile() {
             <div className={styles.mainModalInfoWrap}>
                 <ul className={styles.menuInfoWrap}>
                     {
-                        !_.isEmpty(authUser.profile) ? <li
+                        isCompany ? <li
+                            onClick={() => navigate('/account/dashboard')}
+                            className={`${styles.itemInfoWrap}`}
+                        >
+                            <div>
+                                <span className={styles.text}>Tổng quan</span>
+                            </div>
+                        </li> : ''
+                    }
+                    {
+                        !_.isEmpty(authUser?.profile) ? <li
                             onClick={() => navigate('/account/profile')}
                             className={`${styles.itemInfoWrap}`}
                         >

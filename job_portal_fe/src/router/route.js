@@ -15,6 +15,9 @@ import VerifyEmailResult from "../pages/Auth/VerifyEmailResult/index.jsx";
 import {USER_ROLE} from "../utils/constants.js";
 import ProfileRouting from "../pages/ProfileRouting/index.jsx";
 import Forbidden from "../components/Forbidden/index.jsx";
+import CompanyDashboard from "../pages/Company/Dashboard/index.jsx";
+import JobManagement from "../pages/Company/JobManagement/index.jsx";
+import Applicants from "../pages/Company/JobManagement/components/Applicants/index.jsx";
 import JobDetail from "../pages/Home/components/JobDetail/index.jsx"
 
 const router = createBrowserRouter([
@@ -114,6 +117,27 @@ const router = createBrowserRouter([
         element: <JobDetail />,
         loader: ({ request, params }) => rootLoader(
             { request, params }, true, 'LOAD_JOB_DETAIL_PAGE'
+        )
+    },
+    {
+        path: '/account/dashboard',
+        element: <CompanyDashboard />,
+        loader: ({ request, params }) => rootLoader(
+            { request, params }, true, null, USER_ROLE['COMPANY']
+        )
+    },
+    {
+        path: '/account/jobs',
+        element: <JobManagement />,
+        loader: ({ request, params }) => rootLoader(
+            { request, params }, true, 'LOAD_COMPANY_JOBS_PAGE', USER_ROLE['COMPANY']
+        )
+    },
+    {
+        path: '/account/jobs/:id/applicants',
+        element: <Applicants />,
+        loader: ({ request, params }) => rootLoader(
+            { request, params }, true, 'LOAD_APPLICANT_PAGE', USER_ROLE['COMPANY']
         )
     },
 ]);

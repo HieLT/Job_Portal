@@ -27,7 +27,7 @@ function* handleActions() {
         getNotification('error', 'Đã có lỗi xảy ra, vui lòng thử lại sau')
     });
 
-    yield takeLatest(startRequestUpdateCandidateSuccess, function () {
+    yield takeLatest(startRequestUpdateCandidateSuccess, function* () {
         getNotification('success', 'Cập nhật thành công')
     })
 
@@ -35,8 +35,9 @@ function* handleActions() {
         getNotification('error', 'Đã có lỗi xảy ra, vui lòng thử lại sau')
     })
 
-    yield takeLatest(startRequestUploadCandidateAvatarSuccess, function () {
+    yield takeLatest(startRequestUploadCandidateAvatarSuccess, function* () {
         getNotification('success', 'Cập nhật thành công')
+        yield put(getMe())
     })
 
     yield takeLatest(startRequestUploadCandidateAvatarFail, function () {

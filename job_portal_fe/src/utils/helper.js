@@ -7,9 +7,10 @@ import error from '../assets/images/icons/notification/error_16x16.svg';
 import warning from '../assets/images/icons/notification/warning_16x16.svg';
 import {isValidate} from "./validate.js";
 import moment from "moment";
-import {isValidateLesson} from "./validates/validateLesson.js";
 import {validateCandidate} from "./validates/validateCandidate.js";
 import {validateCompany} from "./validates/validateCompany.js";
+import {validateJob} from "./validates/validateJob.js";
+import _ from "lodash";
 
 export const VALIDATE_EMAIL_REGEX = /^[a-zA-Z0-9][a-zA-Z0-9_.+-]{1,}@[a-z0-9]{1,}(\.[a-z0-9]{1,}){1,2}$/
 export const VALIDATE_PASSWORD_REGEX = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{6,50}$/
@@ -147,6 +148,9 @@ export const handleCheckValidateConfirm = (data, errors, type) => {
             case 'company':
                 validate = validateCompany(data, key, dataError);
                 break;
+            case 'job':
+                validate = validateJob(data, key, dataError);
+                break;
             default:
                 validate = isValidate(data, key, dataError);
                 break;
@@ -163,26 +167,13 @@ export const handleCheckValidateConfirm = (data, errors, type) => {
     }
 }
 
-export const handleCheckValidateLesson = (data, errors) => {
-    let error = false;
-    let keys = Object.keys(data);
-    let dataError = errors
-    keys.map(key => {
-        let validate = isValidateLesson(data, key, dataError);
-        dataError = validate.error;
-        if (validate.isError) {
-            error = true;
-        }
-    })
-
-    return {
-        isError: error,
-        dataError: dataError
-    }
-}
-
 export const handleCheckRoute = (routes, currentRoute) => {
+    const location = store.getState().app.location
     if (routes && routes.length > 0) {
+        if (!_.isEmpty(location.params)) {
+            const currentRouteWithoutParam = currentRoute.replace(location.params?.id, '')
+            return routes.includes(currentRouteWithoutParam)
+        }
         return routes.includes(currentRoute);
     }
 };
@@ -227,4 +218,29 @@ export const handleSetTimeOut = (func, delay = 1000, timeoutId = null) => {
 
 export const formatDate = (date) => {
     return moment(date * 1000).format('HH:mm DD/MM/YYYY')
+}
+
+export const convertISOStringToDate = (isoString) => {
+    return moment(isoString).format('DD/MM/YYYY')
+}
+
+export const isPositiveNumber = (number) => {
+    return !(isNaN(number) || !Number.isInteger(Number(number)) || Number(number) <= 0)
+}
+
+export const convertConstantToOptionArray = (obj) => {
+    const keys = Object.keys(obj)
+    let labels = []
+    let values = []
+    for (let key of keys) {
+        labels = key === 'LABELS' ? Object.values(obj[key]) : [...labels]
+        values = key === 'VALUES' ? Object.values(obj[key]) : [...values]
+    }
+
+    return labels.map((label, index) => {
+        return {
+            label,
+            value: values[index]
+        }
+    })
 }

@@ -1,4 +1,4 @@
-@import "../../assets/scss/variables";
+@import "../../../assets/scss/variables";
 
 .listWrap {
     @apply p-8 rounded-lg bg-white border border-gray-110 shadow-card-box;
@@ -16,7 +16,13 @@
 }
 
 .btnAction {
-    @apply h-full px-[14px] py-[8px]  bg-gray-120 border-gray-95 text-black-20 rounded-[0.425rem] text-sm outline-none font-medium;
+    .editBtn {
+        svg {
+            @apply fill-[gray]
+        }
+    }
+
+    @apply w-fit h-full cursor-pointer px-[10px] py-[8px] bg-gray-120 border-gray-95 text-black-20 rounded-[0.425rem] text-sm outline-none font-medium;
     &:focus, &:hover, &:focus-within {
         @apply bg-gray-95 border-transparent outline-none shadow-none #{!important}
     }
