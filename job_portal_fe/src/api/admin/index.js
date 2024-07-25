@@ -1,4 +1,3 @@
-import { setDetailAdmin } from "../../states/modules/user";
 import {
     startRequestGetAllCompany, startRequestGetAllCompanySuccess, startRequestGetAllCompanyFail,
     startRequestGetAllCandidate , startRequestGetAllCandidateSuccess , startRequestGetAllCandidateFail
