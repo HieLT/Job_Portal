@@ -11,6 +11,18 @@ class ApplicationService {
             throw error;
         }
     }
+
+    async getAppliedOfJob(id_job: string) : Promise<IApplication[]> {
+        try {
+            const appliedOfJob = await applicationModel.find({job_id: id_job}).populate(
+                'candidate_id'
+            ).exec();
+            return appliedOfJob;
+        }
+        catch (error) {
+            throw error;
+        }
+    }
 };
 
 export default new ApplicationService();

@@ -23,6 +23,20 @@ class JobService {
         }
     }
 
+    async getCandidateApplied() : Promise<number> {
+        try {
+            const applied = await jobModel.find().exec();
+            let total = 0;
+            for (const item of applied) {
+                total += item.applied_candidates.length;
+            }
+            return total;
+        }
+        catch(error) {
+            throw error;
+        }
+    }
+
     async getJobDetail(id: string) : Promise<IJob | null> {
         try {
             const job = await jobModel.findById(id).populate(
@@ -63,6 +77,18 @@ class JobService {
     async updateJob(id: string, job: Partial<IJob>) : Promise<IJob | null> {
         try {   
             const updatedJob = await jobModel.findByIdAndUpdate(id, job, {new: true}).exec();
+            return updatedJob;
+        }
+        catch(error) {
+            throw error;
+        }
+    }
+
+    async updateStatusJob(id: string, status: string) : Promise<IJob | null> {
+        try {
+            const updatedJob = await jobModel.findByIdAndUpdate(id, {
+                status: status
+            }, {new: true}).exec();
             return updatedJob;
         }
         catch(error) {

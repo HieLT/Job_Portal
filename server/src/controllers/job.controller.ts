@@ -1,11 +1,9 @@
 import { Request, Response } from "express";
-import jobModel from "../models/job.model";
 import accountModel from "../models/account.model";
 import jobService from "../services/job.service";
 import companyService from "../services/company.service";
 import applicationService from "../services/application.service";
 import categoryModel from "../models/category.model";
-import { IApplication } from "../models/application.model";
 import firebaseService from "../services/firebase.service";
 
 class JobController {
@@ -18,6 +16,16 @@ class JobController {
                 await newCategory.save();
             }
             res.status(201).send({message: "Create categories successfully"});
+        }
+        catch(error: any) {
+            res.status(500).send({message: error.message});
+        }
+    }
+
+    async getCategoryJob(req: Request, res: Response) : Promise<void> {
+        try {
+            const categories = await categoryModel.find().exec();
+            res.status(200).send(categories);
         }
         catch(error: any) {
             res.status(500).send({message: error.message});
@@ -62,12 +70,29 @@ class JobController {
             const email = req.user;
             const account = await accountModel.findOne({email});
             if (account) {
-                if (account.role === 'Admin' || account.role === 'Candidate') {
-                    const jobs = await jobService.getAllJobs();
-                    res.status(200).send(jobs.slice().sort(() => Math.random() -0.5));
+                const jobs = await jobService.getAllJobs();
+                res.status(200).send(jobs.slice().sort(() => Math.random() -0.5));
+            }
+            else {
+                res.status(404).send({message: "Account not found"});
+            }
+        }
+        catch (error: any) {
+            res.status(500).send({message: error.message});
+        }
+    }
+
+    async getTotalCandidateApploed(req: Request, res: Response) : Promise<void> {
+        try {
+            const email = req.user;
+            const account = await accountModel.findOne({email});
+            if (account) {
+                if (account.role === 'Admin') {
+                    const totalCandidateApplied = await jobService.getCandidateApplied();
+                    res.status(200).send(totalCandidateApplied);
                 }
                 else {
-                    res.status(403).send({message: "You are not authorized to get all jobs"});
+                    res.status(403).send({message: "You are not authorized to get total candidate applied"});
                 }
             }
             else {
@@ -165,6 +190,34 @@ class JobController {
         }
     }
 
+    async getCandidateApplied(req: Request, res: Response) : Promise<void> {
+        try {
+            const email = req.user;
+            const account = await accountModel.findOne({email});
+            if (account) {
+                const {id_job} = req.query;
+                if (account.role === 'Company' && await jobService.checkJob(String(id_job), String(account.company))) {
+                    const candidateApplied = await applicationService.getAppliedOfJob(String(id_job));
+                    if (candidateApplied) {
+                        res.status(200).send(candidateApplied);
+                    }
+                    else {
+                        res.status(404).send({});
+                    }
+                }
+                else {
+                    res.status(403).send({message: "You are not authorized to get all jobs"});
+                }
+            }
+            else {
+                res.status(404).send({message: "Account not found"});
+            }
+        }
+        catch (error:any) {
+            res.status(500).send({message: error.message});
+        }
+    }
+
     async updateJob(req: Request, res: Response): Promise<void> {
         try {
             const email = req.user;
@@ -186,6 +239,26 @@ class JobController {
                         const updatedJob = await jobService.updateJob(id_job, dataUpdate);
                         res.status(200).send(updatedJob);
                     }
+                } else {
+                    res.status(403).send({ message: "You are not authorized to update job" });
+                }
+            } else {
+                res.status(404).send({ message: "Account not found" });
+            }
+        } catch (error: any) {
+            res.status(500).send({ message: error.message });
+        }
+    }
+
+    async updateStatusJob(req: Request, res: Response) : Promise<void> {
+        try {
+            const email = req.user;
+            const account = await accountModel.findOne({ email });
+            if (account) {
+                const { id_job, status} = req.body;
+                if (account.role === "Company" && account.company && await jobService.checkJob(id_job, String(account.company))) {
+                    const updatedJob = await jobService.updateStatusJob(id_job, status);
+                    res.status(200).send(updatedJob);
                 } else {
                     res.status(403).send({ message: "You are not authorized to update job" });
                 }

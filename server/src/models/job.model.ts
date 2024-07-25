@@ -6,7 +6,7 @@ export interface IJob extends Document {
     description: string;
     type: 'INTERNSHIP' | 'PART-TIME' | 'FREELANCE' | 'CONTRACT' | 'FULL-TIME';
     salary: string;
-    number_of_recuirement: number;
+    number_of_recruitment: number;
     position: string;
     status: string;
     expired_at: Date;
@@ -35,7 +35,7 @@ const Job = new Schema<IJob>({
         type: String,
         required: true
     },
-    number_of_recuirement: {
+    number_of_recruitment: {
         type: Number,
         required: true
     },
