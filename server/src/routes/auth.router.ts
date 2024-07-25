@@ -1,11 +1,11 @@
 import express from "express";
 import authentication from "../middleware/authentication";
-import verifyEmail from "../middleware/verifyEmail";
 import authController from "../controllers/auth.controller";
+
 
 const authRouter = express.Router();
 
-authRouter.post('/register',[verifyEmail], authController.register);
+authRouter.post('/register', authController.register);
 authRouter.post('/login', authController.login);
 authRouter.get('/logged-in', [authentication], authController.checkLoggedIn);
 

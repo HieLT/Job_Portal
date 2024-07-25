@@ -8,6 +8,7 @@ const companyRouter = express.Router();
 companyRouter.post('/create', [authentication], companyController.createCompany);
 companyRouter.get('/get-profile', [authentication], companyController.getProfile);
 companyRouter.put('/update-profile', [authentication], companyController.updateProfile);
+companyRouter.get('/get-jobs', [authentication], jobController.getJobByCompany);
 companyRouter.delete('/delete-job', [authentication], jobController.deleteJob);
 
 export default companyRouter;

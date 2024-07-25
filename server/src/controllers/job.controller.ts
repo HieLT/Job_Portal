@@ -3,7 +3,10 @@ import jobModel from "../models/job.model";
 import accountModel from "../models/account.model";
 import jobService from "../services/job.service";
 import companyService from "../services/company.service";
+import applicationService from "../services/application.service";
 import categoryModel from "../models/category.model";
+import { IApplication } from "../models/application.model";
+import firebaseService from "../services/firebase.service";
 
 class JobController {
 
@@ -59,8 +62,30 @@ class JobController {
             const email = req.user;
             const account = await accountModel.findOne({email});
             if (account) {
-                if (account.role === 'Admin') {
+                if (account.role === 'Admin' || account.role === 'Candidate') {
                     const jobs = await jobService.getAllJobs();
+                    res.status(200).send(jobs.slice().sort(() => Math.random() -0.5));
+                }
+                else {
+                    res.status(403).send({message: "You are not authorized to get all jobs"});
+                }
+            }
+            else {
+                res.status(404).send({message: "Account not found"});
+            }
+        }
+        catch (error: any) {
+            res.status(500).send({message: error.message});
+        }
+    }
+
+    async getJobByCompany(req: Request, res: Response) : Promise<void> {
+        try {
+            const email = req.user;
+            const account = await accountModel.findOne({email});
+            if (account) {
+                if (account.role === 'Company') {
+                    const jobs = await jobService.getJobByCompany(String(account.company));
                     res.status(200).send(jobs);
                 }
                 else {
@@ -85,6 +110,54 @@ class JobController {
             }
             else {
                 res.status(404).send({message: "Job not found"});
+            }
+        }
+        catch (error:any) {
+            res.status(500).send({message: error.message});
+        }
+    }
+
+    async candidateApply(req: Request, res: Response) : Promise<void> {
+        try {
+            const email = req.user;
+            const account = await accountModel.findOne({email});
+            if (account) {
+                if (account.role === 'Candidate') {
+                    const {job_id, candidate_id, cover_letter, resume_path} = req.body;
+                    let resume_url = '';
+                    if (req.file) {
+                        const resume_path = req.file;
+                        resume_url = await firebaseService.uploadFile(resume_path);
+                    }
+                    else {
+                        resume_url = resume_path;
+                    }
+                    const newApplication = {
+                        job_id,
+                        candidate_id,
+                        resume_path: resume_url,
+                        cover_letter
+                    };
+                    const application = await applicationService.createApplication(newApplication);
+                    if (application) {
+                        const updatedJob = await jobService.candidateApply(job_id, String(application._id));
+                        if (updatedJob) {
+                            res.status(200).send({message: 'Candidate apply success'});
+                        }
+                        else {
+                            res.status(400).send({message: 'Candidate apply failed'});
+                        }
+                    }
+                    else {
+                        res.status(400).send({message: 'Candidate apply failed'});
+                    }
+                }
+                else {
+                    res.status(403).send({message: "You are not authorized to get all jobs"});
+                }
+            }
+            else {
+                res.status(404).send({message: "Account not found"});
             }
         }
         catch (error:any) {

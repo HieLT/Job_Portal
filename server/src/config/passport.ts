@@ -90,7 +90,7 @@ passport.deserializeUser(async (id: string, done) => {
         });
         const userSessionData = {
             account: {
-                id: account._id,
+                _id: account._id,
                 email: account.email,
                 role: account.role,
                 token: token,

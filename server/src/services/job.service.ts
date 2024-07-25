@@ -2,7 +2,7 @@ import jobModel from "../models/job.model";
 import { IJob } from "../models/job.model";
 
 class JobService {
-    async createJob(job: any) : Promise<IJob> {
+    async createJob(job: Partial<IJob>) : Promise<IJob> {
         try {
             const newJob = new jobModel(job);
             await newJob.save();
@@ -35,6 +35,16 @@ class JobService {
         }
     }
 
+    async getJobByCompany(id: string) : Promise<IJob[]> {
+        try {
+            const jobs = await jobModel.find({company_id: id}).populate('category_id').exec();
+            return jobs;
+        }
+        catch(error) {
+            throw error;
+        }
+    }
+
     async checkJob(id: string, company: string) : Promise<boolean> {
         try {
             const job = await jobModel.findById(id).exec();
@@ -50,20 +60,34 @@ class JobService {
         }
     }
 
-    async updateJob(id: string, job: any) {
+    async updateJob(id: string, job: Partial<IJob>) : Promise<IJob | null> {
         try {   
-            await jobModel.findByIdAndUpdate(id, job);
-            return jobModel.findById(id);
+            const updatedJob = await jobModel.findByIdAndUpdate(id, job, {new: true}).exec();
+            return updatedJob;
         }
         catch(error) {
             throw error;
         }
     }
 
-    async deleteJob(id: string) {
+    async deleteJob(id: string) : Promise<{message: string}> {
         try {   
             await jobModel.findByIdAndDelete(id);
             return {message: 'Job deleted'};
+        }
+        catch(error) {
+            throw error;
+        }
+    }
+
+    async candidateApply(id: string, application: string) : Promise<IJob | null> {
+        try {   
+            const updatedJob = await jobModel.findByIdAndUpdate(id, {
+                $push: {
+                    applied_candidates: application
+                }
+            }, {new: true});
+            return updatedJob;
         }
         catch(error) {
             throw error;

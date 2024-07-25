@@ -30,7 +30,7 @@ const transporter = nodemailer.createTransport({
 
 const sendVerificationEmail = async (user: any) => {
     const token = uuidv4();
-    const url = `http://localhost:8000/gmail/verify/${token}`;
+    const url = `http://localhost:5174/verify-email/${token}`;
     await accountModel.updateOne({_id: user._id}, {verificationToken: token});
     const mailOptions = {
         from: 'Job Portal',

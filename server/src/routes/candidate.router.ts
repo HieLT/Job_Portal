@@ -1,10 +1,8 @@
 import express from "express";
 import candidateController from "../controllers/candidate.controller";
 import authentication from "../middleware/authentication";
-import multer from "multer";
-
-const storage = multer.memoryStorage();
-const upload = multer({storage});
+import jobController from "../controllers/job.controller";
+import upload from "../utils/multer";
 
 const candidateRouter = express.Router();
 
@@ -14,5 +12,6 @@ candidateRouter.put('/update-profile', [authentication], candidateController.upd
 candidateRouter.put('/upload-resume', [upload.single('file'), authentication], candidateController.uploadResume);
 candidateRouter.delete('/delete-resume', [authentication], candidateController.deleteResume);
 candidateRouter.put('/upload-avatar', [authentication], candidateController.uploadAvatar);
+candidateRouter.post('/apply-job', [upload.single('file'), authentication], jobController.candidateApply);
 
 export default candidateRouter;

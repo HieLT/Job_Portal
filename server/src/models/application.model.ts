@@ -5,7 +5,7 @@ export interface IApplication extends Document {
     job_id: Schema.Types.ObjectId;
     candidate_id: Schema.Types.ObjectId;
     resume_path: string;
-    cover_letter_path: string;
+    cover_letter: string;
     seen_at: Date;
     downloaded_at: Date;
     is_deleted: boolean;
@@ -26,7 +26,7 @@ const Application = new Schema<IApplication>({
         type: String,
         required: true
     },
-    cover_letter_path: {
+    cover_letter: {
         type: String,
         required: true
     },

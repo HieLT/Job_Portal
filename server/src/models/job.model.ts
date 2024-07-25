@@ -63,7 +63,7 @@ const Job = new Schema<IJob>({
     },
     applied_candidates: [{
         type: Schema.Types.ObjectId,
-        ref: 'Candidate'
+        ref: 'Application'
     }],
     category_id: {
         type: Schema.Types.ObjectId,
