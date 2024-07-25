@@ -1,9 +1,14 @@
 import React from 'react';
 import styles from './styles.module.scss';
 import { useSelector } from 'react-redux';
-const ResultField = () => {
 
+const ResultField = () => {
   const jobs = useSelector((state) => state.home.jobs);
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0];
+  };
 
   return (
     <div className={styles.resultField}>
@@ -15,8 +20,8 @@ const ResultField = () => {
           </div>
           <div className={styles.jobDetails}>
             <p className={styles.jobType}>{job.type}</p>
+            <p className={styles.jobDate}>Ngày đăng: {formatDate(job.createdAt)}</p>
             <p className={styles.jobSalary}>Lương: {job.salary}</p>
-            <p className={styles.jobDescription}>{job.description}</p>
           </div>
         </div>
       ))}

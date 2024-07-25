@@ -42,7 +42,7 @@ const Header = ({isHeaderOnly}) => {
                                 <div className={styles.headerMainWrap}>
                                     <div className={`${styles.breadcrumbWrap} breadcrumb-custom`}>
                                         {
-                                            (breadcrumb && breadcrumb.length > 1) ?
+                                            (breadcrumb && breadcrumb.length > 0) ?
                                                 <Breadcrumb items={breadcrumb} separator=">"/> : ''
                                         }
                                     </div>
