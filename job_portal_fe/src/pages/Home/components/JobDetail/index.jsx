@@ -69,7 +69,7 @@ const JobDetail = () => {
                             <p>{job.experience_required}</p>
                         </div>
                         {
-                            user.account.role === 'Candidate' ? 
+                            user?.account?.role === 'Candidate' ?
                             <div className={styles.applyButtonContainer}>
                                 <button className={styles.applyButton} onClick={handleApplyClick} >Ứng tuyển ngay</button>
                             </div> : ''
