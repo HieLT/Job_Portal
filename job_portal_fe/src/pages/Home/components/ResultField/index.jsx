@@ -1,19 +1,21 @@
 import React from 'react';
 import styles from './styles.module.scss';
 import { useSelector } from 'react-redux';
-
+import { Link } from 'react-router-dom';
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toISOString().split('T')[0];
+};
 const ResultField = () => {
+
   const jobs = useSelector((state) => state.home.jobs);
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toISOString().split('T')[0];
-  };
+
 
   return (
     <div className={styles.resultField}>
       {jobs.map((job) => (
-        <div key={job._id} className={styles.jobCard}>
+        <Link key={job._id} to={`/job/${job._id}`} className={styles.jobCard}>
           <div className={styles.jobHeader}>
             <h3 className={styles.jobTitle}>{job.title}</h3>
             <p className={styles.jobCompany}>{job.company}</p>
@@ -23,7 +25,7 @@ const ResultField = () => {
             <p className={styles.jobDate}>Ngày đăng: {formatDate(job.createdAt)}</p>
             <p className={styles.jobSalary}>Lương: {job.salary}</p>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );

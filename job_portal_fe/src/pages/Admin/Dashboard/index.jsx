@@ -5,7 +5,7 @@ import MainLayout from "../../../layouts/MainLayout/index.jsx";
 import Card from './Components/Card/index.jsx';
 import styles from './styles.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import { setBreadcrumb } from '../../../states/modules/app/index.js';
+import { setTitlePage } from '../../../states/modules/app/index.js';
 import { getAllCompany , getAllCandidate} from '../../../api/admin/index.js';
 
 const barData = {
@@ -71,14 +71,10 @@ function Dashboard() {
     const countCandidates = useSelector ((state) => state.admin.allCandidate).length;
     const countJobs = 20;
     useEffect(() => {
-        dispatch(setBreadcrumb({
-            breadcrumb: 'Dashboard'
-        }));
+        dispatch(setTitlePage('Dashboard'));
         dispatch(getAllCompany())
         dispatch(getAllCandidate())
     }, []);
-
-    const title = useSelector((state) => state.app.breadcrumb)
     return (
         <MainLayout>
             <div className={styles.dashboard}>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import MainLayout from "../../../layouts/MainLayout";
 import { getAllCompany } from "../../../api/admin";
-import { setBreadcrumb } from '../../../states/modules/app/index.js';
+import { setTitlePage } from '../../../states/modules/app/index.js';
 import { useSelector, useDispatch } from "react-redux";
 
 const AdminCompanies = () => {
@@ -11,9 +11,7 @@ const AdminCompanies = () => {
     const [status, setStatus] = useState({});
 
     useEffect(() => {
-        dispatch(setBreadcrumb({
-            breadcrumb: 'Danh sách công ty'
-        }));
+        dispatch(setTitlePage('Danh sách công ty'));
         dispatch(getAllCompany());
     }, [dispatch]);
 

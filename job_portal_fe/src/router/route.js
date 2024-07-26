@@ -113,7 +113,7 @@ const router = createBrowserRouter([
         path: '/job/:id',
         element: <JobDetail />,
         loader: ({ request, params }) => rootLoader(
-            { request, params }, true
+            { request, params }, true, 'LOAD_JOB_DETAIL_PAGE'
         )
     },
 ]);
