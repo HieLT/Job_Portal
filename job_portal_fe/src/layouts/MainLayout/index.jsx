@@ -11,7 +11,7 @@ function MainLayout(props) {
     const {children} = props;
     const isShowSideBar = useSelector(state => state.app.isShowSideBar);
     const isThemeLight = useSelector(state => state.app.isThemeLight);
-    const title = useSelector((state) => state.app.breadcrumb)
+    const title = useSelector((state) => state.app.title)
     const breadcrumb = useSelector(state => state.app.breadcrumb);
     const goToPage = useSelector(state => state.app.goToPage);
     const navigate = useNavigate();
@@ -37,9 +37,9 @@ function MainLayout(props) {
                     <Header/>
                     <main className={styles.mainContentWrap}>
                         <div className={styles.headerMainWrap}>
-                            <div className={styles.titleWrap}>{title.breadcrumb}</div>
+                            <div className={styles.titleWrap}>{title}</div>
                             <div className={styles.breadcrumbWrap}>
-                                {(breadcrumb && breadcrumb.length > 1) ? <Breadcrumb breadcrumb={breadcrumb}/> : ''}
+                                {(breadcrumb && breadcrumb?.length > 0) ? <Breadcrumb breadcrumb={breadcrumb}/> : ''}
                             </div>
                         </div>
                         {children}

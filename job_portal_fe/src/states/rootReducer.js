@@ -7,6 +7,7 @@ import homeReducer from './modules/home/index.js';
 import informationReducer from './modules/profile/information/index.js';
 import passwordReducer from './modules/profile/password/index.js';
 import cvReducer from './modules/profile/cv/index.js';
+import jobReducer from './modules/job/index.js';
 
 const rootReducer = {
     app: appReducer,
@@ -18,6 +19,7 @@ const rootReducer = {
     password: passwordReducer,
     cv: cvReducer,
     user: userReducer,
+    job : jobReducer,
 }
 
 export default rootReducer

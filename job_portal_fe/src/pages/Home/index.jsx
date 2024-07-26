@@ -17,8 +17,6 @@ const HomePage = () => {
       }
     ]))
   },[])
-
-  console.log(useSelector((state) => state.app.breadcrumb));
   return (
     <HeaderOnly>
       <div className={styles.card}>
