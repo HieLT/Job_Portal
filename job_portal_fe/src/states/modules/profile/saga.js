@@ -1,11 +1,9 @@
-import {all, call, fork, put, takeLatest, select} from "redux-saga/effects";
+import {all, call, fork, select, takeLatest} from "redux-saga/effects";
 import {setTab} from "./index.js";
 import loadInformationSaga from "./information/saga.js";
 import loadChangePasswordSaga from "./password/saga.js";
 import loadCVSaga from "./cv/saga.js";
-import {startRequestCreateCandidateFail, startRequestCreateCandidateSuccess} from "./information/index.js";
 import {getNotification} from "../../../utils/helper.js";
-import {getMe} from "../../../api/auth/index.js";
 import _ from "lodash";
 import {USER_ROLE} from "../../../utils/constants.js";
 

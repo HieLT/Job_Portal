@@ -120,7 +120,7 @@ export default function ResumeTab() {
                         </Upload>
                         <div className={'mt-4 flex justify-between items-center w-full'}>
                             {
-                                (candidateProfile?.resume_path !== '' || !_.isEmpty(file) || oldCv) ?
+                                ((candidateProfile?.resume_path && candidateProfile?.resume_path !== '') || !_.isEmpty(file) || oldCv) ?
                                     <div className={'flex items-center mr-5 w-3/4'}>
                                         <LinkOutlined className={'mr-1'}/>
                                         <a onClick={() => window.open(_.isEmpty(file) ? candidateProfile?.resume_path : cvUrl, '_blank')}
@@ -130,7 +130,7 @@ export default function ResumeTab() {
                                     </div> : ''
                             }
                             {
-                                (candidateProfile?.resume_path !== '' || !_.isEmpty(file)) ?
+                                ((candidateProfile?.resume_path && candidateProfile?.resume_path !== '') || !_.isEmpty(file)) ?
                                     <div className={styles.deleteBtn} onClick={handleDeleteCv}>
                                         <DeleteOutlined/> {_.isEmpty(file) ? 'Xóa' : 'Xóa bản mới tải lên'}
                                     </div> : <i className={'text-gray-500'}>Không có bản CV nào</i>

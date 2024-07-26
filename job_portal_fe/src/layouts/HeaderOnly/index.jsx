@@ -44,7 +44,6 @@ function HeaderOnly(props) {
         }
     }, [goToPage, navigate, dispatch]);
 
-
     return (
         <div className={`${styles.boxMainLayout}`}>
             <div className={styles.headerBox}></div>

@@ -37,7 +37,7 @@ export default function CandidateProfile() {
                 {
                     isLoadingGetMe ? <Skeleton active={isLoadingGetMe}/> : <>
                         <div className={`${styles.avatarWrap} avatar-custom`}>
-                            <Avatar src={isProfileEmpty ? User : authUser.profile.avatar}
+                            <Avatar src={(!isProfileEmpty && authUser.profile.avatar) ? authUser.profile.avatar : User}
                                     className={'w-[100px] h-[100px]'}/>
                         </div>
                         <div className={'font-semibold text-xl mt-3'}>
@@ -50,7 +50,7 @@ export default function CandidateProfile() {
                             <div className={`${styles.info} mr-8`}>
                                 <PhoneOutlined className={'mr-1.5'}/>
                                 {
-                                    !isProfileEmpty ?
+                                    (!isProfileEmpty && authUser.profile.phone) ?
                                         <a href={`tel:${authUser.profile?.phone}`}>{authUser.profile?.phone}</a>
                                         : <i>Đang cập nhật</i>
                                 }

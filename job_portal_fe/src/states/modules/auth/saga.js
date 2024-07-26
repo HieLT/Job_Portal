@@ -38,14 +38,13 @@ function* handleActions() {
                 }))
             }
         }
-        // yield put(getMe());
     });
 
     yield takeLatest(startRequestLoginFail, function (action) {
         let statusError = action.payload.status
         if (statusError === 400) {
             getNotification('error', 'Email hoặc mật khẩu không đúng!');
-        } else if (statusError === 404) {
+        } else if (statusError === 404 || statusError === 401) {
             getNotification('error', 'Người dùng không tồn tại!');
         } else if (statusError === 403) {
             getNotification('error', 'Email chưa được kich hoạt!');

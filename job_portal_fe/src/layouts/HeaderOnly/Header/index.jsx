@@ -5,8 +5,8 @@ import {Breadcrumb, Popover} from "antd";
 import contentInfo from './components/PopoverProfile';
 import ImageUser from '../../../../src/assets/images/logos/user_default.png'
 import {useSelector} from "react-redux";
-import User from '../../../assets/images/logos/user_default.png'
 import _ from "lodash";
+import {USER_ROLE} from "../../../utils/constants.js";
 
 const Header = ({isHeaderOnly}) => {
     const openFullScreen = () => {
@@ -32,17 +32,19 @@ const Header = ({isHeaderOnly}) => {
     const authUser = useSelector((state) => state.auth.authUser);
     const breadcrumb = useSelector(state => state.app.breadcrumb);
 
+    const isCandidate = authUser?.account?.role === USER_ROLE['CANDIDATE']
+
     return (
         <header className={`${styles.headerWrap} ${isHeaderOnly && '!bg-[white]'}`}>
             {
-                !_.isEmpty(authUser.profile) ?
+                !_.isEmpty(authUser?.profile) ?
                     <div className={styles.headerLeftWrap}>
                         {
                             isHeaderOnly ?
                                 <div className={styles.headerMainWrap}>
                                     <div className={`${styles.breadcrumbWrap} breadcrumb-custom`}>
                                         {
-                                            (breadcrumb && breadcrumb.length > 0) ?
+                                            (breadcrumb && breadcrumb?.length > 0) ?
                                                 <Breadcrumb items={breadcrumb} separator=">"/> : ''
                                         }
                                     </div>
@@ -67,7 +69,8 @@ const Header = ({isHeaderOnly}) => {
                              trigger="click">
                         <div className={styles.infoWrap}>
                             <div className={styles.avatarWrap}>
-                                <img src={User} alt="" onError={(e) => {
+                                <img src={isCandidate ? authUser?.profile?.avatar : authUser?.profile?.logo}
+                                     alt="" onError={(e) => {
                                     e.currentTarget.onerror = null;
                                     e.currentTarget.src = ImageUser;
                                 }}/>
