@@ -15,6 +15,7 @@ import {EMPLOYEE_TYPE, JOB_EXPERIENCE, JOB_STATUS, SALARY_OPTIONS} from "../../.
 import dayjs from "dayjs";
 import {postJob, updateJob} from "../../../../../api/jobManagement/index.js";
 import store from "../../../../../states/configureStore.js";
+import {setTitlePage} from "../../../../../states/modules/app/index.js";
 
 export default function CreateOrUpdate(props) {
     const {isTypeModalCreate, closeModal} = props;

@@ -12,7 +12,7 @@ export const routeMap = [
         ),
         path: '/admin/dashboard',
         routeActive: ['/admin/dashboard'],
-        permissions: [],
+        permissions: [USER_ROLE['ADMIN']],
     },
     {
         label: 'Quản lý Công Ty',
@@ -23,7 +23,7 @@ export const routeMap = [
         ),
         path: '/admin/companies',
         routeActive: ['/admin/companies'],
-        permissions: [],
+        permissions: [USER_ROLE['ADMIN']],
     },
     {
         label: 'Quản lý Ứng Viên',
@@ -35,7 +35,7 @@ export const routeMap = [
         ),
         path: '/admin/candidates',
         routeActive: ['/admin/candidates'],
-        permissions: [],
+        permissions: [USER_ROLE['ADMIN']],
     },
     {
         label: 'Quản lý Công việc',
@@ -46,7 +46,7 @@ export const routeMap = [
         ),
         path: '/admin/posted-jobs',
         routeActive: ['/admin/posted-jobs'],
-        permissions: [],
+        permissions: [USER_ROLE['ADMIN']],
     },
     {
         label: 'Tổng quan',

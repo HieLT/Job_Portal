@@ -11,14 +11,15 @@ import {
     setVisibleModalCreateOrUpdate
 } from "../../../states/modules/jobManagement/index.js";
 import styles from "./styles.module.scss";
-import {Button, Switch, Tooltip} from "antd";
+import {Button, Input, Switch, Tooltip} from "antd";
 import TableDefault from "../../../components/Table/index.jsx";
 import ModalDefault from "../../../components/Modal/index.jsx";
 import CreateOrUpdate from "../../Company/JobManagement/components/CreateOrUpdate/index.jsx";
 import {PlusOutlined} from '@ant-design/icons'
 import {EMPLOYEE_TYPE, JOB_STATUS} from "../../../utils/constants.js";
-import {goToPage, setBreadcrumb} from "../../../states/modules/app/index.js";
+import {goToPage, setTitlePage} from "../../../states/modules/app/index.js";
 import ApplicantIcon from '../../../assets/images/icons/duotone/applicant.svg'
+import IconSearch from '../../../assets/images/icons/duotone/magnifying-glass.svg'
 
 export default function JobManagement() {
     const [isTypeModalCreate, setIsTypeModalCreate] = useState(true);
@@ -112,11 +113,7 @@ export default function JobManagement() {
     ];
 
     useEffect(() => {
-        dispatch(setBreadcrumb([
-            {
-                title: 'Quản lý công việc',
-            }
-        ]))
+        dispatch(setTitlePage('Quản lý công việc'))
     }, [dispatch])
 
     const handleFindLabelByValue = (obj, value) => {
@@ -180,18 +177,17 @@ export default function JobManagement() {
 
     return (
         <MainLayout>
-            <div className={'font-semibold text-xl mb-3 mt-7'}>Quản lý công việc</div>
             <div className={styles.listWrap}>
                 <div className={styles.filterWrap}>
                     <div className={styles.search}>
-                        {/*<Input*/}
-                        {/*    prefix={<img src={IconSearch} className={`w-3.5 mr-1.5`} alt=""/>}*/}
-                        {/*    className={`main-input`}*/}
-                        {/*    placeholder={'Enter username ...'}*/}
-                        {/*    value={dataFilter.keySearch}*/}
-                        {/*    onChange={(e) => handleSearch(e)}*/}
-                        {/*    onKeyDown={handleKeyPress}*/}
-                        {/*/>*/}
+                        <Input
+                            prefix={<img src={IconSearch} className={`w-3.5 mr-1.5`} alt=""/>}
+                            className={`main-input`}
+                            placeholder={'Nhập tiêu đề việc làm để tìm kiếm'}
+                            // value={dataFilter.keySearch}
+                            // onChange={(e) => handleSearch(e)}
+                            // onKeyDown={handleKeyPress}
+                        />
                     </div>
                     <div className={styles.action}>
                         <Button
