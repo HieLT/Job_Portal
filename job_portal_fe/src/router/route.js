@@ -15,6 +15,7 @@ import VerifyEmailResult from "../pages/Auth/VerifyEmailResult/index.jsx";
 import {USER_ROLE} from "../utils/constants.js";
 import ProfileRouting from "../pages/ProfileRouting/index.jsx";
 import Forbidden from "../components/Forbidden/index.jsx";
+import JobDetail from "../pages/Home/components/JobDetail/index.jsx"
 
 const router = createBrowserRouter([
     {
@@ -106,6 +107,13 @@ const router = createBrowserRouter([
         element: <Forbidden />,
         loader: ({ request, params }) => rootLoader(
             { request, params }, true
+        )
+    },
+    {
+        path: '/job/:id',
+        element: <JobDetail />,
+        loader: ({ request, params }) => rootLoader(
+            { request, params }, true, 'LOAD_JOB_DETAIL_PAGE'
         )
     },
 ]);

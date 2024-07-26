@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import MainLayout from "../../../layouts/MainLayout";
-import { setBreadcrumb } from "../../../states/modules/app";
+import { setTitlePage } from "../../../states/modules/app";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllCandidate } from "../../../api/admin";
 
@@ -11,9 +11,7 @@ const AdminPostedJobs = () => {
     const [status, setStatus] = useState({});
 
     useEffect(() => {
-        dispatch(setBreadcrumb({
-            breadcrumb: 'Danh sách ứng viên'
-        }));
+        dispatch(setTitlePage('Danh sách ứng viên'));
         dispatch(getAllCandidate());
     }, [dispatch]);
 

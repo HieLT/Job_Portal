@@ -1,0 +1,29 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #4a90e2; /* More appealing color */
+  color: #fff;
+  border-bottom: 2px solid #007bb5; /* Subtle border */
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logoImage {
+  height: 40px;
+  width: auto;
+}
+
+.postJobButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #ffc107; /* Contrasting button color */
+  color: #000;
+  cursor: pointer;
+  font-size: 16px;
+}
