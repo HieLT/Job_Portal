@@ -32,7 +32,8 @@ const Header = ({isHeaderOnly}) => {
     const authUser = useSelector((state) => state.auth.authUser);
     const breadcrumb = useSelector(state => state.app.breadcrumb);
 
-    const isCandidate = authUser?.account?.role === USER_ROLE['CANDIDATE']
+    const isCandidateAndHasAvatar = (authUser?.account?.role === USER_ROLE['CANDIDATE'] && authUser.profile?.avatar)
+    const isCompanyAndHasLogo = (authUser?.account?.role === USER_ROLE['COMPANY'] && authUser.profile?.logo)
 
     return (
         <header className={`${styles.headerWrap} ${isHeaderOnly && '!bg-[white]'}`}>
@@ -69,7 +70,9 @@ const Header = ({isHeaderOnly}) => {
                              trigger="click">
                         <div className={styles.infoWrap}>
                             <div className={styles.avatarWrap}>
-                                <img src={isCandidate ? authUser?.profile?.avatar : authUser?.profile?.logo}
+                                <img src={isCandidateAndHasAvatar ? authUser?.profile?.avatar :
+                                    (isCompanyAndHasLogo ? authUser?.profile?.logo : ImageUser)
+                                }
                                      alt="" onError={(e) => {
                                     e.currentTarget.onerror = null;
                                     e.currentTarget.src = ImageUser;

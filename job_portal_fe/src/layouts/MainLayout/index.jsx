@@ -37,8 +37,9 @@ function MainLayout(props) {
                     <main className={styles.mainContentWrap}>
                         <div className={styles.headerMainWrap}>
                             <div className={styles.titleWrap}>{title}</div>
-                            <div className={styles.breadcrumbWrap}>
-                                {(breadcrumb && breadcrumb?.length > 0) ? <Breadcrumb breadcrumb={breadcrumb}/> : ''}
+                            <div className={`${styles.breadcrumbWrap} breadcrumb-custom`}>
+                                {(breadcrumb && breadcrumb?.length > 0) ?
+                                    <Breadcrumb items={breadcrumb} separator={'-'}/> : ''}
                             </div>
                         </div>
                         {children}
