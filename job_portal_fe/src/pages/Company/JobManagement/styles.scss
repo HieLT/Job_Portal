@@ -1,5 +1,11 @@
 .table-custom {
     .ant-table-body {
-        @apply max-h-[calc(100vh_-_370px)] min-h-[calc(100vh_-_370px)]
+        @apply max-h-[calc(100vh_-_400px)] min-h-[calc(100vh_-_400px)]
+    }
+}
+
+.applicants-table-custom {
+    .ant-table-body {
+        @apply max-h-[calc(100vh_-_400px)] min-h-[calc(100vh_-_400px)]
     }
 }

@@ -11,11 +11,10 @@ const HomePage = () => {
     useEffect(() => {
         dispatch(setBreadcrumb([
             {
-                href: '/',
                 title: 'Trang chủ'
             }
-        ]));
-    }, [dispatch]);
+        ]))
+    }, [dispatch])
 
     return (
         <HeaderOnly>

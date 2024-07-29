@@ -1,16 +1,22 @@
-import React, {useEffect} from 'react';
-import {Avatar} from "antd";
+import React, {useEffect, useState} from 'react';
+import {Avatar, Input} from "antd";
 import styles from "../../styles.module.scss";
 import TableDefault from "../../../../../components/Table/index.jsx";
 import MainLayout from "../../../../../layouts/MainLayout/index.jsx";
 import {useDispatch, useSelector} from "react-redux";
-import {setBreadcrumb} from "../../../../../states/modules/app/index.js";
+import {setBreadcrumb, setTitlePage} from "../../../../../states/modules/app/index.js";
 import DefaultAvatar from '../../../../../assets/images/logos/user_default.png'
 import moment from "moment";
+import IconSearch from '../../../../../assets/images/icons/duotone/magnifying-glass.svg'
+import DownloadIcon from '../../../../../assets/images/icons/duotone/download.svg'
+import DetailIcon from '../../../../../assets/images/icons/duotone/detail.svg'
+import {EllipsisOutlined} from '@ant-design/icons'
+import InlineSVG from "react-inlinesvg";
 
 export default function Applicants() {
     const isLoadingGetApplicant = useSelector(state => state.applicant.isLoadingGetAppliedCandidate)
     const applicants = useSelector(state => state.applicant.appliedCandidates)
+    const [visibleOptions, setVisibleOptions] = useState(null)
     const columns = [
         {
             title: 'Họ và tên',
@@ -21,7 +27,7 @@ export default function Applicants() {
             sorter: (a, b) => a.age - b.age,
             render: (text, record) => <span className={'font-bold flex justify-start items-center'}>
                 <Avatar src={record.candidate_id.avatar || DefaultAvatar} size={80}/>
-                <span className={'ml-4'}>{record.candidate_id.first_name + ' ' + record.candidate_id.last_name}</span>
+                <span className={'ml-5'}>{record.candidate_id.first_name + ' ' + record.candidate_id.last_name}</span>
             </span>
         },
         {
@@ -29,10 +35,11 @@ export default function Applicants() {
             dataIndex: 'phone',
             key: 'phone',
             showSorterTooltip: false,
-            width: 140,
+            width: 120,
             align: 'center',
-            render: (text, record) => <a href={`tel:${record.candidate_id.phone}`} className={'text-[#4d94ff]'}>
-                {record.candidate_id.phone}
+            render: (text, record) => <a href={`tel:${record.candidate_id.phone || null}`}
+                                         className={'text-[#4d94ff]'}>
+                {record.candidate_id.phone || <i className={'text-gray-500'}>Đang cập nhật</i>}
             </a>
         },
         {
@@ -50,18 +57,6 @@ export default function Applicants() {
             </span>
         },
         {
-            title: 'Hồ sơ ứng tuyển',
-            dataIndex: 'resume_path',
-            key: 'resume_path',
-            showSorterTooltip: false,
-            width: 200,
-            render: (text) => (
-                <div className={'text-[#4d94ff] max-w-[100%] whitespace-nowrap overflow-hidden overflow-ellipsis'}>
-                    <a rel="noopener noreferrer" target={'_blank'} href={text}>{text}</a>
-                </div>
-            )
-        },
-        {
             title: 'Thư ứng tuyển',
             dataIndex: 'cover_letter',
             key: 'cover_letter',
@@ -69,6 +64,40 @@ export default function Applicants() {
             width: 200,
             render: (text) => (
                 <div className={'max-h-[150px] overflow-auto'}>{text}</div>
+            )
+        },
+        {
+            title: 'Hồ sơ ứng tuyển',
+            dataIndex: 'resume_path',
+            key: 'resume_path',
+            showSorterTooltip: false,
+            width: 220,
+            render: (text, record) => (
+                <div className={'flex items-center justify-between'}>
+                    <div className={'text-[#4d94ff] max-w-[100%] whitespace-nowrap overflow-hidden overflow-ellipsis'}>
+                        <a rel="noopener noreferrer" target={'_blank'} href={text}>{text}</a>
+                    </div>
+                    <div className={styles.optionWrap}
+                         onClick={() => setVisibleOptions((visibleOptions && visibleOptions === record._id)
+                             ? null : record._id)}
+                    >
+                        <EllipsisOutlined className={'rotate-[-90deg]'}/>
+                        {
+                            (visibleOptions && visibleOptions === record._id) ?
+                                <div className={styles.dropDownWrap} onMouseLeave={() => setVisibleOptions(null)}>
+                                    <a rel="noopener noreferrer" target={'_blank'} href={text}
+                                       className={'hover:bg-[#f9f9f9] flex items-center justify-start p-2 rounded-md hover:fill-[#5B8DEF] hover:text-[#000]'}>
+                                        <InlineSVG src={DetailIcon} height={17} width={17} className={'mr-1.5'}/>
+                                        Xem
+                                    </a>
+                                    <div className={styles.downloadWrap} onClick={() => handleDownloadResume(text)}>
+                                        <InlineSVG src={DownloadIcon} height={17} width={17} className={'mr-1.5'}/>
+                                        Tải xuống
+                                    </div>
+                                </div> : ''
+                        }
+                    </div>
+                </div>
             )
         },
         // {
@@ -82,6 +111,7 @@ export default function Applicants() {
     const dispatch = useDispatch()
 
     useEffect(() => {
+        dispatch(setTitlePage(`Danh sách ứng viên`))
         dispatch(setBreadcrumb([
             {
                 title: 'Quản lý công việc',
@@ -93,19 +123,32 @@ export default function Applicants() {
         ]))
     }, [dispatch])
 
+    const handleDownloadResume = async (fileUrl) => {
+        const nameFile = fileUrl.split('/').pop();
+        const response = await fetch(fileUrl);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = nameFile;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+    }
+
     return <MainLayout>
-        <div className={'font-semibold text-xl mb-3 mt-7'}>Danh sách ứng viên</div>
         <div className={styles.listWrap}>
             <div className={styles.filterWrap}>
                 <div className={styles.search}>
-                    {/*<Input*/}
-                    {/*    prefix={<img src={IconSearch} className={`w-3.5 mr-1.5`} alt=""/>}*/}
-                    {/*    className={`main-input`}*/}
-                    {/*    placeholder={'Enter username ...'}*/}
-                    {/*    value={dataFilter.keySearch}*/}
-                    {/*    onChange={(e) => handleSearch(e)}*/}
-                    {/*    onKeyDown={handleKeyPress}*/}
-                    {/*/>*/}
+                    <Input
+                        prefix={<img src={IconSearch} className={`w-3.5 mr-1.5`} alt=""/>}
+                        className={`main-input`}
+                        placeholder={'Nhập tên ứng viên để tìm kiếm'}
+                        // value={dataFilter.keySearch}
+                        // onChange={(e) => handleSearch(e)}
+                        // onKeyDown={handleKeyPress}
+                    />
                 </div>
             </div>
 
@@ -117,7 +160,7 @@ export default function Applicants() {
                     columns={columns}
                     // onChange={handleChangeTable}
                     isPagination={false}
-                    extraClassName={'table-custom'}
+                    extraClassName={'applicants-table-custom'}
                 />
             </div>
         </div>

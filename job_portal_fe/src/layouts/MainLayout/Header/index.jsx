@@ -4,8 +4,9 @@ import './styles.scss';
 import {Popover} from "antd";
 import ImageUser from '../../../../src/assets/images/logos/user_default.png'
 import contentInfo from './components/PopoverProfile';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {USER_ROLE} from "../../../utils/constants.js";
+import {goToPage} from "../../../states/modules/app/index.js";
 
 const Header = () => {
     const openFullScreen = () => {
@@ -30,6 +31,7 @@ const Header = () => {
 
     const authUser = useSelector((state) => state.auth.authUser);
     const isAdmin = authUser?.account.role === USER_ROLE['ADMIN']
+    const dispatch = useDispatch()
 
     return (
         <header className={styles.headerWrap}>
@@ -58,7 +60,8 @@ const Header = () => {
                                     }}/>
                                 </div>
                             </div>
-                        </Popover> : <a href={'/'} className={'text-[white] text-sm flex items-center justify-center'}>
+                        </Popover> : <a onClick={() => dispatch(goToPage({path: '/'}))}
+                                        className={'hover:text-[#66a3ff] text-[white] text-sm flex items-center justify-center'}>
                             VỀ TRANG CHỦ
                             <svg className="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                  viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"

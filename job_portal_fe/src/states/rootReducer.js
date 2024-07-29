@@ -10,6 +10,7 @@ import cvReducer from './modules/profile/cv/index.js';
 import jobManagementReducer from './modules/jobManagement/index.js';
 import applicantReducer from './modules/applicant/index.js';
 import jobReducer from './modules/job/index.js';
+import appliedJobsReducer from './modules/appliedJobs/index.js';
 
 const rootReducer = {
     app: appReducer,
@@ -24,6 +25,7 @@ const rootReducer = {
     job : jobReducer,
     jobManagement: jobManagementReducer,
     applicant: applicantReducer,
+    appliedJobs: appliedJobsReducer,
 }
 
 export default rootReducer

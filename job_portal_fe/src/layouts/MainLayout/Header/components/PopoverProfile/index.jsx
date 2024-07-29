@@ -13,7 +13,7 @@ function PopoverProfile() {
     const handleConfirmLogout = () => {
         removeAuthToken();
         dispatch(startRequestGetMeFail())
-        navigate('/login');
+        navigate('/');
     }
 
     return (

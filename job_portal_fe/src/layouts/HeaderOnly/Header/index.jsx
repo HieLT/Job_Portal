@@ -7,6 +7,7 @@ import ImageUser from '../../../../src/assets/images/logos/user_default.png'
 import {useSelector} from "react-redux";
 import _ from "lodash";
 import {USER_ROLE} from "../../../utils/constants.js";
+import {useNavigate} from "react-router-dom";
 
 const Header = ({isHeaderOnly}) => {
     const openFullScreen = () => {
@@ -29,10 +30,13 @@ const Header = ({isHeaderOnly}) => {
         }
     }
 
+    const navigate = useNavigate()
     const authUser = useSelector((state) => state.auth.authUser);
+    const isAuthSuccess = useSelector((state) => state.auth.isAuthSuccess);
     const breadcrumb = useSelector(state => state.app.breadcrumb);
 
-    const isCandidate = authUser?.account?.role === USER_ROLE['CANDIDATE']
+    const isCandidateAndHasAvatar = (authUser?.account?.role === USER_ROLE['CANDIDATE'] && authUser.profile?.avatar)
+    const isCompanyAndHasLogo = (authUser?.account?.role === USER_ROLE['COMPANY'] && authUser.profile?.logo)
 
     return (
         <header className={`${styles.headerWrap} ${isHeaderOnly && '!bg-[white]'}`}>
@@ -65,18 +69,26 @@ const Header = ({isHeaderOnly}) => {
                 </div>
 
                 <div className={`${styles.itemHeaderRight}`}>
-                    <Popover className={`popover-info-wrap`} placement="bottomRight" content={contentInfo}
-                             trigger="click">
-                        <div className={styles.infoWrap}>
-                            <div className={styles.avatarWrap}>
-                                <img src={isCandidate ? authUser?.profile?.avatar : authUser?.profile?.logo}
-                                     alt="" onError={(e) => {
-                                    e.currentTarget.onerror = null;
-                                    e.currentTarget.src = ImageUser;
-                                }}/>
+                    {
+                        isAuthSuccess ?
+                            <Popover className={`popover-info-wrap`} placement="bottomRight" content={contentInfo}
+                                     trigger="click">
+                                <div className={styles.infoWrap}>
+                                    <div className={styles.avatarWrap}>
+                                        <img src={isCandidateAndHasAvatar ? authUser?.profile?.avatar :
+                                            (isCompanyAndHasLogo ? authUser?.profile?.logo : ImageUser)
+                                        }
+                                             alt="" onError={(e) => {
+                                            e.currentTarget.onerror = null;
+                                            e.currentTarget.src = ImageUser;
+                                        }}/>
+                                    </div>
+                                </div>
+                            </Popover> : <div onClick={() => navigate('/login')}
+                                              className={'font-semibold text-base'}>
+                                Đăng nhập
                             </div>
-                        </div>
-                    </Popover>
+                    }
                 </div>
 
             </div>

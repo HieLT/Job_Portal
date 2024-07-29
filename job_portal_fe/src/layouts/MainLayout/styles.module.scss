@@ -12,23 +12,21 @@
     .mainWrap {
         .mainContentWrap {
             .headerMainWrap {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
+                margin-top: 40px;
                 margin-bottom: 20px;
 
                 .titleWrap {
-                    font-size: 25px;
+                    font-size: 20px;
                     font-weight: 600;
                     color: $colorBlack;
                 }
 
                 .breadcrumbWrap {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-
+                    span {
+                        font-size: 13px;
+                    }
                     a {
+                        font-size: 13px;
                         text-decoration: none;
                     }
                 }
@@ -58,8 +56,8 @@
                 @apply max-h-[calc(100vh_-_68px)] overflow-y-auto overflow-x-hidden py-[20px] px-[22px]
             }
 
-            padding: 31px 22px 30px 22px;
-            @apply h-[calc(100vh_-_60px)] bg-gray-115 pt-[68px]
+            padding: 0 30px 20px 30px;
+            @apply h-[calc(100vh)] bg-gray-115 pt-[68px]
         }
 
         @apply w-[calc(100%_-_250px)] ml-[250px] h-[100vh] transition-all duration-500 relative
