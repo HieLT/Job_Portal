@@ -4,64 +4,101 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    transition: opacity 0.3s ease;
+    padding-top: 100px;
 }
 
 .modalContent {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 80%;
-    max-width: 600px;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
     position: relative;
+    max-height: 80vh; 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
 }
+
+
 
 .closeButton {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 15px;
+    right: 15px;
     background: none;
     border: none;
-    font-size: 20px;
+    font-size: 24px;
+    color: #333;
     cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+    z-index: 10;
 }
 
+.closeButton:hover {
+    color: #ff4d4d;
+}
 .formGroup {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .formGroup label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    color: #555;
+    font-weight: 500;
 }
 
-input[type="file"] {
-    display: block;
+input[type="file"],
+select,
+textarea {
     width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+input[type="file"]:focus,
+select:focus,
+textarea:focus {
+    border-color: black;
+    outline: none;
 }
 
 textarea {
-    width: 100%;
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+    resize: vertical;
+    min-height: 120px;
 }
 
 .submitButton {
-    background-color: #4CAF50; /* Green */
+    background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
+    border-radius: 6px;
+    padding: 14px 24px;
     text-align: center;
-    font-size: 16px;
+    font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+    display: block;
 }
 
 .submitButton:hover {
-    background-color: #45a049; /* Darker green */
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.submitButton:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+    transform: none;
 }
