@@ -72,6 +72,28 @@ class CandidateController {
         }
     }
 
+    async getAllResume(req: Request, res: Response) : Promise<void> {
+        try {
+            const email = req.user;
+            const account = await accountModel.findOne({email});
+            if (account) {
+                if (account.role === "Candidate" && account.candidate) {
+                    const resumes = await candidateService.getAllResume(String(account.candidate));
+                    res.status(200).send(resumes);
+                }
+                else {
+                    res.status(401).send({message: 'Account not found'});
+                }
+            }
+            else {
+                res.status(401).send({message: 'Account not found'});
+            }
+        }
+        catch(error: any) {
+            res.status(500).send({message: error.message});
+        }
+    }
+
     async uploadResume(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;

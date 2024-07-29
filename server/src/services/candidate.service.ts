@@ -1,4 +1,6 @@
+import { ObjectId } from "mongodb";
 import candidateModel, {ICandidate} from "../models/candidate.model";
+import { IFile } from "../models/file.model";
 
 class CandidateService {
     async createCandidate(candidate: Partial<ICandidate>) : Promise<ICandidate> {
@@ -35,6 +37,15 @@ class CandidateService {
         try {
             const updatedCandidate = candidateModel.findByIdAndUpdate(id, candidate, {new: true}).exec();
             return updatedCandidate;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getAllResume(id: string) {
+        try {
+            const candidate = await candidateModel.findById(id).populate('resume_path').exec();
+            return candidate?.resume_path || [];
         } catch (error) {
             throw error;
         }
