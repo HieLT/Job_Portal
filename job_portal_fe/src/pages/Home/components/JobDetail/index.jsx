@@ -14,7 +14,8 @@ const JobDetail = () => {
     const dispatch = useDispatch();
     const {id} = useParams();
     const job = useSelector(state => state.home.job);
-    const user = useSelector(state => state.auth.authUser)
+    const user = useSelector(state => state.auth.authUser);
+    const isAuthSuccess = useSelector(state => state.auth.isAuthSuccess);
     const company = job?.company_id || {};
 
     useEffect(() => {
@@ -30,57 +31,79 @@ const JobDetail = () => {
         ]));
     }, [dispatch, id]);
 
+    const isJobExpired = (expiryDateString) => {
+        if (!expiryDateString) return false;
+        const expiryDate = new Date(expiryDateString);
+        const today = new Date();
+        return expiryDate < today;
+    };
+
+    const isJobClosed = job?.status !== 'Open';
     if (!job) {
         return <div className={styles.loading}><Skeleton active/></div>;
     }
 
-
     const handleApplyClick = () => {
-        if (_.isEmpty(user?.profile)) {
-            dispatch(goToPage({path: '/account/profile'}))
+        if (!isAuthSuccess) {
+            console.log("here");
+            dispatch(goToPage({path: '/login'}))
         } else {
-            setModalOpen(true)
+            if (_.isEmpty(user?.profile)) {
+                dispatch(goToPage({path: '/account/profile'}))
+            } else {
+                setModalOpen(true)
+            }
         }
-    }
+    };
+
     const handleCloseApplyModal = () => {
-        setModalOpen(false)
-    }
+        setModalOpen(false);
+    };
+    console.log(user.account);
+    console.log(user?.account?.role !== 'Company');
+    console.log(!isJobExpired(job.expired_at));
+    console.log(!isJobClosed);
     return (
         <HeaderOnly>
             <div className={styles.container}>
                 <div className={styles.jobSection}>
+                    {(isJobExpired(job.expired_at) || isJobClosed) && (
+                        <div className={styles.headerBand}>
+                            {isJobExpired(job.expired_at) ? "This job has expired" : "This job is closed"}
+                        </div>
+                    )}
                     <div className={styles.jobHeader}>
                         <h1 className={styles.jobTitle}><strong>{job.title}</strong></h1>
                     </div>
                     <div className={styles.jobInfo}>
-                        <div className={styles.jobSectionItem}>
-                            <h2><strong>Mô tả</strong></h2>
-                            <p>{job.description}</p>
-                        </div>
-                        <div className={styles.jobSectionItem}>
-                            <h2><strong>Ngày Đăng</strong></h2>
-                            <p>{new Date(job.createdAt).toISOString().split('T')[0]}</p>
-                        </div>
-                        <div className={styles.jobSectionItem}>
-                            <h2><strong>Vị trí</strong></h2>
-                            <p>{job.position}</p>
-                        </div>
-                        <div className={styles.jobSectionItem}>
-                            <h2><strong>Lương</strong></h2>
-                            <p>{job.salary}</p>
-                        </div>
-                        <div className={styles.jobSectionItem}>
-                            <h2><strong>Yêu cầu kinh nghiệm</strong></h2>
-                            <p>{job.experience_required}</p>
-                        </div>
-                        {
-                            user?.account?.role === 'Candidate' ?
+                        <div className={styles.jobDetails}>
+                            <div className={styles.jobSectionItem}>
+                                <h2><strong>Mô tả</strong></h2>
+                                <p>{job.description}</p>
+                            </div>
+                            <div className={styles.jobSectionItem}>
+                                <h2><strong>Ngày Đăng</strong></h2>
+                                <p>{new Date(job.createdAt).toISOString().split('T')[0]}</p>
+                            </div>
+                            <div className={styles.jobSectionItem}>
+                                <h2><strong>Vị trí</strong></h2>
+                                <p>{job.position}</p>
+                            </div>
+                            <div className={styles.jobSectionItem}>
+                                <h2><strong>Lương</strong></h2>
+                                <p>{job.salary}</p>
+                            </div>
+                            <div className={styles.jobSectionItem}>
+                                <h2><strong>Yêu cầu kinh nghiệm</strong></h2>
+                                <p>{job.experience_required}</p>
+                            </div>
+                            {user?.account?.role !== 'Company' && !isJobExpired(job.expired_at) && !isJobClosed && (
                                 <div className={styles.applyButtonContainer}>
                                     <button className={styles.applyButton} onClick={handleApplyClick}>Ứng tuyển ngay
                                     </button>
-                                </div> : ''
-                        }
-
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <div className={styles.companySection}>
@@ -96,7 +119,6 @@ const JobDetail = () => {
                     </div>
                 </div>
             </div>
-
             <ApplyModal isOpen={isModalOpen} onClose={handleCloseApplyModal} job_id={id}/>
         </HeaderOnly>
     );

@@ -16,9 +16,11 @@ export const rootLoader = async ({request, params}, requiredAuth, saga = null, r
     const secondCondition = url.pathname === '/account/profile';
     const extraUrls = ['/forbidden', '/']
 
-    if (firstCondition || secondCondition) {
-        await store.dispatch(getMe());
-        auth = store.getState().auth;
+    if (requiredAuth){
+        if (firstCondition || secondCondition) {
+            await store.dispatch(getMe());
+            auth = store.getState().auth;
+        }
     }
 
     if (requiredAuth) {
