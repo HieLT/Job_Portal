@@ -67,15 +67,8 @@ class JobController {
 
     async getAllJobs(req: Request, res: Response) : Promise<void> {
         try {
-            const email = req.user;
-            const account = await accountModel.findOne({email});
-            if (account) {
-                const jobs = await jobService.getAllJobs();
-                res.status(200).send(jobs.slice().sort(() => Math.random() -0.5));
-            }
-            else {
-                res.status(404).send({message: "Account not found"});
-            }
+            const jobs = await jobService.getAllJobs();
+            res.status(200).send(jobs.slice().sort(() => Math.random() -0.5));
         }
         catch (error: any) {
             res.status(500).send({message: error.message});
