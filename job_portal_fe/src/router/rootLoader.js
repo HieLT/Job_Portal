@@ -17,9 +17,11 @@ export const rootLoader = async ({request, params}, requiredAuth, saga = null, r
     const extraUrls = ['/forbidden', '/']
     const authUrls = ['/login', '/signup', '/forgot-password', '/reset-password']
 
-    if (firstCondition || secondCondition) {
-        await store.dispatch(getMe());
-        auth = store.getState().auth;
+    if (requiredAuth){
+        if (firstCondition || secondCondition) {
+            await store.dispatch(getMe());
+            auth = store.getState().auth;
+        }
     }
 
     if (requiredAuth) {

@@ -11,6 +11,7 @@ import _ from "lodash";
 
 const JobDetail = () => {
     const [isModalOpen, setModalOpen] = useState(false);
+    const navigate = useNavigate()
     const dispatch = useDispatch();
     const {id} = useParams();
     const job = useSelector(state => state.home.job);
