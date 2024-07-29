@@ -19,6 +19,7 @@ import CompanyDashboard from "../pages/Company/Dashboard/index.jsx";
 import JobManagement from "../pages/Company/JobManagement/index.jsx";
 import Applicants from "../pages/Company/JobManagement/components/Applicants/index.jsx";
 import JobDetail from "../pages/Home/components/JobDetail/index.jsx"
+import AppliedJobs from "../pages/Candidate/AppliedJobs/index.jsx";
 
 const router = createBrowserRouter([
     {
@@ -60,7 +61,7 @@ const router = createBrowserRouter([
         path: '',
         element: <Home/>,
         loader: ({request, params}) => rootLoader(
-            {request, params}, true, 'LOAD_HOME_PAGE'
+            {request, params}, false, 'LOAD_HOME_PAGE'
         )
     },
     {
@@ -116,7 +117,7 @@ const router = createBrowserRouter([
         path: '/job/:id',
         element: <JobDetail />,
         loader: ({ request, params }) => rootLoader(
-            { request, params }, true, 'LOAD_JOB_DETAIL_PAGE'
+            { request, params }, false, 'LOAD_JOB_DETAIL_PAGE'
         )
     },
     {
@@ -138,6 +139,13 @@ const router = createBrowserRouter([
         element: <Applicants />,
         loader: ({ request, params }) => rootLoader(
             { request, params }, true, 'LOAD_APPLICANT_PAGE', USER_ROLE['COMPANY']
+        )
+    },
+    {
+        path: '/account/applied-jobs',
+        element: <AppliedJobs />,
+        loader: ({ request, params }) => rootLoader(
+            { request, params }, true, 'LOAD_APPLIED_JOBS_PAGE', USER_ROLE['CANDIDATE']
         )
     },
 ]);

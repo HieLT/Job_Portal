@@ -4,7 +4,7 @@ import {Button, Flex, Upload} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import styles from './styles.module.scss'
 import {getNotification} from "../../../../../utils/helper.js";
-import {DeleteOutlined, LinkOutlined, UploadOutlined} from '@ant-design/icons'
+import {LinkOutlined, UploadOutlined} from '@ant-design/icons'
 import {setTab} from "../../../../../states/modules/profile/index.js";
 import {deleteCandidateCv, uploadCandidateCv} from "../../../../../api/profile/index.js";
 import _ from "lodash";
@@ -12,6 +12,9 @@ import ModalDeleteDefault from "../../../../../components/ModalDelete/index.jsx"
 import {setIsOpenModalDelete, setNewFile} from "../../../../../states/modules/profile/cv/index.js";
 import InlineSVG from "react-inlinesvg";
 import IconWarning from "../../../../../assets/images/icons/light/warning.svg";
+import Edit from "../../../../../assets/images/icons/duotone/pencil.svg";
+import Delete from "../../../../../assets/images/icons/duotone/trash-can.svg";
+import TableDefault from "../../../../../components/Table/index.jsx";
 
 const getBuffer = (file, callback) => {
     const reader = new FileReader();
@@ -33,6 +36,7 @@ export default function ResumeTab() {
     const authUser = useSelector(state => state.auth.authUser)
     const candidateProfile = useSelector(state => state.information.candidateProfile)
     const isLoadingBtnUploadCv = useSelector(state => state.cv.isLoadingBtnUploadCv)
+    const isLoadingGetMe = useSelector(state => state.auth.isLoadingGetMe)
     const isLoadingDelete = useSelector(state => state.cv.isLoadingDelete)
     const isOpenModalDelete = useSelector(state => state.cv.isOpenModalDelete)
     const file = useSelector(state => state.cv.newFile)
@@ -41,6 +45,42 @@ export default function ResumeTab() {
     const [loadingCv, setLoadingCv] = useState(false)
     const [cvFileName, setCvFileName] = useState('')
     const [oldCv, setOldCv] = useState(null)
+
+    const columns = [
+        {
+            title: 'Tên',
+            dataIndex: 'title',
+            key: 'title',
+            showSorterTooltip: false,
+            render: (text) => <span className={'font-bold'}>{text}</span>
+        },
+        {
+            title: 'Loại công việc',
+            dataIndex: 'type',
+            key: 'type',
+            showSorterTooltip: false,
+        },
+        {
+            title: 'Hành động',
+            dataIndex: 'action',
+            key: 'action',
+            width: 120,
+            align: 'center',
+            render: (text, record) =>
+                <div className={'flex items-center justify-center'}>
+                    <div className={styles.btnAction} onClick={() => {}}>
+                        <div className={styles.editBtn}>
+                            <InlineSVG src={Edit} width={18} height={18}/>
+                        </div>
+                    </div>
+                    <div className={`${styles.btnAction} ml-2`} onClick={() => handleDeleteCv(record._id)}>
+                        <div className={`btn-delete`}>
+                            <InlineSVG src={Delete}/>
+                        </div>
+                    </div>
+                </div>
+        },
+    ];
 
     useEffect(() => {
         dispatch(setTab('cv'))
@@ -129,10 +169,23 @@ export default function ResumeTab() {
                                         </a>
                                     </div> : ''
                             }
+                            {/*{*/}
+                            {/*    ((candidateProfile?.resume_path && candidateProfile?.resume_path !== '') || !_.isEmpty(file)) ?*/}
+                            {/*        <div className={styles.deleteBtn} onClick={handleDeleteCv}>*/}
+                            {/*            <DeleteOutlined/> {_.isEmpty(file) ? 'Xóa' : 'Xóa bản mới tải lên'}*/}
+                            {/*        </div> : <i className={'text-gray-500'}>Không có bản CV nào</i>*/}
+                            {/*}*/}
                             {
                                 ((candidateProfile?.resume_path && candidateProfile?.resume_path !== '') || !_.isEmpty(file)) ?
-                                    <div className={styles.deleteBtn} onClick={handleDeleteCv}>
-                                        <DeleteOutlined/> {_.isEmpty(file) ? 'Xóa' : 'Xóa bản mới tải lên'}
+                                    <div className={'tableWrap'}>
+                                        <TableDefault
+                                            rowKey={'_id'}
+                                            loading={isLoadingGetMe}
+                                            dataSource={authUser?.profile?.resume_path}
+                                            columns={columns}
+                                            isPagination={false}
+                                            extraClassName={'table-custom'}
+                                        />
                                     </div> : <i className={'text-gray-500'}>Không có bản CV nào</i>
                             }
                         </div>

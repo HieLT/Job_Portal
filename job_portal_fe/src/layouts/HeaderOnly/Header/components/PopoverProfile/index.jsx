@@ -12,12 +12,13 @@ function PopoverProfile() {
     const dispatch = useDispatch();
     const authUser = useSelector(state => state.auth.authUser);
 
-    const isCompany = authUser?.account?.role === USER_ROLE['COMPANY']
+    const isUpdatedCompany = authUser?.account?.role === USER_ROLE['COMPANY'] && !_.isEmpty(authUser?.account?.profile)
+    const isUpdatedCandidate = authUser?.account?.role === USER_ROLE['CANDIDATE'] && !_.isEmpty(authUser?.account?.profile)
 
     const handleConfirmLogout = () => {
         removeAuthToken();
         dispatch(startRequestGetMeFail())
-        navigate('/login');
+        navigate('/');
     }
 
     return (
@@ -34,25 +35,32 @@ function PopoverProfile() {
             <div className={styles.mainModalInfoWrap}>
                 <ul className={styles.menuInfoWrap}>
                     {
-                        isCompany ? <li
+                        isUpdatedCompany ? <li
                             onClick={() => navigate('/account/dashboard')}
                             className={`${styles.itemInfoWrap}`}
                         >
                             <div>
                                 <span className={styles.text}>Tổng quan</span>
                             </div>
-                        </li> : ''
+                        </li> : (
+                            isUpdatedCandidate ? <li
+                                onClick={() => navigate('/account/applied-jobs')}
+                                className={`${styles.itemInfoWrap}`}
+                            >
+                                <div>
+                                    <span className={styles.text}>Công việc đã ứng tuyển</span>
+                                </div>
+                            </li> : ''
+                        )
                     }
-                    {
-                        !_.isEmpty(authUser?.profile) ? <li
-                            onClick={() => navigate('/account/profile')}
-                            className={`${styles.itemInfoWrap}`}
-                        >
-                            <div>
-                                <span className={styles.text}>Hồ sơ cá nhân</span>
-                            </div>
-                        </li> : ''
-                    }
+                    <li
+                        onClick={() => navigate('/account/profile')}
+                        className={`${styles.itemInfoWrap}`}
+                    >
+                        <div>
+                            <span className={styles.text}>Hồ sơ cá nhân</span>
+                        </div>
+                    </li>
                     <li
                         onClick={() => handleConfirmLogout()}
                         className={styles.itemInfoWrap}
