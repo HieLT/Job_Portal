@@ -23,6 +23,16 @@ class ApplicationService {
             throw error;
         }
     }
+
+    async getApplicationOfCandidate(id_candidate: string) : Promise<IApplication[]> {
+        try {
+            const applications = await applicationModel.find({candidate: id_candidate}).exec();
+            return applications;
+        }
+        catch (error) {
+            throw error;
+        }
+    }
 };
 
 export default new ApplicationService();
