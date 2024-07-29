@@ -8,13 +8,19 @@ config();
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
-const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
 const REDICT_URI = process.env.REDICT_URI;
+const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
 
 const client = new OAuth2Client(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, REDICT_URI);
 client.setCredentials({
     refresh_token: REFRESH_TOKEN
 });
+
+const accessToken = async () => {
+    const token = (await client.getAccessToken()).token;
+    return token;
+} 
+    
 
 const transporter = nodemailer.createTransport({
     service: 'Gmail',

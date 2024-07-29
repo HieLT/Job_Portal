@@ -1,15 +1,15 @@
-import mongoose from "mongoose";
+import { model, Schema, Document } from "mongoose";
 
-interface IFile extends mongoose.Document {
+export interface IFile extends Document {
     file_name: string;
-    data: Buffer;
-    content_type: string;
+    file_url: string;
+    type: string;
 }
 
-const File = new mongoose.Schema<IFile>({
-    file_name: String,
-    data: Buffer,
-    content_type: String
+const File = new Schema<IFile>({
+    file_name: { type: String, required: true },
+    file_url: { type: String, required: true },
+    type: { type: String, required: true }
 });
 
-export default mongoose.model<IFile>('File', File);
+export default model<IFile>('File', File);

@@ -42,7 +42,11 @@ class CandidateService {
 
     async updateResume(id: string, resume: string) : Promise<ICandidate | null> {
         try {
-            const updatedCandidate = await candidateModel.findByIdAndUpdate(id, {resume_path: resume}, {new: true}).exec();
+            const updatedCandidate = await candidateModel.findByIdAndUpdate(id, {
+                $push: {
+                    resume_path: resume
+                }
+            }, {new: true}).exec();
             return updatedCandidate;
         }
         catch (error) {
@@ -50,9 +54,13 @@ class CandidateService {
         }
     } 
 
-    async deleteResume(id: string) : Promise<ICandidate | null> {
+    async deleteResume(id: string, resume: string) : Promise<ICandidate | null> {
         try {
-            const updatedCandidate = await candidateModel.findByIdAndUpdate(id, {resume_path: ''}, {new: true}).exec();
+            const updatedCandidate = await candidateModel.findByIdAndUpdate(id, {
+                $pull: {
+                    resume_path: resume
+                }
+            }, {new: true}).exec();
             return updatedCandidate;
         }
         catch(error) {

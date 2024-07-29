@@ -45,7 +45,7 @@ class FirebaseService {
         }
     }
 
-    async uploadImage(fileImage: IImage) {
+    async uploadImage(fileImage: IImage) : Promise<string> {
         try {
             const { uri, name, type } = fileImage;
             const decodedImage = Buffer.from(uri, 'base64');

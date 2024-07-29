@@ -10,7 +10,7 @@ export interface ICandidate extends Document {
     gender: 'Male' | 'Female' | 'Other';
     bio: string;
     profile_description: string;
-    resume_path: string;
+    resume_path: Schema.Types.ObjectId[];
     account: Schema.Types.ObjectId,
     is_deleted: boolean;
 };
@@ -41,9 +41,10 @@ const Candidate = new Schema<ICandidate>({
     profile_description: {
         type: String
     },
-    resume_path: {
-        type: String,
-    },
+    resume_path: [{
+        type: Schema.Types.ObjectId,
+        ref: 'File'
+    }],
     account: {
         type: Schema.Types.ObjectId,
         ref: 'Account',
