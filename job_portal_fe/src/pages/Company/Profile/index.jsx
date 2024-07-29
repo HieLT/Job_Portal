@@ -36,7 +36,7 @@ export default function CompanyProfile() {
                     isLoadingGetMe ? <Skeleton active={isLoadingGetMe}/> : <>
                         <div className={`${styles.avatarWrap} avatar-custom`}>
                             <Avatar
-                                src={(!_.isEmpty(authUser.profile) && authUser.profile.logo) ?
+                                src={(!_.isEmpty(authUser.profile) && authUser.profile?.logo) ?
                                     authUser.profile.logo : DefaultLogo}
                                 className={'w-[100px] h-[100px]'}
                             />
@@ -52,18 +52,18 @@ export default function CompanyProfile() {
                                 <PhoneOutlined className={'mr-1.5'}/>
                                 {
                                     (!_.isEmpty(authUser.profile) && authUser.profile?.phone) ?
-                                        <span>{authUser.profile.phone}</span> :
+                                        <span>{authUser.profile?.phone}</span> :
                                         <i>Đang cập nhật</i>
                                 }
                             </div>
                             <div className={`${styles.info} mr-8`}>
                                 <MailOutlined className={'mr-1.5'}/>
-                                <a href={`mailto:${authUser.account.email}}`}>{authUser.account.email}</a>
+                                <a href={`mailto:${authUser.account?.email}}`}>{authUser.account?.email}</a>
                             </div>
                             <div className={styles.info}>
                                 <InlineSVG src={Location} className={'mr-1.5'} width={15} height={15}/>
                                 {
-                                    !_.isEmpty(authUser.profile) ? <span>{authUser.profile.location}</span> :
+                                    !_.isEmpty(authUser.profile) ? <span>{authUser.profile?.location}</span> :
                                         <i>Đang cập nhật</i>
                                 }
                             </div>
