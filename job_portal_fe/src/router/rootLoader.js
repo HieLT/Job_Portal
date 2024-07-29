@@ -14,7 +14,7 @@ export const rootLoader = async ({request, params}, requiredAuth, saga = null, r
 
     const firstCondition = !auth.isAuthSuccess && getAuthToken();
     const secondCondition = url.pathname === '/account/profile';
-    const extraUrls = ['/forbidden']
+    const extraUrls = ['/forbidden', '/']
 
     if (firstCondition || secondCondition) {
         await store.dispatch(getMe());
@@ -29,18 +29,16 @@ export const rootLoader = async ({request, params}, requiredAuth, saga = null, r
             if (auth.authUser?.account?.role === USER_ROLE['ADMIN'] && !url.pathname?.includes('/admin')) {
                 return redirect('/admin/dashboard')
             }
-            if (url.pathname !== '/account/profile' && !extraUrls.includes(url.pathname)
-                && _.isEmpty(auth.authUser.profile) && !url.pathname?.includes('admin')
-            ) {
-                return redirect('/account/profile')
-            }
         } else {
             return redirect('/login');
         }
     } else if (auth.isAuthSuccess) {
-        return redirect('/');
+        if (url.pathname !== '/account/profile' && !extraUrls.includes(url.pathname)
+            && _.isEmpty(auth.authUser.profile) && !url.pathname?.includes('admin')
+        ) {
+            return redirect('/account/profile')
+        }
     }
-
 
     let query = {...(url.search ? convertQueryStringToObject(url.search) : {})};
     if (!query.token && url.pathname === '/reset-password') {

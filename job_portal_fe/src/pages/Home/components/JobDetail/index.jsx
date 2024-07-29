@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { getDetailJob } from "../../../../api/home";
+import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {useParams} from "react-router-dom";
+import {getDetailJob} from "../../../../api/home";
 import styles from "./styles.module.css";
 import HeaderOnly from "../../../../layouts/HeaderOnly/index.jsx";
-import { setBreadcrumb } from "../../../../states/modules/app/index.js";
+import {goToPage, setBreadcrumb} from "../../../../states/modules/app/index.js";
 import ApplyModal from "../ApplyModal/index.jsx";
-import { Skeleton } from "antd";
+import {Skeleton} from "antd";
+import _ from "lodash";
 
 const JobDetail = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const dispatch = useDispatch();
-    const { id } = useParams();
+    const {id} = useParams();
     const job = useSelector(state => state.home.job);
     const user = useSelector(state => state.auth.authUser)
     const company = job?.company_id || {};
-    
+
     useEffect(() => {
         dispatch(getDetailJob(id));
         dispatch(setBreadcrumb([
@@ -30,12 +31,16 @@ const JobDetail = () => {
     }, [dispatch, id]);
 
     if (!job) {
-        return <div className={styles.loading}><Skeleton active /></div>;
+        return <div className={styles.loading}><Skeleton active/></div>;
     }
 
 
     const handleApplyClick = () => {
-        setModalOpen(true)
+        if (_.isEmpty(user?.profile)) {
+            dispatch(goToPage({path: '/account/profile'}))
+        } else {
+            setModalOpen(true)
+        }
     }
     const handleCloseApplyModal = () => {
         setModalOpen(false)
@@ -70,9 +75,10 @@ const JobDetail = () => {
                         </div>
                         {
                             user?.account?.role === 'Candidate' ?
-                            <div className={styles.applyButtonContainer}>
-                                <button className={styles.applyButton} onClick={handleApplyClick} >Ứng tuyển ngay</button>
-                            </div> : ''
+                                <div className={styles.applyButtonContainer}>
+                                    <button className={styles.applyButton} onClick={handleApplyClick}>Ứng tuyển ngay
+                                    </button>
+                                </div> : ''
                         }
 
                     </div>
@@ -80,7 +86,7 @@ const JobDetail = () => {
                 <div className={styles.companySection}>
                     <div className={styles.companyHeader}>
                         <h1><strong>Công Ty</strong></h1>
-                        {company?.logo && <img src={company.logo} alt="Company Logo" className={styles.companyLogo} />}
+                        {company?.logo && <img src={company.logo} alt="Company Logo" className={styles.companyLogo}/>}
                     </div>
                     <div className={styles.companyInfo}>
                         <p><strong>Tên:</strong> {company?.name || "Not Available"}</p>
@@ -91,7 +97,7 @@ const JobDetail = () => {
                 </div>
             </div>
 
-            <ApplyModal isOpen={isModalOpen} onClose={handleCloseApplyModal} job_id={id} />
+            <ApplyModal isOpen={isModalOpen} onClose={handleCloseApplyModal} job_id={id}/>
         </HeaderOnly>
     );
 };

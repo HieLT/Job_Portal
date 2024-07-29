@@ -33,3 +33,23 @@
         }
     }
 }
+
+.optionWrap {
+    svg {
+        @apply w-6
+    }
+
+    .dropDownWrap {
+        box-shadow: 0 7px 18px 0 #00000017;
+        border: 1px solid #f1f1f4;
+        z-index: 1000;
+
+        .downloadWrap {
+            @apply hover:bg-[#f9f9f9] flex items-center justify-start ml-[-0.5px] p-2 rounded-md hover:fill-[#5B8DEF]
+        }
+
+        @apply absolute bg-[white] rounded-md top-8 right-0 p-[10px] w-[140px] text-[13px]
+    }
+
+    @apply relative bg-[#f1f1f4] w-4 h-4 rounded-md flex items-center justify-center p-3 cursor-pointer hover:bg-[#e0e0e4] ml-6
+}
