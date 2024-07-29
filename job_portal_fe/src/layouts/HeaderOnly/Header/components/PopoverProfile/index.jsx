@@ -12,8 +12,8 @@ function PopoverProfile() {
     const dispatch = useDispatch();
     const authUser = useSelector(state => state.auth.authUser);
 
-    const isUpdatedCompany = authUser?.account?.role === USER_ROLE['COMPANY'] && !_.isEmpty(authUser?.account?.profile)
-    const isUpdatedCandidate = authUser?.account?.role === USER_ROLE['CANDIDATE'] && !_.isEmpty(authUser?.account?.profile)
+    const isUpdatedCompany = authUser?.account?.role === USER_ROLE['COMPANY'] && !_.isEmpty(authUser?.profile)
+    const isUpdatedCandidate = authUser?.account?.role === USER_ROLE['CANDIDATE'] && !_.isEmpty(authUser?.profile)
 
     const handleConfirmLogout = () => {
         removeAuthToken();
