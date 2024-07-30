@@ -34,7 +34,7 @@ export const rootLoader = async ({request, params}, requiredAuth, saga = null, r
             return redirect('/login');
         }
     } else if (auth.isAuthSuccess) {
-        if (url.pathname !== '/account/profile' && !extraUrls.includes(url.pathname)
+        if (url.pathname !== '/account/profile' && !extraUrls.includes(url.pathname) && !url.pathname?.includes('/job/')
             && _.isEmpty(auth.authUser.profile) && !url.pathname?.includes('admin')
         ) {
             return redirect('/account/profile')
