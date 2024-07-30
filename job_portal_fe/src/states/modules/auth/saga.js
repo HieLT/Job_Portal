@@ -28,7 +28,7 @@ function* handleActions() {
                 path: '/'
             }))
         } else {
-            if (action.payload.account.role === USER_ROLE['ADMIN']) {
+            if (action.payload.account?.role === USER_ROLE['ADMIN']) {
                 yield put(goToPage({
                     path: "/admin/dashboard"
                 }))

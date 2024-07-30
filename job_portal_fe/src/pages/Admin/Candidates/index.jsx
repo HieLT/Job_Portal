@@ -16,7 +16,6 @@ const AdminPostedJobs = () => {
     }, [dispatch]);
 
     const handleSeeDetail = (id) => {
-        console.log(`See details for candidate id: ${id}`);
     };
 
     const handleChangeStatus = (id) => {
@@ -24,11 +23,9 @@ const AdminPostedJobs = () => {
             ...prevStatus,
             [id]: !prevStatus[id]
         }));
-        console.log(`Change status for candidate id: ${id}`);
     };
 
     const handleDelete = (id) => {
-        console.log(`Delete candidate id: ${id}`);
     };
 
     return (
