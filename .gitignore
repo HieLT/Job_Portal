@@ -34,3 +34,7 @@ job_portal_fe/*.sw?
 *.njsproj
 *.sln
 *.sw?
+
+server/node_modules
+server/.env
+server/.idea
