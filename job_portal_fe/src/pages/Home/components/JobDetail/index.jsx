@@ -45,7 +45,6 @@ const JobDetail = () => {
 
     const handleApplyClick = () => {
         if (!isAuthSuccess) {
-            console.log("here");
             dispatch(goToPage({path: '/login'}))
         } else {
             if (_.isEmpty(user?.profile)) {
@@ -59,10 +58,7 @@ const JobDetail = () => {
     const handleCloseApplyModal = () => {
         setModalOpen(false);
     };
-    console.log(user.account);
-    console.log(user?.account?.role !== 'Company');
-    console.log(!isJobExpired(job.expired_at));
-    console.log(!isJobClosed);
+
     return (
         <HeaderOnly>
             <div className={styles.container}>

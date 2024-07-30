@@ -30,7 +30,7 @@ const Header = () => {
     }
 
     const authUser = useSelector((state) => state.auth.authUser);
-    const isAdmin = authUser?.account.role === USER_ROLE['ADMIN']
+    const isAdmin = authUser?.account?.role === USER_ROLE['ADMIN']
     const dispatch = useDispatch()
 
     return (

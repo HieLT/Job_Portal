@@ -20,7 +20,6 @@ const ResultField = () => {
     return expiryDate < today;
   };
 
-  console.log(jobs);
   return (
     <div className={styles.resultField}>
       {jobs

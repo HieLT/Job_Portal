@@ -15,12 +15,11 @@ export const rootLoader = async ({request, params}, requiredAuth, saga = null, r
     const firstCondition = !auth.isAuthSuccess && getAuthToken();
     const secondCondition = url.pathname === '/account/profile';
     const extraUrls = ['/forbidden', '/']
+    const authUrls = ['/login', '/signup', '/forgot-password', '/reset-password']
 
-    if (requiredAuth){
-        if (firstCondition || secondCondition) {
-            await store.dispatch(getMe());
-            auth = store.getState().auth;
-        }
+    if (firstCondition || secondCondition) {
+        await store.dispatch(getMe());
+        auth = store.getState().auth;
     }
 
     if (requiredAuth) {
@@ -39,6 +38,9 @@ export const rootLoader = async ({request, params}, requiredAuth, saga = null, r
             && _.isEmpty(auth.authUser.profile) && !url.pathname?.includes('admin')
         ) {
             return redirect('/account/profile')
+        }
+        if (authUrls.includes(url.pathname) || url.pathname?.includes('/verify-email')) {
+            return redirect('/')
         }
     }
 
