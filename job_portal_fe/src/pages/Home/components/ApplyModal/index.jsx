@@ -1,20 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './styles.module.css';
-import { useDispatch, useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { applyJob } from '../../../../api/job';
-import { Button } from 'antd';
+import { Button, message } from 'antd';  
+import { getMyResumes } from '../../../../api/profile/index';
 
 const ApplyModal = ({ isOpen, onClose, job_id }) => {
     const dispatch = useDispatch();
     const candidate = useSelector(state => state.auth.authUser);
     const isLoadingSubmitJob = useSelector(state => state.job.isLoadingSubmitJob);
-    
+    const resumes = useSelector(state => state.cv.myResumes);
     const [resume, setResume] = useState(null);
     const [coverLetter, setCoverLetter] = useState('');
     const [resumeOption, setResumeOption] = useState('upload'); 
 
+    useEffect(() => {
+        dispatch(getMyResumes()); 
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (resumes.length > 0 && resumeOption === 'choose') {
+            setResume(resumes[0].id);
+        }
+    }, [resumes, resumeOption]);
+
     const handleFileChange = (e) => {
         setResume(e.target.files[0]);
+        console.log(e.target.value);
     };
 
     const handleCoverLetterChange = (e) => {
@@ -23,44 +35,78 @@ const ApplyModal = ({ isOpen, onClose, job_id }) => {
 
     const handleResumeOptionChange = (e) => {
         setResumeOption(e.target.value);
+        if (e.target.value === 'choose' && resumes.length > 0) {
+            setResume(resumes[0].id);
+        }
+    };
+
+    const handleResumePathChange = (e) => {
+        setResume(e.target.value);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!coverLetter.trim()) {
+            message.error('Lời giới thiệu không thể để trống.');
+            return;
+        }
         const data = new FormData();
-        data.append("file", resume);
+        if (resumeOption === 'upload' && resume) {
+            data.append("file", resume);
+            data.append("file_path" , "")
+        } else if (resumeOption === 'upload' && !resume) {
+            message.error('Hãy tải file lên.');
+            return;
+        } else if (resumeOption === 'choose' && resume) {
+            data.append("resume_path", resume);
+        } else if (resumeOption === 'choose' && !resume) {
+            if (!resumes.length) {
+                message.error('Không có resume đã đăng, hãy quay lại trang Hồ sơ cá nhân để tạo.');
+                return;
+            }
+            data.append("resume_path", resumes[0].file_url);
+
+        }
+
         data.append("job_id", job_id);
         data.append("cover_letter", coverLetter);
-        data.append("candidate_id", candidate.profile._id);
-        data.append("resume_path", ''); 
+        data.append("candidate_id", candidate?.profile?._id || '');
+
         dispatch(applyJob(data));
-        handleClose()
+        
+        const formDataObject = formDataToObject(data);
+        console.log("resume" , resume);
+        console.log("FormData Object:", formDataObject);
     };
 
-    const handleClose = () =>{
+    const handleClose = () => {
         onClose();
         setCoverLetter('');
-        setResumeOption('upload')
-    }
-
+        setResumeOption('upload');
+        setResume(null); 
+    };
+    const formDataToObject = (formData) => {
+        const obj = {};
+        formData.forEach((value, key) => {
+            obj[key] = value;
+        });
+        return obj;
+    };
+    
     if (!isOpen) return null;
+
+
+    
 
     return (
         <div className={styles.modalOverlay}>
             <div className={styles.modalContent}>
-                <button className={styles.closeButton} onClick={handleClose}>X</button>
+                <button className={styles.closeButton} onClick={onClose}>X</button>
                 <h2>Ứng Tuyển Ngay</h2>
-                <div>
+                <div >
                     <div className={styles.formGroup}>
-                        <label htmlFor="resumeOption">Chọn tùy chọn resume:</label>
-                        <select 
-                            id="resumeOption" 
-                            value={resumeOption} 
-                            onChange={handleResumeOptionChange}
-                        >
-                            <option value="upload">Tải Resume lên</option>
-                            <option value="choose">Chọn Resume có sẵn</option>
-                        </select>
+                        <label htmlFor="resume">Upload Resume:</label>
+                        <input type="file" id="resume" onChange={handleFileChange} />
                     </div>
                     {resumeOption === 'upload' && (
                         <div className={styles.formGroup}>
@@ -74,19 +120,25 @@ const ApplyModal = ({ isOpen, onClose, job_id }) => {
                     )}
                     {resumeOption === 'choose' && (
                         <div className={styles.formGroup}>
-                            {/* Implement resume selection logic here */}
                             <label htmlFor="resumePath">Chọn Resume có sẵn:</label>
                             <select 
                                 id="resumePath" 
-                                onChange={(e) => setResume(e.target.value)}
+                                onChange={handleResumePathChange}
                             >
-                                <option value="">Chonj</option>
-                                {/* Add options dynamically based on available resumes */}
+                                {resumes.length > 0 ? (
+                                    resumes.map((resumeItem) => (
+                                        <option key={resumeItem.id} value={resumeItem.file_url}>
+                                            {resumeItem.file_name}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <option value="">No resumes available</option>
+                                )}
                             </select>
                         </div>
                     )}
                     <div className={styles.formGroup}>
-                        <label htmlFor="coverLetter">Lời giới thiệu:</label>
+                        <label htmlFor="coverLetter">Cover Letter:</label>
                         <textarea
                             id="coverLetter"
                             value={coverLetter}
@@ -98,11 +150,9 @@ const ApplyModal = ({ isOpen, onClose, job_id }) => {
                     <Button
                         type='primary'
                         className={"main-btn-primary"}
-                        loading={isLoadingSubmitJob}
+                        loading = {isLoadingSubmitJob}
                         onClick={handleSubmit}
-                    >
-                        Submit
-                    </Button>
+                    >Submit</Button>
                 </div>
             </div>
         </div>
