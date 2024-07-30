@@ -82,7 +82,7 @@ class CandidateController {
                     res.status(200).send(resumes);
                 }
                 else {
-                    res.status(401).send({message: 'Account not found'});
+                    res.status(403).send({message: "You are not authorized to get all jobs"});
                 }
             }
             else {

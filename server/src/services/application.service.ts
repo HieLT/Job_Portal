@@ -33,6 +33,42 @@ class ApplicationService {
             throw error;
         }
     }
+
+    async updateSeen(id: string, job_id: string, seen_at: Date) : Promise<IApplication | null> {
+        try {
+            const application = await applicationModel.findOne({_id: id, job_id: job_id}).exec();
+            if (application?.seen_at) {
+                return application;
+            }
+            else {
+                const updatedApplication = await applicationModel.findByIdAndUpdate(id, {
+                    seen_at: seen_at
+                }, {new: true}).exec();
+                return updatedApplication;
+            }
+        }
+        catch(error) {
+            throw error;
+        }
+    }
+
+    async updateDownloaded(id: string, job_id: string, downloaded_at: Date) : Promise<IApplication | null> {
+        try {
+            const application = await applicationModel.findOne({_id: id, job_id: job_id}).exec();
+            if (application?.downloaded_at) {
+                return application;
+            }
+            else {
+                const updatedApplication = await applicationModel.findByIdAndUpdate(id, {
+                    downloaded_at: downloaded_at
+                }, {new: true}).exec();
+                return updatedApplication;
+            }
+        }
+        catch(error) {
+            throw error;
+        }
+    }
 };
 
 export default new ApplicationService();

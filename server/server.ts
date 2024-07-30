@@ -7,9 +7,9 @@ import cors from "cors";
 import connect from "./src/db/connectDb";
 import route from "./src/routes/route";
 import cronJob from "./src/utils/cronJob";
+import io from "./src/socket/socket";
 import { config } from "dotenv";
 config();
-cronJob;
 
 const app = express();
 
@@ -31,6 +31,8 @@ app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
 
 connect();
+cronJob;
+io;
 route(app);
 
 app.listen(8000, () => {
