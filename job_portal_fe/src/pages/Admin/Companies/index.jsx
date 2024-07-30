@@ -17,7 +17,6 @@ const AdminCompanies = () => {
 
     const handleSeeDetail = (id) => {
         // Logic for seeing detail
-        console.log(`See details for company id: ${id}`);
     };
 
     const handleChangeStatus = (id) => {
@@ -26,12 +25,10 @@ const AdminCompanies = () => {
             ...prevStatus,
             [id]: !prevStatus[id]
         }));
-        console.log(`Change status for company id: ${id}`);
     };
 
     const handleDelete = (id) => {
         // Logic for deleting a company
-        console.log(`Delete company id: ${id}`);
     };
 
     return (

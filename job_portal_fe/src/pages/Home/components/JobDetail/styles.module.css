@@ -21,17 +21,34 @@
     margin: 0;
 }
 
-.jobCompany {
-    font-size: 18px;
-    color: gray;
+.jobInfo {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
 }
 
-.jobInfo {
-    margin-top: 20px;
+.jobInfoContent {
+    flex: 1;
+}
+
+.jobDetails {
+    flex: 1;
 }
 
 .jobSectionItem {
     margin-bottom: 15px;
+}
+
+.headerBand {
+    background-color: red;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    min-width: 200px;
 }
 
 .companySection {
@@ -62,6 +79,7 @@
     color: #007bff;
     text-decoration: none;
 }
+
 .applyButtonContainer {
     margin-top: 20px;
 }
