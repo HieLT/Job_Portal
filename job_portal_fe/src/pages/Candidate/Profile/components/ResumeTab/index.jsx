@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import './styles.scss';
-import {Button, Flex, Upload} from "antd";
+import {Button, Flex, Input, Skeleton, Upload} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import styles from './styles.module.scss'
 import {getNotification} from "../../../../../utils/helper.js";
-import {LinkOutlined, UploadOutlined} from '@ant-design/icons'
+import {DeleteOutlined, LinkOutlined, UploadOutlined} from '@ant-design/icons'
 import {setTab} from "../../../../../states/modules/profile/index.js";
 import {deleteCandidateCv, uploadCandidateCv} from "../../../../../api/profile/index.js";
 import _ from "lodash";
@@ -12,9 +12,7 @@ import ModalDeleteDefault from "../../../../../components/ModalDelete/index.jsx"
 import {setIsOpenModalDelete, setNewFile} from "../../../../../states/modules/profile/cv/index.js";
 import InlineSVG from "react-inlinesvg";
 import IconWarning from "../../../../../assets/images/icons/light/warning.svg";
-import Edit from "../../../../../assets/images/icons/duotone/pencil.svg";
-import Delete from "../../../../../assets/images/icons/duotone/trash-can.svg";
-import TableDefault from "../../../../../components/Table/index.jsx";
+import FileIcon from '../../../../../assets/images/icons/light/pdf.svg'
 
 const getBuffer = (file, callback) => {
     const reader = new FileReader();
@@ -34,9 +32,9 @@ export default function ResumeTab() {
     const dispatch = useDispatch();
 
     const authUser = useSelector(state => state.auth.authUser)
-    const candidateProfile = useSelector(state => state.information.candidateProfile)
     const isLoadingBtnUploadCv = useSelector(state => state.cv.isLoadingBtnUploadCv)
-    const isLoadingGetMe = useSelector(state => state.auth.isLoadingGetMe)
+    const isLoadingGetResumes = useSelector(state => state.cv.isLoadingGetResumes)
+    const myResumes = useSelector(state => state.cv.myResumes)
     const isLoadingDelete = useSelector(state => state.cv.isLoadingDelete)
     const isOpenModalDelete = useSelector(state => state.cv.isOpenModalDelete)
     const file = useSelector(state => state.cv.newFile)
@@ -44,54 +42,19 @@ export default function ResumeTab() {
     const [cvUrl, setCvUrl] = useState('')
     const [loadingCv, setLoadingCv] = useState(false)
     const [cvFileName, setCvFileName] = useState('')
-    const [oldCv, setOldCv] = useState(null)
-
-    const columns = [
-        {
-            title: 'Tên',
-            dataIndex: 'title',
-            key: 'title',
-            showSorterTooltip: false,
-            render: (text) => <span className={'font-bold'}>{text}</span>
-        },
-        {
-            title: 'Loại công việc',
-            dataIndex: 'type',
-            key: 'type',
-            showSorterTooltip: false,
-        },
-        {
-            title: 'Hành động',
-            dataIndex: 'action',
-            key: 'action',
-            width: 120,
-            align: 'center',
-            render: (text, record) =>
-                <div className={'flex items-center justify-center'}>
-                    <div className={styles.btnAction} onClick={() => {}}>
-                        <div className={styles.editBtn}>
-                            <InlineSVG src={Edit} width={18} height={18}/>
-                        </div>
-                    </div>
-                    <div className={`${styles.btnAction} ml-2`} onClick={() => handleDeleteCv(record._id)}>
-                        <div className={`btn-delete`}>
-                            <InlineSVG src={Delete}/>
-                        </div>
-                    </div>
-                </div>
-        },
-    ];
+    const [fileName, setFileName] = useState('')
+    const [fileId, setFileId] = useState(null)
 
     useEffect(() => {
         dispatch(setTab('cv'))
+        setFileId(null)
         setCvFileName('')
         setCvUrl('')
-        setOldCv(null)
     }, [dispatch])
 
     useEffect(() => {
-        setOldCv(candidateProfile?.resume_path || null)
-    }, [candidateProfile])
+        setFileName(cvFileName)
+    }, [cvFileName])
 
     const handleChangeCV = (info) => {
         if (info.file.status === 'uploading') {
@@ -109,25 +72,26 @@ export default function ResumeTab() {
         }
     }
 
-    const handleDeleteCv = () => {
-        if (!_.isEmpty(file)) {
-            dispatch(setNewFile({}))
-            setCvFileName('')
-            setCvUrl('')
-            setOldCv(null)
-        } else {
-            dispatch(setIsOpenModalDelete(true))
-        }
+    const handleDeleteCv = (fileId) => {
+        setFileId(fileId)
+        dispatch(setIsOpenModalDelete(true))
     }
 
     const handleUploadCv = () => {
-        const data = new FormData()
-        data.append('file', file)
-        dispatch(uploadCandidateCv(data))
+        if (!fileName) {
+            getNotification('error', 'Tên file không được bỏ trống')
+        } else {
+            const data = new FormData()
+            data.append('name_resume', fileName)
+            data.append('file', file)
+            dispatch(uploadCandidateCv(data))
+        }
     }
 
     const handleConfirmDelete = () => {
-        dispatch(deleteCandidateCv())
+        if (fileId) {
+            dispatch(deleteCandidateCv(fileId))
+        }
     }
 
     return (
@@ -136,74 +100,96 @@ export default function ResumeTab() {
                 <p className={''}>Quản lý CV</p>
             </div>
             <div className={'px-10 pt-7 pb-5'}>
-                <div>
-                    <div className={'mt-3 input-wrap'}>
-                        <Upload
-                            name="file"
-                            disabled={_.isEmpty(authUser?.profile)}
-                            customRequest={({file, onSuccess}) => {
-                                setTimeout(() => {
-                                    const uploadedFileUrl = URL.createObjectURL(file);
-                                    onSuccess({url: uploadedFileUrl});
-                                }, 0);
-                            }}
-                            showUploadList={false}
-                            beforeUpload={beforeUploadCV}
-                            onChange={handleChangeCV}
-                        >
-                            <Button icon={<UploadOutlined/>} loading={loadingCv}
-                                    className={'h-[40px] w-[150px] font-medium'}
-                                    disabled={_.isEmpty(authUser?.profile)}
-                            >
-                                Tải CV (.pdf)
-                            </Button>
-                        </Upload>
-                        <div className={'mt-4 flex justify-between items-center w-full'}>
-                            {
-                                ((candidateProfile?.resume_path && candidateProfile?.resume_path !== '') || !_.isEmpty(file) || oldCv) ?
-                                    <div className={'flex items-center mr-5 w-3/4'}>
-                                        <LinkOutlined className={'mr-1'}/>
-                                        <a onClick={() => window.open(_.isEmpty(file) ? candidateProfile?.resume_path : cvUrl, '_blank')}
-                                           className={'text-gray-500 max-w-[100%] whitespace-nowrap overflow-hidden overflow-ellipsis'}>
-                                            {_.isEmpty(file) ? candidateProfile?.resume_path : cvFileName}
-                                        </a>
-                                    </div> : ''
-                            }
-                            {/*{*/}
-                            {/*    ((candidateProfile?.resume_path && candidateProfile?.resume_path !== '') || !_.isEmpty(file)) ?*/}
-                            {/*        <div className={styles.deleteBtn} onClick={handleDeleteCv}>*/}
-                            {/*            <DeleteOutlined/> {_.isEmpty(file) ? 'Xóa' : 'Xóa bản mới tải lên'}*/}
-                            {/*        </div> : <i className={'text-gray-500'}>Không có bản CV nào</i>*/}
-                            {/*}*/}
-                            {
-                                ((candidateProfile?.resume_path && candidateProfile?.resume_path !== '') || !_.isEmpty(file)) ?
-                                    <div className={'tableWrap'}>
-                                        <TableDefault
-                                            rowKey={'_id'}
-                                            loading={isLoadingGetMe}
-                                            dataSource={authUser?.profile?.resume_path}
-                                            columns={columns}
-                                            isPagination={false}
-                                            extraClassName={'table-custom'}
-                                        />
-                                    </div> : <i className={'text-gray-500'}>Không có bản CV nào</i>
-                            }
-                        </div>
-                        {
-                            _.isEmpty(authUser?.profile) ?
-                                <div className={'input-wrap mt-3'}>
+                {
+                    isLoadingGetResumes ? <Skeleton active/> :
+                        <div>
+                            <div className={'mt-3 input-wrap flex justify-between w-full'}>
+                                <div className={'w-[50%]'}>
+                                    <Upload
+                                        name="file"
+                                        disabled={_.isEmpty(authUser?.profile)}
+                                        customRequest={({file, onSuccess}) => {
+                                            setTimeout(() => {
+                                                const uploadedFileUrl = URL.createObjectURL(file);
+                                                onSuccess({url: uploadedFileUrl});
+                                            }, 0);
+                                        }}
+                                        showUploadList={false}
+                                        beforeUpload={beforeUploadCV}
+                                        onChange={handleChangeCV}
+                                    >
+                                        <Button icon={<UploadOutlined/>} loading={loadingCv}
+                                                className={'h-[40px] w-[150px] font-medium'}
+                                                disabled={_.isEmpty(authUser?.profile)}
+                                        >
+                                            Tải CV (.pdf)
+                                        </Button>
+                                    </Upload>
+                                    {
+                                        _.isEmpty(authUser?.profile) ?
+                                            <div className={'input-wrap mt-3'}>
                                         <span className={`error !text-[#bdbe63]`}>
                                             <div className={`icon`}>
                                               <InlineSVG src={IconWarning} width={14} height="auto"/>
                                             </div>
                                             Vui lòng cập nhật thông tin cá nhân trước!
                                         </span>
-                                </div> : ''
-                        }
-                    </div>
-                </div>
+                                            </div> : ''
+                                    }
+                                    <div className={'mt-6'}>
+                                        {
+                                            !_.isEmpty(file) ? <>
+                                                <div className={'input-wrap flex items-center w-1/2'}>
+                                                    <div
+                                                        className={'label-wrap flex w-auto mr-4 font-semibold text-sm'}>
+                                                        Tên file <div className={'required ml-1'}>*</div>
+                                                    </div>
+                                                    <Input className={'w-[70%]'} value={fileName}
+                                                           onChange={e => setFileName(e.target.value)}/>
+                                                </div>
+                                                <div className={'flex items-center mr-5 w-full'}>
+                                                    <LinkOutlined className={'mr-1'}/>
+                                                    <a onClick={() => window.open(cvUrl, '_blank')}
+                                                       className={'text-gray-500 max-w-[100%] whitespace-nowrap overflow-hidden overflow-ellipsis'}>
+                                                        {cvFileName}
+                                                    </a>
+                                                </div>
+                                            </> : ''
+                                        }
+                                    </div>
+                                </div>
+                                <div className={'w-[50%]'}>
+                                    <div className={'font-semibold text-lg mb-5'}>Tải lên gần đây</div>
+                                    {
+                                        !_.isEmpty(myResumes) ?
+                                            myResumes?.map(item => (
+                                                <div key={item._id}
+                                                     className={'flex items-center justify-between mb-3.5'}>
+                                                    <a href={String(item.file_url)} target={'_blank'}
+                                                       className={'flex items-center w-full justify-start text-[15px] font-medium'}
+                                                       rel="noreferrer"
+                                                    >
+                                                        <InlineSVG src={FileIcon} width={24} height={24}/>
+                                                        <div
+                                                            className={'ml-2.5 max-w-[80%] whitespace-nowrap overflow-hidden overflow-ellipsis'}>
+                                                            {item.file_name}
+                                                        </div>
+                                                    </a>
+                                                    <div className={styles.deleteBtn}
+                                                         onClick={() => handleDeleteCv(item._id)}>
+                                                        <DeleteOutlined/> Xóa
+                                                    </div>
+                                                </div>
+                                            ))
+                                            :
+                                            <i className={'text-gray-500'}>Không có bản CV nào</i>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                }
             </div>
-            <div className={'w-full flex justify-end px-10'}>
+            <div className={'w-full flex justify-end px-10 mt-5'}>
                 <Flex vertical gap="small">
                     <Button
                         loading={isLoadingBtnUploadCv}

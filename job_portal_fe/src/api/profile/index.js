@@ -17,7 +17,9 @@ import {
     startRequestUploadCandidateAvatarSuccess
 } from "../../states/modules/profile/information/index.js";
 import {
-    startRequestDeleteCv, startRequestDeleteCvFail, startRequestDeleteCvSuccess,
+    requestGetResumesFail,
+    requestGetResumesSuccess,
+    startRequestDeleteCv, startRequestDeleteCvFail, startRequestDeleteCvSuccess, startRequestGetResumes,
     startRequestUploadCv,
     startRequestUploadCvFail,
     startRequestUploadCvSuccess
@@ -79,12 +81,12 @@ export const uploadCandidateCv = (data) => async (dispatch, getState) => {
     })
 }
 
-export const deleteCandidateCv = () => async (dispatch, getState) => {
+export const deleteCandidateCv = (resumeId) => async (dispatch, getState) => {
     return callApi({
         method: 'delete',
         apiPath: `candidate/delete-resume`,
         actionTypes: [startRequestDeleteCv, startRequestDeleteCvSuccess, startRequestDeleteCvFail],
-        variables: {},
+        variables: {id_resume: resumeId},
         dispatch,
         getState
     })
@@ -100,6 +102,21 @@ export const uploadCandidateAvatar = (data) => async (dispatch, getState) => {
             startRequestUploadCandidateAvatarFail
         ],
         variables: {...data},
+        dispatch,
+        getState
+    })
+}
+
+export const getMyResumes = () => async (dispatch, getState) => {
+    return callApi({
+        method: 'get',
+        apiPath: `candidate//get-resumes`,
+        actionTypes: [
+            startRequestGetResumes,
+            requestGetResumesSuccess,
+            requestGetResumesFail
+        ],
+        variables: {},
         dispatch,
         getState
     })
