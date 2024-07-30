@@ -6,8 +6,10 @@ import passport from "passport";
 import cors from "cors";
 import connect from "./src/db/connectDb";
 import route from "./src/routes/route";
+import cronJob from "./src/utils/cronJob";
 import { config } from "dotenv";
 config();
+cronJob;
 
 const app = express();
 
