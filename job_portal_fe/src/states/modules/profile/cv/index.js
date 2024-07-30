@@ -7,6 +7,8 @@ const cvSlice = createSlice({
         isLoadingDelete: false,
         isOpenModalDelete: false,
         isLoadingBtnUploadCv: false,
+        myResumes: [],
+        isLoadingGetResumes: false,
     },
     reducers: {
         setNewFile: (state, action) => ({
@@ -42,6 +44,20 @@ const cvSlice = createSlice({
             ...state,
             isLoadingBtnUploadCv: false
         }),
+
+        startRequestGetResumes: (state) => ({
+            ...state,
+            isLoadingGetResumes: true
+        }),
+        requestGetResumesSuccess: (state, action) => ({
+            ...state,
+            isLoadingGetResumes: false,
+            myResumes: action.payload
+        }),
+        requestGetResumesFail: (state) => ({
+            ...state,
+            isLoadingGetResumes: false
+        }),
     }
 })
 
@@ -54,6 +70,8 @@ export const {
     startRequestUploadCv,
     startRequestUploadCvSuccess,
     startRequestUploadCvFail,
+    startRequestGetResumes, requestGetResumesSuccess, requestGetResumesFail,
+
 } = cvSlice.actions
 
 export default cvSlice.reducer;

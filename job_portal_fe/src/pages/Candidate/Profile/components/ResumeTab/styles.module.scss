@@ -24,8 +24,16 @@
 
 .deleteBtn {
     svg {
-        @apply w-6 h-4 fill-[red] mr-1.5
+        @apply w-6 h-4 fill-[red] mr-0.5
     }
 
     @apply text-[red] flex items-center justify-center cursor-pointer
+}
+
+.updateBtn {
+    svg {
+        @apply w-6 h-4 fill-[#2F6BFF] mr-0.5
+    }
+
+    @apply text-[#2F6BFF] flex items-center justify-center cursor-pointer
 }
