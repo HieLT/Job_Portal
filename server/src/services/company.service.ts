@@ -41,6 +41,18 @@ class CompanyService {
         }
     }
 
+    async updateLogo(id: string, logo: string) : Promise<ICompany | null> {
+        try {
+            const updatedCompany = await companyModel.findByIdAndUpdate(id, {
+                logo: logo
+            }, {new: true}).exec();
+            return updatedCompany;
+        }
+        catch(error) {
+            throw error;
+        }
+    }
+
     async deleteCompany(id: string) : Promise<{message: string}> {
         try {
             await companyModel.findByIdAndDelete(id).exec();

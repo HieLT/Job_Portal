@@ -75,6 +75,25 @@ class CompanyController {
         }
     }
 
+    async updateLogo(req: Request, res: Response) : Promise<void> {
+        try {
+            const email = req.user;
+            const account = await accountModel.findOne({email});
+            if (account && account.role === "Company") {
+                const {logo} = req.body;
+                const logoUrl = await firebaseService.uploadImage(logo);
+                const company = await companyService.updateLogo(String(account.company), logoUrl);
+                res.status(200).send(company);
+            }
+            else {
+                res.status(401).send({message: 'Account not found'});
+            }
+        }
+        catch (error:any) {
+            res.status(500).send({message: error.message});
+        }
+    }
+
     async updateProfile(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;
