@@ -5,7 +5,6 @@ import {Breadcrumb, Popover} from "antd";
 import contentInfo from './components/PopoverProfile';
 import ImageUser from '../../../../src/assets/images/logos/user_default.png'
 import {useSelector} from "react-redux";
-import _ from "lodash";
 import {USER_ROLE} from "../../../utils/constants.js";
 import {useNavigate} from "react-router-dom";
 
@@ -40,23 +39,19 @@ const Header = ({isHeaderOnly}) => {
 
     return (
         <header className={`${styles.headerWrap} ${isHeaderOnly && '!bg-[white]'}`}>
-            {
-                !_.isEmpty(authUser?.profile) ?
-                    <div className={styles.headerLeftWrap}>
-                        {
-                            isHeaderOnly ?
-                                <div className={styles.headerMainWrap}>
-                                    <div className={`${styles.breadcrumbWrap} breadcrumb-custom`}>
-                                        {
-                                            (breadcrumb && breadcrumb?.length > 0) ?
-                                                <Breadcrumb items={breadcrumb} separator=">"/> : ''
-                                        }
-                                    </div>
-                                </div> : ''
-                        }
-                    </div>
-                    : <div></div>
-            }
+            <div className={styles.headerLeftWrap}>
+                {
+                    isHeaderOnly ?
+                        <div className={styles.headerMainWrap}>
+                            <div className={`${styles.breadcrumbWrap} breadcrumb-custom`}>
+                                {
+                                    (breadcrumb && breadcrumb?.length > 0) ?
+                                        <Breadcrumb items={breadcrumb} separator=">"/> : ''
+                                }
+                            </div>
+                        </div> : ''
+                }
+            </div>
             <div className={`${styles.headerRightWrap}`}>
                 <div className={`${styles.itemHeaderRight}`}>
                     <div onClick={() => openFullScreen()} className={`${styles.iconWrap}`}>
