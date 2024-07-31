@@ -244,3 +244,29 @@ export const convertConstantToOptionArray = (obj) => {
         }
     })
 }
+
+export const handleFindLabelByValue = (obj, value) => {
+    const valueKeys = Object.keys(obj['VALUES'])
+    for (const key of valueKeys) {
+        if (obj['VALUES'][key] === value) {
+            return obj['LABELS'][key]
+        }
+    }
+}
+
+export const handleSplitSalary = (salary) => {
+    if (salary?.includes('-')) {
+        const range = salary.split('-')
+        return handleFormatMoney(range[0]) + ' - ' + handleFormatMoney(range[1])
+    } else if (salary !== 'Thỏa thuận') {
+        return handleFormatMoney(salary)
+    }
+    return salary
+}
+
+export const handleFormatMoney = (str) => {
+    return !isNaN(str) ? new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+    }).format(str) : ''
+}

@@ -127,7 +127,7 @@ export const uploadCompanyLogo = (data) => async (dispatch, getState) => {
 export const getMyResumes = () => async (dispatch, getState) => {
     return callApi({
         method: 'get',
-        apiPath: `candidate//get-resumes`,
+        apiPath: `candidate/get-resumes`,
         actionTypes: [
             startRequestGetResumes,
             requestGetResumesSuccess,
