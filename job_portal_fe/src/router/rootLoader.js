@@ -1,27 +1,25 @@
-import {redirect} from "react-router-dom";
+import { redirect } from "react-router-dom";
 import store from "../states/configureStore";
-import {initialSaga} from "../states/modules/routing/index.js";
-import {convertQueryStringToObject, hasRole} from "../utils/helper";
-import {getMe} from "../api/auth/index.js";
-import {getAuthToken} from "../utils/localStorage";
-import {setLocation} from "../states/modules/app/index.js";
+import { initialSaga } from "../states/modules/routing/index.js";
+import { convertQueryStringToObject, hasRole } from "../utils/helper";
+import { getMe } from "../api/auth/index.js";
+import { getAuthToken } from "../utils/localStorage";
+import { setLocation } from "../states/modules/app/index.js";
 import _ from "lodash";
-import {USER_ROLE} from "../utils/constants.js";
+import { USER_ROLE } from "../utils/constants.js";
 
-export const rootLoader = async ({request, params}, requiredAuth, saga = null, roleRequired = null) => {
+export const rootLoader = async ({ request, params }, requiredAuth, saga = null, roleRequired = null) => {
     const url = new URL(request.url);
-    let {auth} = store.getState();
+    let { auth } = store.getState();
 
     const firstCondition = !auth.isAuthSuccess && getAuthToken();
     const secondCondition = url.pathname === '/account/profile';
     const extraUrls = ['/forbidden', '/']
     const authUrls = ['/login', '/signup', '/forgot-password', '/reset-password']
 
-    if (requiredAuth){
-        if (firstCondition || secondCondition) {
-            await store.dispatch(getMe());
-            auth = store.getState().auth;
-        }
+    if (firstCondition || secondCondition) {
+        await store.dispatch(getMe());
+        auth = store.getState().auth;
     }
 
     if (requiredAuth) {
@@ -46,7 +44,7 @@ export const rootLoader = async ({request, params}, requiredAuth, saga = null, r
         }
     }
 
-    let query = {...(url.search ? convertQueryStringToObject(url.search) : {})};
+    let query = { ...(url.search ? convertQueryStringToObject(url.search) : {}) };
     if (!query.token && url.pathname === '/reset-password') {
         return redirect('/');
     }
@@ -54,7 +52,7 @@ export const rootLoader = async ({request, params}, requiredAuth, saga = null, r
     store.dispatch(setLocation({
         pathName: url.pathname,
         prevPathName: store.getState().app.location.pathName,
-        params: {...params},
+        params: { ...params },
         query: query
     }))
 
