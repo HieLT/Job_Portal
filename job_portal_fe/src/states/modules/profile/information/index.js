@@ -52,7 +52,7 @@ const informationSlice = createSlice({
         companyProfile: initialInformationState.companyProfile,
         errorUpdateCompanyProfile: initialInformationState.errorUpdateCompanyProfile,
         isLoadingBtnUpdateCompany: false,
-
+        isLoadingBtnUpdateCompanyLogo: false,
     },
     reducers: {
         /* candidate */
@@ -146,6 +146,19 @@ const informationSlice = createSlice({
             isLoadingBtnUpdateCompany: false
         }),
 
+        startRequestUploadCompanyLogo: (state) => ({
+            ...state,
+            isLoadingBtnUpdateCompanyLogo: true
+        }),
+        requestUploadCompanyLogoSuccess: (state) => ({
+            ...state,
+            isLoadingBtnUpdateCompanyLogo: false
+        }),
+        requestUploadCompanyLogoFail: (state) => ({
+            ...state,
+            isLoadingBtnUpdateCompanyLogo: false
+        }),
+
         refreshState: (state, action) => {
             // TODO
             return ({
@@ -163,6 +176,7 @@ export const {
     setCompanyProfile, setErrorUpdateCompanyProfile,
     startRequestUpdateCompany, startRequestUpdateCompanySuccess, startRequestUpdateCompanyFail,
     startRequestCreateCompany, startRequestCreateCompanySuccess, startRequestCreateCompanyFail,
+    startRequestUploadCompanyLogo, requestUploadCompanyLogoSuccess, requestUploadCompanyLogoFail,
 
 } = informationSlice.actions
 

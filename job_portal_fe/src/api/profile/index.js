@@ -1,5 +1,7 @@
 import callApi from "../callApi.js";
 import {
+    requestUploadCompanyLogoFail,
+    requestUploadCompanyLogoSuccess,
     startRequestCreateCandidate,
     startRequestCreateCandidateFail,
     startRequestCreateCandidateSuccess,
@@ -14,7 +16,7 @@ import {
     startRequestUpdateCompanySuccess,
     startRequestUploadCandidateAvatar,
     startRequestUploadCandidateAvatarFail,
-    startRequestUploadCandidateAvatarSuccess
+    startRequestUploadCandidateAvatarSuccess, startRequestUploadCompanyLogo
 } from "../../states/modules/profile/information/index.js";
 import {
     requestGetResumesFail,
@@ -100,6 +102,21 @@ export const uploadCandidateAvatar = (data) => async (dispatch, getState) => {
             startRequestUploadCandidateAvatar,
             startRequestUploadCandidateAvatarSuccess,
             startRequestUploadCandidateAvatarFail
+        ],
+        variables: {...data},
+        dispatch,
+        getState
+    })
+}
+
+export const uploadCompanyLogo = (data) => async (dispatch, getState) => {
+    return callApi({
+        method: 'put',
+        apiPath: `company/update-logo`,
+        actionTypes: [
+            startRequestUploadCompanyLogo,
+            requestUploadCompanyLogoSuccess,
+            requestUploadCompanyLogoFail
         ],
         variables: {...data},
         dispatch,

@@ -170,10 +170,15 @@ const authSlice = createSlice({
             ...state,
             verifyResult: action.payload
         }),
+        setAuthUser: (state, action) => ({
+            ...state,
+            authUser: action.payload
+        })
     }
 })
 
 export const {
+    setAuthUser,
     setVerifyResult,
     startRequestLoginWithGoogle, startRequestLoginWithGoogleSuccess, startRequestLoginWithGoogleFail,
     requestSignup, requestSignupSuccess, requestSignupFail,

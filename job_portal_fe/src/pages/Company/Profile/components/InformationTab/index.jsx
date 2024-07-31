@@ -15,7 +15,7 @@ import DefaultAvatar from '../../../../../assets/images/logos/user_default.png'
 import CustomCKEditor from "../../../../../components/CKEditor/index.jsx";
 import {EditOutlined} from "@ant-design/icons";
 import {getNotification, handleCheckValidateConfirm} from "../../../../../utils/helper.js";
-import {createCompany, updateCompanyProfile} from "../../../../../api/profile/index.js";
+import {createCompany, updateCompanyProfile, uploadCompanyLogo} from "../../../../../api/profile/index.js";
 import dayjs from "dayjs";
 import {setTab} from "../../../../../states/modules/profile/index.js";
 
@@ -44,6 +44,7 @@ export default function InformationTab() {
     const companyProfile = useSelector(state => state.information.companyProfile);
     const errorUpdateCompanyProfile = useSelector(state => state.information.errorUpdateCompanyProfile);
     const isLoadingBtnUpdate = useSelector(state => state.information.isLoadingBtnUpdateCompany);
+    const isLoadingBtnUpdateCompanyLogo = useSelector(state => state.information.isLoadingBtnUpdateCompanyLogo);
     const [imageUrl, setImageUrl] = useState('');
     const noAvatar = _.isEmpty(authUser.profile) || !authUser.profile?.logo
 
@@ -105,10 +106,16 @@ export default function InformationTab() {
         }
     }
 
+    const handleUpdateLogo = () => {
+        if (companyProfile?.logo && _.isObject(companyProfile?.logo)) {
+            dispatch(uploadCompanyLogo({logo: companyProfile?.logo}))
+        }
+    }
+
     const handleUpdateProfile = () => {
         const validate = handleCheckValidateConfirm(companyProfile, errorUpdateCompanyProfile, 'company')
         if (!validate.isError) {
-            const data = {
+            let data = {
                 name: companyProfile?.name,
                 logo: companyProfile?.logo,
                 description: companyProfile?.description,
@@ -121,6 +128,7 @@ export default function InformationTab() {
             if (_.isEmpty(authUser.profile)) {
                 dispatch(createCompany(data))
             } else {
+                delete data.logo
                 dispatch(updateCompanyProfile(data))
             }
         } else {
@@ -137,7 +145,7 @@ export default function InformationTab() {
                 {
                     isLoadingGetMe ? <Skeleton active={isLoadingGetMe}/> : <>
                         <div className={'flex justify-between'}>
-                            <div className={'w-1/4 flex flex-col items-center justify-center ml-5'}>
+                            <div className={'w-1/4 flex flex-col items-center justify-start mt-12 ml-5'}>
                                 <div className={'w-fit border-[3px] rounded-[50%] h-fit hover:border-dashed'}>
                                     <Upload
                                         name="avatar"
@@ -162,6 +170,30 @@ export default function InformationTab() {
                                         </div>
                                     </Upload>
                                 </div>
+                                <Flex vertical gap="small">
+                                    <Button
+                                        loading={isLoadingBtnUpdateCompanyLogo}
+                                        type="primary"
+                                        disabled={!_.isObject(companyProfile?.logo)}
+                                        onClick={handleUpdateLogo}
+                                        size={'large'}
+                                        className={`main-btn-primary flex justify-center items-center font-semibold mt-10`}
+                                        block
+                                    >
+                                        Cập nhật logo
+                                    </Button>
+                                </Flex>
+                                {
+                                    _.isEmpty(authUser?.profile) ?
+                                        <div className={'input-wrap mt-2'}>
+                                    <span className={`error !text-[#bdbe63]`}>
+                                        <div className={`icon`}>
+                                          <InlineSVG src={IconWarning} width={14} height="auto"/>
+                                        </div>
+                                        Vui lòng cập nhật thông tin cá nhân trước!
+                                    </span>
+                                        </div> : ''
+                                }
                             </div>
 
                             <div className={'w-2/3'}>
@@ -245,11 +277,11 @@ export default function InformationTab() {
                                             {
                                                 errorUpdateCompanyProfile && errorUpdateCompanyProfile.location?.length > 0 ?
                                                     <span className={`error`}>
-                            <div className={`icon`}>
-                              <InlineSVG src={IconWarning} width={14} height="auto"/>
-                            </div>
-                                                        {errorUpdateCompanyProfile.location}
-                      </span> : ''
+                                                            <div className={`icon`}>
+                                                              <InlineSVG src={IconWarning} width={14} height="auto"/>
+                                                            </div>
+                                                                                        {errorUpdateCompanyProfile.location}
+                                                      </span> : ''
                                             }
                                         </div>
                                         <div className={`input-wrap`}>
@@ -266,11 +298,11 @@ export default function InformationTab() {
                                             {
                                                 errorUpdateCompanyProfile && errorUpdateCompanyProfile.website_url?.length > 0 ?
                                                     <span className={`error`}>
-                            <div className={`icon`}>
-                              <InlineSVG src={IconWarning} width={14} height="auto"/>
-                            </div>
-                                                        {errorUpdateCompanyProfile.website_url}
-                      </span> : ''
+                                                            <div className={`icon`}>
+                                                              <InlineSVG src={IconWarning} width={14} height="auto"/>
+                                                            </div>
+                                                                                        {errorUpdateCompanyProfile.website_url}
+                                                      </span> : ''
                                             }
                                         </div>
                                         <div className={`input-wrap`}>
@@ -287,26 +319,26 @@ export default function InformationTab() {
                                             {
                                                 errorUpdateCompanyProfile && errorUpdateCompanyProfile.headcount?.length > 0 ?
                                                     <span className={`error`}>
-                            <div className={`icon`}>
-                              <InlineSVG src={IconWarning} width={14} height="auto"/>
-                            </div>
-                                                        {errorUpdateCompanyProfile.headcount}
-                      </span> : ''
+                                                            <div className={`icon`}>
+                                                              <InlineSVG src={IconWarning} width={14} height="auto"/>
+                                                            </div>
+                                                                                        {errorUpdateCompanyProfile.headcount}
+                                                      </span> : ''
                                             }
                                         </div>
                                     </div>
                                 </div>
+                                <div className={'mt-3 input-wrap'}>
+                                    <div className={'label-wrap'}>
+                                        Mô tả
+                                    </div>
+                                    <CustomCKEditor
+                                        placeholder={''}
+                                        data={companyProfile?.description}
+                                        handleChange={handleChangeInputEditor}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className={'mt-3 input-wrap'}>
-                            <div className={'label-wrap'}>
-                                Mô tả
-                            </div>
-                            <CustomCKEditor
-                                placeholder={''}
-                                data={companyProfile?.description}
-                                handleChange={handleChangeInputEditor}
-                            />
                         </div>
                     </>
                 }
