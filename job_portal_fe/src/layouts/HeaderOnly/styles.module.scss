@@ -12,10 +12,10 @@
                     @apply py-[30px] px-[200px] bg-[#f4f4f4]
                 }
 
-                @apply bg-gray-115 pt-[68px] px-28 pb-[40px]
+                @apply bg-gray-115 pt-[68px] px-28 pb-[40px] min-h-screen
             }
 
-            @apply transition-all duration-500 relative
+            @apply transition-all duration-500 relative min-h-screen
         }
 
         .mainWrapWithConditionSideBarClose {
@@ -31,7 +31,7 @@
             }
         }
 
-        @apply flex-1 flex flex-col
+        @apply min-h-screen
     }
 
     .footerBox {
@@ -55,8 +55,8 @@
 
         animation: scaleIn 0.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         transform-origin: center;
-        @apply bottom-9 left-[calc(100vw_-_100px)] sticky w-fit
+        @apply bottom-9 left-[calc(100vw_-_100px)] fixed w-fit
     }
 
-    @apply bg-gray-100 flex flex-col min-h-screen max-w-[1920px] m-auto relative
+    @apply bg-gray-100 min-h-screen max-w-[1920px] m-auto relative
 }

@@ -20,6 +20,7 @@ import {EMPLOYEE_TYPE, JOB_STATUS} from "../../../utils/constants.js";
 import {goToPage, setTitlePage} from "../../../states/modules/app/index.js";
 import ApplicantIcon from '../../../assets/images/icons/duotone/applicant.svg'
 import IconSearch from '../../../assets/images/icons/duotone/magnifying-glass.svg'
+import {handleFindLabelByValue, handleSplitSalary} from "../../../utils/helper.js";
 
 export default function JobManagement() {
     const [isTypeModalCreate, setIsTypeModalCreate] = useState(true);
@@ -115,32 +116,6 @@ export default function JobManagement() {
     useEffect(() => {
         dispatch(setTitlePage('Quản lý công việc'))
     }, [dispatch])
-
-    const handleFindLabelByValue = (obj, value) => {
-        const valueKeys = Object.keys(obj['VALUES'])
-        for (const key of valueKeys) {
-            if (obj['VALUES'][key] === value) {
-                return obj['LABELS'][key]
-            }
-        }
-    }
-
-    const handleSplitSalary = (salary) => {
-        if (salary?.includes('-')) {
-            const range = salary.split('-')
-            return handleFormatMoney(range[0]) + ' - ' + handleFormatMoney(range[1])
-        } else if (salary !== 'Thỏa thuận') {
-            return handleFormatMoney(salary)
-        }
-        return salary
-    }
-
-    const handleFormatMoney = (str) => {
-        return !isNaN(str) ? new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-        }).format(str) : ''
-    }
 
     const handleReloadData = () => {
         dispatch(setErrorCreateOrUpdate({
