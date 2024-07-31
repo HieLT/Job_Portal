@@ -3,13 +3,13 @@ import styles from './styles.module.css';
 import {useDispatch, useSelector} from "react-redux";
 import { applyJob } from '../../../../api/job';
 import { Button, message } from 'antd';  
-import { getMyResumes } from '../../../../api/profile/index';
+import { getMyResumes } from '../../../../api/job/index';
 
 const ApplyModal = ({ isOpen, onClose, job_id }) => {
     const dispatch = useDispatch();
     const candidate = useSelector(state => state.auth.authUser);
     const isLoadingSubmitJob = useSelector(state => state.job.isLoadingSubmitJob);
-    const resumes = useSelector(state => state.cv.myResumes);
+    const resumes = useSelector(state => state.job.resumes);
     const [resume, setResume] = useState(null);
     const [coverLetter, setCoverLetter] = useState('');
     const [resumeOption, setResumeOption] = useState('upload'); 

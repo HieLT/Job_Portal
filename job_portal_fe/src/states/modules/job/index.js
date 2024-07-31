@@ -5,6 +5,7 @@ const jobSlice = createSlice({
     initialState: {
         isLoadingSubmitJob : false , 
         message : {},
+        resumes : [],
     },
     reducers: {
         startRequestSubmitJob : (state) => ({
@@ -19,12 +20,24 @@ const jobSlice = createSlice({
         startRequestSubmitJobFail : (state) => ({
             ...state , 
             isLoadingSubmitJob : false , 
+        }),
+        startRequestGetResumes : (state) => ({
+            ...state , 
+        }),
+        startRequestGetResumesSuccess : (state) => ({
+            ...state , 
+            resumes : action.payload
+        }),
+        startRequestGetResumesFail : (state) => ({
+            ...state , 
+            resumes :[]
         })
     }
 })
 
 export const {
-    startRequestSubmitJob , startRequestSubmitJobSuccess, startRequestSubmitJobFail
+    startRequestSubmitJob , startRequestSubmitJobSuccess, startRequestSubmitJobFail,
+    startRequestGetResumes,startRequestGetResumesSuccess, startRequestGetResumesFail
 } = jobSlice.actions
 
 export default jobSlice.reducer;
