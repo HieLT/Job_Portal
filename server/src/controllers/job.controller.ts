@@ -135,6 +135,28 @@ class JobController {
         }
     }
 
+    async getJobApplied(req: Request, res: Response) : Promise<void> {
+        try {
+            const email = req.user;
+            const account = await accountModel.findOne({email});
+            if (account) {
+                if (account.role === "Candidate" && account.candidate) {
+                    const applications = await applicationService.getApplicationOfCandidate(String(account.candidate));
+                    res.status(200).send(applications);
+                }
+                else {
+                    res.status(403).send({message: "You are not authorized to get all jobs"});
+                }
+            }
+            else {
+                res.status(404).send({message: "Account not found"});
+            }
+        }
+        catch (error:any) {
+            res.status(500).send({message: error.message});
+        }
+    }
+
     async candidateApply(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;

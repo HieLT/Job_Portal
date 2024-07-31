@@ -8,6 +8,7 @@ const candidateRouter = express.Router();
 
 candidateRouter.post('/create', [authentication], candidateController.createCandidate);
 candidateRouter.get('/get-profile', [authentication], candidateController.getProfile);
+candidateRouter.get('/job-applied', [authentication], jobController.getJobApplied);
 candidateRouter.get('/get-resumes', [authentication], candidateController.getAllResume);
 candidateRouter.put('/update-profile', [authentication], candidateController.updateCandidate);
 candidateRouter.put('/upload-resume', [upload.single('file'), authentication], candidateController.uploadResume);
