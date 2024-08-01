@@ -35,7 +35,7 @@ class ApplicationService {
                         select: '_id name logo', // Select fields from the company schema as needed
                     }
                 })
-                .select('job_id resume_path cover_letter')
+                .select('job_id resume_path cover_letter createdAt')
                 .exec();
             return applications;
         }
