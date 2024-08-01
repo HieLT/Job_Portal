@@ -4,6 +4,7 @@ import accountModel from "../models/account.model";
 import jobService from "../services/job.service";
 
 class ApplicationController {
+
     async updateSeen(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;

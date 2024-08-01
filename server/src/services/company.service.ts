@@ -55,7 +55,9 @@ class CompanyService {
 
     async deleteCompany(id: string) : Promise<{message: string}> {
         try {
-            await companyModel.findByIdAndDelete(id).exec();
+            await companyModel.findByIdAndUpdate(id, {
+                is_deleted: true
+            }, {new: true}).exec();
             return {message: "Company has been deleted"};
         }
         catch(error) {

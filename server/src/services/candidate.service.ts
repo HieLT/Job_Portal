@@ -93,7 +93,9 @@ class CandidateService {
 
     async deleteCandidate(id: string) : Promise<{message: string}> {
         try {
-            await candidateModel.findByIdAndDelete(id).exec();
+            await candidateModel.findByIdAndUpdate(id, {
+                is_deleted: true
+            }, {new: true}).exec();
             return {message: 'Candidate deleted successfully'};
         } catch (error) {
             throw error;

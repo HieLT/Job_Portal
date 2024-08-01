@@ -98,7 +98,9 @@ class JobService {
 
     async deleteJob(id: string) : Promise<{message: string}> {
         try {   
-            await jobModel.findByIdAndDelete(id);
+            await jobModel.findByIdAndUpdate(id, {
+                is_deleted: true
+            });
             return {message: 'Job deleted'};
         }
         catch(error) {
