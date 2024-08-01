@@ -21,12 +21,14 @@ import {goToPage, setTitlePage} from "../../../states/modules/app/index.js";
 import ApplicantIcon from '../../../assets/images/icons/duotone/applicant.svg'
 import IconSearch from '../../../assets/images/icons/duotone/magnifying-glass.svg'
 import {handleFindLabelByValue, handleSplitSalary} from "../../../utils/helper.js";
+import {updateJobStatus} from "../../../api/jobManagement/index.js";
 
 export default function JobManagement() {
     const [isTypeModalCreate, setIsTypeModalCreate] = useState(true);
     const visibleModalCreateOrUpdate = useSelector(state => state.jobManagement.visibleModalCreateOrUpdate);
     const jobs = useSelector(state => state.jobManagement.jobs);
     const isLoadingGetJobs = useSelector(state => state.jobManagement.isLoadingGetJobs);
+    const isLoadingUpdateStatus = useSelector(state => state.jobManagement.isLoadingUpdateStatus);
     const dispatch = useDispatch();
     const columns = [
         {
@@ -75,8 +77,14 @@ export default function JobManagement() {
             showSorterTooltip: false,
             width: 130,
             align: 'center',
-            render: (text) => <Tooltip title={`Bấm để ${text === JOB_STATUS['OPEN'] ? 'đóng' : 'mở'}`}>
-                <Switch className={'main-switch'} checked={text === JOB_STATUS['OPEN']}/>
+            render: (text, record) => <Tooltip title={`Bấm để ${text === JOB_STATUS['OPEN'] ? 'đóng' : 'mở'}`}>
+                <Switch className={'main-switch'} checked={text === JOB_STATUS['OPEN']}
+                        loading={isLoadingUpdateStatus}
+                        onChange={(checked) => dispatch(updateJobStatus({
+                            id_job: record._id,
+                            status: checked ? JOB_STATUS['OPEN'] : JOB_STATUS['CLOSED']
+                        }))}
+                />
             </Tooltip>
         },
         {

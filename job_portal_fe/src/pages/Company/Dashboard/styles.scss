@@ -1,0 +1,5 @@
+.bottom-table-custom {
+    .ant-table-body {
+        @apply h-[calc(100vh_-_350px)]
+    }
+}

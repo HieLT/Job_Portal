@@ -124,7 +124,7 @@ const router = createBrowserRouter([
         path: '/account/dashboard',
         element: <CompanyDashboard />,
         loader: ({ request, params }) => rootLoader(
-            { request, params }, true, null, USER_ROLE['COMPANY']
+            { request, params }, true, 'LOAD_COMPANY_DASHBOARD_PAGE', USER_ROLE['COMPANY']
         )
     },
     {

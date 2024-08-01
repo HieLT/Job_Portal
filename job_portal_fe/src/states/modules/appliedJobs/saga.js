@@ -1,7 +1,8 @@
-import {all, fork} from "redux-saga/effects";
+import {all, fork, put} from "redux-saga/effects";
+import {getAppliedJobs} from "../../../api/appliedJobs/index.js";
 
 function* loadRouteData() {
-
+    yield put(getAppliedJobs())
 }
 
 function* handleActions() {

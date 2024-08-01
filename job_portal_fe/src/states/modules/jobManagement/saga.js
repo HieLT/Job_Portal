@@ -1,6 +1,8 @@
 import {all, fork, put, takeLatest} from "redux-saga/effects";
 import {getCategories, getJobList} from "../../../api/jobManagement/index.js";
 import {
+    requestUpdateJobStatusFail,
+    requestUpdateJobStatusSuccess,
     setVisibleModalCreateOrUpdate,
     startRequestPostJobFail,
     startRequestPostJobSuccess,
@@ -32,6 +34,15 @@ function* handleActions() {
     })
 
     yield takeLatest(startRequestUpdateJobFail, function () {
+        getNotification('error', 'Đã có lỗi xảy ra, vui lòng thử lại sau')
+    })
+
+    yield takeLatest(requestUpdateJobStatusSuccess, function* () {
+        getNotification('success', 'Cập nhật trạng thái thành công')
+        yield put(getJobList())
+    })
+
+    yield takeLatest(requestUpdateJobStatusFail, function () {
         getNotification('error', 'Đã có lỗi xảy ra, vui lòng thử lại sau')
     })
 }

@@ -43,34 +43,34 @@ export default function AppliedJobs() {
     }
 
     const a = [
-        {
-            _id: '1',
-            title: 'Principal Designer, Design Systems',
-            experience_required: 'NOT REQUIRED',
-            logo: '',
-            type: 'FREELANCE',
-            position: 'Nhan vien',
-            salary: '10000',
-            createdAt: '2024-07-25T18:13:30.444Z',
-            status: 'Closed'
-        },
-        {
-            _id: '2',
-            title: 'Principal Designer, Design Systems',
-            experience_required: '1-3 YEARS',
-            logo: '',
-            type: 'FULL-TIME',
-            position: 'Nhan vien',
-            salary: '10000',
-            createdAt: '2024-07-25T18:13:30.444Z',
-            status: 'Open'
-        },
+        // {
+        //     _id: '1',
+        //     title: 'Principal Designer, Design Systems',
+        //     experience_required: 'NOT REQUIRED',
+        //     logo: '',
+        //     type: 'FREELANCE',
+        //     position: 'Nhan vien',
+        //     salary: '10000',
+        //     createdAt: '2024-07-25T18:13:30.444Z',
+        //     status: 'Closed'
+        // },
+        // {
+        //     _id: '2',
+        //     title: 'Principal Designer, Design Systems',
+        //     experience_required: '1-3 YEARS',
+        //     logo: '',
+        //     type: 'FULL-TIME',
+        //     position: 'Nhan vien',
+        //     salary: '10000',
+        //     createdAt: '2024-07-25T18:13:30.444Z',
+        //     status: 'Open'
+        // },
     ]
 
     return <HeaderOnly>
         <div className={'py-8 px-20'}>
             <div className={'flex justify-between items-center'}>
-                <div className={'font-semibold text-lg'}>
+                <div className={'font-semibold text-[19px]'}>
                     Công việc đã ứng tuyển
                 </div>
                 <Select
@@ -92,45 +92,46 @@ export default function AppliedJobs() {
             </div>
             <div className={'mt-8'}>
                 {
-                    isLoadingGetAppliedJobs ? <Skeleton active/> :
-                        a.map(item => {
+                    isLoadingGetAppliedJobs ? <Skeleton active/> : (
+                        appliedJobs?.length > 0 ? appliedJobs?.map(item => {
+                            const job = item.job_id
+                            const company = job.company_id
                             const content = <div key={item._id}
-                                className={'flex items-center justify-between px-8 py-5 w-full bg-[white] rounded-md h-[130px] border-[1px] mb-6'}
+                                                 className={'flex items-center justify-between px-8 py-5 w-full bg-[white] rounded-md h-[130px] border-[1px] mb-6'}
                             >
                                 <div className={'h-full w-[90px]'}>
-                                    <Avatar src={item.logo || DefaultLogo} shape={'square'}
+                                    <Avatar src={company.logo || DefaultLogo} shape={'square'}
                                             className={'w-full h-full'}/>
                                 </div>
                                 <div className={'flex-1 mx-6'}>
                                     <div className={'flex items-center'}>
-                                        <div className={'font-semibold text-[16px]'}>{item.title}</div>
+                                        <div className={'font-semibold text-[16px]'}>{job.title}</div>
                                         &nbsp;
                                         <div className={'text-[15px]'}>
-                                            ({handleFindLabelByValue(JOB_EXPERIENCE, item.experience_required)} kinh
-                                            nghiệm)
+                                            ({handleFindLabelByValue(JOB_EXPERIENCE, job.experience_required)} kinh nghiệm)
                                         </div>
                                     </div>
                                     <div className={'flex items-center mt-1.5 text-[15px]'}>
-                                        <div className={'font-medium'}>Vị trí: {item.position}</div>
-                                        <div className={'flex items-center ml-[200px]'}>
+                                        <div className={'font-medium w-[30%]'}>Vị trí: {job.position}</div>
+                                        <div className={'flex items-center ml-[50px]'}>
                                             <Tag className={'font-semibold text-[14px]'}
-                                                 color={handleFindColorByEmployeeType(item.type)}>
-                                                {handleFindLabelByValue(EMPLOYEE_TYPE, item.type)}
+                                                 color={handleFindColorByEmployeeType(job.type)}>
+                                                {handleFindLabelByValue(EMPLOYEE_TYPE, job.type)}
                                             </Tag>
                                             <div className={'flex items-center ml-6 font-medium'}>
                                                 <CreditCardOutlined/>
-                                                <div className={'ml-2'}>{handleSplitSalary(item.salary)}</div>
+                                                <div className={'ml-2'}>{handleSplitSalary(job.salary)}</div>
                                             </div>
                                         </div>
                                     </div>
                                     <div className={'text-[14px] mt-1.5 font-medium'}>
-                                        Ngày ứng tuyển: {moment(item.createdAt).format('DD/MM/YYYY')}
+                                        Ngày ứng tuyển: {moment(job.createdAt).format('DD/MM/YYYY')}
                                     </div>
                                 </div>
                                 <div className={'w-1/12'}>
                                     <Tooltip title={'Chi tiết'}>
                                         <div
-                                            onClick={() => dispatch(goToPage({path: `/job/${item._id}`}))}
+                                            onClick={() => dispatch(goToPage({path: `/job/${job._id}`}))}
                                             className={'w-[50px] h-[50px] p-3.5 rounded-[50%] bg-[#daede8] cursor-pointer flex items-center justify-center'}
                                         >
                                             <EyeOutlined style={{fontSize: '20px', color: '#048565'}}/>
@@ -146,7 +147,8 @@ export default function AppliedJobs() {
                             }
 
                             return content
-                        })
+                        }) : <i className={'font-semibold text-[17px] text-gray-500'}>Bạn chưa ứng tuyển công việc nào</i>
+                    )
                 }
             </div>
         </div>

@@ -38,7 +38,9 @@ const jobManagementSlice = createSlice({
         detailJob: {},
 
         isLoadingGetCategories: false,
-        categories: []
+        categories: [],
+
+        isLoadingUpdateStatus: false
     },
     reducers: {
         setJob: (state, action) => ({
@@ -58,7 +60,7 @@ const jobManagementSlice = createSlice({
             visibleModalCreateOrUpdate: action.payload
         }),
 
-        /* Get jobManagement list */
+        /* Get job list */
         startRequestGetJobList: (state) => ({
             ...state,
             isLoadingGetJobs: true
@@ -73,7 +75,7 @@ const jobManagementSlice = createSlice({
             isLoadingGetJobs: false
         }),
 
-        /* Post jobManagement */
+        /* Post job */
         startRequestPostJob: (state) => ({
             ...state,
             isLoadingCreateOrUpdate: true
@@ -87,7 +89,7 @@ const jobManagementSlice = createSlice({
             isLoadingCreateOrUpdate: false
         }),
 
-        /* Update jobManagement */
+        /* Update job */
         startRequestUpdateJob: (state) => ({
             ...state,
             isLoadingCreateOrUpdate: true
@@ -99,6 +101,20 @@ const jobManagementSlice = createSlice({
         startRequestUpdateJobFail: (state) => ({
             ...state,
             isLoadingCreateOrUpdate: false
+        }),
+
+        /* Update job status */
+        startRequestUpdateJobStatus: (state) => ({
+            ...state,
+            isLoadingUpdateStatus: true
+        }),
+        requestUpdateJobStatusSuccess: (state) => ({
+            ...state,
+            isLoadingUpdateStatus: false,
+        }),
+        requestUpdateJobStatusFail: (state) => ({
+            ...state,
+            isLoadingUpdateStatus: false
         }),
 
         /* Get category list */
@@ -125,6 +141,8 @@ export const {
     startRequestPostJob, startRequestPostJobSuccess, startRequestPostJobFail,
     startRequestUpdateJob, startRequestUpdateJobSuccess, startRequestUpdateJobFail,
     startRequestGetCategories, startRequestGetCategoriesSuccess, startRequestGetCategoriesFail,
+    startRequestUpdateJobStatus, requestUpdateJobStatusSuccess, requestUpdateJobStatusFail,
+
 } = jobManagementSlice.actions
 
 export default jobManagementSlice.reducer;

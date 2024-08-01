@@ -1,5 +1,5 @@
 import _ from "lodash";
-import {isValidPhone} from "../helper.js";
+import moment from "moment";
 
 export const validateJob = (data, type, errors) => {
     let error = false
@@ -25,6 +25,9 @@ export const validateJob = (data, type, errors) => {
         case 'expired_at':
             if (!data.expired_at) {
                 dataError.expired_at = 'Ngày hết hạn không được bỏ trống!';
+                error = true;
+            } else if (moment(data.expired_at).isSameOrBefore(moment())) {
+                dataError.expired_at = 'Ngày hết hạn phải lớn hơn ngày hiện tại!';
                 error = true;
             } else {
                 dataError.expired_at = '';

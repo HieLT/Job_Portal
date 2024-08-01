@@ -15,7 +15,7 @@ import {EMPLOYEE_TYPE, JOB_EXPERIENCE, JOB_STATUS, SALARY_OPTIONS} from "../../.
 import dayjs from "dayjs";
 import {postJob, updateJob} from "../../../../../api/jobManagement/index.js";
 import store from "../../../../../states/configureStore.js";
-import {setTitlePage} from "../../../../../states/modules/app/index.js";
+import moment from "moment";
 
 export default function CreateOrUpdate(props) {
     const {isTypeModalCreate, closeModal} = props;
@@ -173,7 +173,7 @@ export default function CreateOrUpdate(props) {
             }
         }))
         const updatedJob = store.getState().jobManagement.job
-        let validate = handleCheckValidateConfirm(updatedJob, errorCreateOrUpdate, 'job');
+        let validate = handleCheckValidateConfirm(updatedJob.dataUpdate, errorCreateOrUpdate, 'job');
         dispatch(setErrorCreateOrUpdate(validate.dataError))
         if (!validate.isError) {
             dispatch(updateJob(updatedJob))
@@ -342,7 +342,7 @@ export default function CreateOrUpdate(props) {
                                     Ngày hết hạn <span className={'required'}>*</span>
                                 </div>
                                 <DatePicker onBlur={handleBlur}
-                                            disabledDate={(current) => current && current < new Date().setHours(23, 59, 59, 9999)}
+                                            disabledDate={(current) => current && current < new Date().setHours(23, 59, 59, 0)}
                                             className={'main-datepicker w-full'}
                                             placeholder={'Ngày hết hạn'}
                                             format={dateFormatList}

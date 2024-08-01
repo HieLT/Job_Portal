@@ -1,5 +1,7 @@
 import callApi from "../callApi";
 import {
+    requestUpdateJobStatusFail,
+    requestUpdateJobStatusSuccess,
     startRequestGetCategories,
     startRequestGetCategoriesFail,
     startRequestGetCategoriesSuccess,
@@ -9,7 +11,7 @@ import {
     startRequestPostJob,
     startRequestPostJobFail,
     startRequestPostJobSuccess,
-    startRequestUpdateJob, startRequestUpdateJobFail, startRequestUpdateJobSuccess
+    startRequestUpdateJob, startRequestUpdateJobFail, startRequestUpdateJobStatus, startRequestUpdateJobSuccess
 } from "../../states/modules/jobManagement/index.js";
 import {
     requestGetAppliedCandidateFail,
@@ -54,6 +56,17 @@ export const updateJob = (data) => (dispatch, getState) => {
         method: 'put',
         apiPath: 'job/update',
         actionTypes: [startRequestUpdateJob, startRequestUpdateJobSuccess, startRequestUpdateJobFail],
+        variables: {...data},
+        dispatch,
+        getState
+    })
+}
+
+export const updateJobStatus = (data) => (dispatch, getState) => {
+    return callApi({
+        method: 'put',
+        apiPath: `job/update-status`,
+        actionTypes: [startRequestUpdateJobStatus, requestUpdateJobStatusSuccess, requestUpdateJobStatusFail],
         variables: {...data},
         dispatch,
         getState

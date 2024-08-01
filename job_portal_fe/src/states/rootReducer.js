@@ -11,6 +11,7 @@ import jobManagementReducer from './modules/jobManagement/index.js';
 import applicantReducer from './modules/applicant/index.js';
 import jobReducer from './modules/job/index.js';
 import appliedJobsReducer from './modules/appliedJobs/index.js';
+import companyDashboardReducer from './modules/companyDashboard/index.js';
 
 const rootReducer = {
     app: appReducer,
@@ -26,6 +27,7 @@ const rootReducer = {
     jobManagement: jobManagementReducer,
     applicant: applicantReducer,
     appliedJobs: appliedJobsReducer,
+    companyDashboard: companyDashboardReducer,
 }
 
 export default rootReducer
