@@ -108,6 +108,18 @@ class JobService {
         }
     }
 
+    async restoreJob(id: string) : Promise<{message: string}> {
+        try {   
+            await jobModel.findByIdAndUpdate(id, {
+                is_deleted: false
+            });
+            return {message: 'Job restored'};
+        }
+        catch(error) {
+            throw error;
+        }
+    }
+
     async candidateApply(id: string, application: string) : Promise<IJob | null> {
         try {   
             const updatedJob = await jobModel.findByIdAndUpdate(id, {

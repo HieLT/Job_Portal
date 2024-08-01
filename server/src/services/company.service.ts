@@ -1,4 +1,5 @@
 import companyModel, {ICompany} from "../models/company.model";
+import jobService from "./job.service";
 
 class CompanyService {
     async createCompany(company: Partial<ICompany>) : Promise<ICompany> {
@@ -58,7 +59,33 @@ class CompanyService {
             await companyModel.findByIdAndUpdate(id, {
                 is_deleted: true
             }, {new: true}).exec();
+            const company = await companyModel.findById(id);
+            const jobs = company?.jobs;
+            if (jobs) {
+                for (const job of jobs) {
+                    await jobService.deleteJob(String(job));
+                }
+            }
             return {message: "Company has been deleted"};
+        }
+        catch(error) {
+            throw error;
+        }
+    }
+
+    async restoreCompany(id: string) : Promise<{message: string}> {
+        try {
+            await companyModel.findByIdAndUpdate(id, {
+                is_deleted: false
+            }, {new: true}).exec();
+            const company = await companyModel.findById(id);
+            const jobs = company?.jobs;
+            if (jobs) {
+                for (const job of jobs) {
+                    await jobService.restoreJob(String(job));
+                }
+            }
+            return {message: "Company has been restored"};
         }
         catch(error) {
             throw error;

@@ -221,6 +221,23 @@ class CandidateController {
             res.status(500).send({message: error.message});
         }
     }
+
+    async restoreCandidate(req: Request, res: Response) : Promise<void> {
+        try {
+            const email = req.user;
+            const account = await accountModel.findOne({email});
+            if (account && account.role === "Admin") {
+                const {id_candidate} = req.body;
+                await candidateService.restoreCandidate(id_candidate);
+                res.status(200).send({message: 'Restore candidate success'});
+            }
+            else {
+                res.status(401).send({message: 'Account not found'});
+            }
+        } catch (error:any) {
+            res.status(500).send({message: error.message});
+        }
+    }
 };
 
 export default new CandidateController();

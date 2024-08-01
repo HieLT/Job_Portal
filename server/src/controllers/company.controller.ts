@@ -115,9 +115,28 @@ class CompanyController {
         try {
             const email = req.user;
             const account = await accountModel.findOne({email});
-            if (account && account.role === "Company") {
-                await companyService.deleteCompany(String(account.company));
+            if (account && account.role === "Admin") {
+                const {id_company} = req.body;
+                await companyService.deleteCompany(id_company);
                 res.status(200).send({message: 'Delete company success'});
+            }
+            else {
+                res.status(401).send({message: 'Account not found'});
+            }
+        }
+        catch(error: any) {
+            res.status(500).send({message: error.message});
+        }
+    }
+
+    async restoreCompany(req: Request, res: Response) : Promise<void> {
+        try {
+            const email = req.user;
+            const account = await accountModel.findOne({email});
+            if (account && account.role === "Admin") {
+                const {id_company} = req.body;
+                await companyService.restoreCompany(id_company);
+                res.status(200).send({message: 'Restore company success'});
             }
             else {
                 res.status(401).send({message: 'Account not found'});

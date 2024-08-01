@@ -12,6 +12,8 @@ adminRouter.get('/get-company', [authentication], companyController.getAllCompan
 adminRouter.get('/get-total-applied', [authentication], jobController.getTotalCandidateApplied);
 adminRouter.delete('/delete-candidate', [authentication], candidateController.deleteCandidate);
 adminRouter.delete('/delete-company', [authentication], companyController.deleteCompany);
+adminRouter.post('/restore-candidate', [authentication], candidateController.restoreCandidate);
+adminRouter.post('/restore-company', [authentication], companyController.restoreCompany);
 adminRouter.get('/get-profile', [authentication], adminController.getProfile);
 adminRouter.put('/update-profile', [authentication], adminController.updateProfile);
 

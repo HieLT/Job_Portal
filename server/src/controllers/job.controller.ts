@@ -292,8 +292,30 @@ class JobController {
             if (account) {
                 const {id_job} = req.body;
                 if (account.role === "Company" && account.company && await jobService.checkJob(id_job, String(account.company))) {
-                    await companyService.removeJob(String(account.company), id_job);
                     const answer = await jobService.deleteJob(id_job);
+                    res.status(200).send(answer);
+                }
+                else {
+                    res.status(403).send({message: "You are not authorized to update job"});
+                }
+            }
+            else {
+                res.status(404).send({message: "Account not found"});
+            }
+        }
+        catch (error: any) {
+            res.status(500).send({message: error.message})
+        }
+    }
+
+    async restoreJob(req: Request, res: Response) : Promise<void> {
+        try {
+            const email = req.user;
+            const account = await accountModel.findOne({email});
+            if (account) {
+                const {id_job} = req.body;
+                if (account.role === "Company" && account.company && await jobService.checkJob(id_job, String(account.company))) {
+                    const answer = await jobService.restoreJob(id_job);
                     res.status(200).send(answer);
                 }
                 else {

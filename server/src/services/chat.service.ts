@@ -28,6 +28,28 @@ class ChatService {
             throw error;
         }
     }
+
+    async startConversation(from: string, to: string) : Promise<IChatMessage | null> {
+        try {
+            const conversation = await chatMessageModel.findOne({
+                participants: [from, to]
+            }).exec();
+
+            if (conversation) {
+                return conversation;
+            }
+            else {
+                const newConversation = new chatMessageModel({
+                    participants: [from, to]
+                });
+                await newConversation.save();
+                return newConversation;
+            }
+        }
+        catch (error) {
+            throw error;
+        }
+    }
 };
 
 export default new ChatService();

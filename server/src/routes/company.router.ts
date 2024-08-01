@@ -11,5 +11,6 @@ companyRouter.put('/update-profile', [authentication], companyController.updateP
 companyRouter.put('/update-logo', [authentication], companyController.updateLogo);
 companyRouter.get('/get-jobs', [authentication], jobController.getJobByCompany);
 companyRouter.delete('/delete-job', [authentication], jobController.deleteJob);
+companyRouter.post('/restore-job', [authentication], jobController.restoreJob);
 
 export default companyRouter;
