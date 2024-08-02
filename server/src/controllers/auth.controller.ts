@@ -69,6 +69,11 @@ class Auth {
                             // get profile admin
                             profile = await adminService.getProfile(String(user.admin));
                         }
+
+                        if (profile && profile.is_deleted) {
+                            res.status(403).send({message: 'Your account has been deleted'});
+                            return;
+                        }
                         res.status(200).send({
                             account: dataUser,
                             profile: profile
@@ -214,6 +219,21 @@ class Auth {
         });
     }
     
+    // async logout(req: Request, res: Response) {
+    //     try {
+    //         const email = req.user;
+    //         const account = await accountModel.findOne({email});
+    //         if (account) {
+    //             res.status(200).send({message: 'Logout successful'});
+    //         }
+    //         else {
+    //             res.status(401).send({message: 'Account not found'});
+    //         }
+    //     }
+    //     catch(error: any) {
+    //         res.status(500).send({message: error.message});
+    //     }
+    // }
 }
 
 export default new Auth();

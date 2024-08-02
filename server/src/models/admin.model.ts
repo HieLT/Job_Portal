@@ -5,6 +5,7 @@ export interface IAdmin extends Document {
     name: string;
     avatar: string;
     account: Schema.Types.ObjectId;
+    is_deleted: false;
 };
 
 const Admin = new Schema<IAdmin>({

@@ -1,4 +1,14 @@
+import { Schema } from "mongoose";
 import chatMessageModel, {IChatMessage} from "../models/chatMessage.model";
+
+interface Message {
+    to: string;
+    from: string;
+    type: 'Text' | 'Media' | 'Document' | 'Link' | 'Image';
+    created_at: Date;
+    text?: string;
+    file?: string;
+}
 
 class ChatService {
     async getHistoryChat(user_id: string) : Promise<IChatMessage[]> {
@@ -32,7 +42,7 @@ class ChatService {
     async startConversation(from: string, to: string) : Promise<IChatMessage | null> {
         try {
             const conversation = await chatMessageModel.findOne({
-                participants: [from, to]
+                participants: {$size: 2, $all: [from, to]}
             }).exec();
 
             if (conversation) {
@@ -45,6 +55,31 @@ class ChatService {
                 await newConversation.save();
                 return newConversation;
             }
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+
+    async getMessages(sender: string, recipient: string) : Promise<Message[]> {
+        try {
+            const conversation = await chatMessageModel.findOne({
+                participants: {$size: 2, $all: [sender, recipient]}
+            }).select('messages');
+            const messages : Message[] = [];
+            if (conversation) {
+                for (const x of conversation?.messages) {
+                    messages.push({
+                        to: String(x.to),
+                        from: String(x.from),
+                        type: x.type,
+                        created_at: x.created_at,
+                        text: x.text,
+                        file: x.file
+                    });
+                }
+            }
+            return messages;
         }
         catch (error) {
             throw error;
