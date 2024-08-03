@@ -47,7 +47,7 @@ function* handleActions() {
         } else if (statusError === 404 || statusError === 401) {
             getNotification('error', 'Người dùng không tồn tại!');
         } else if (statusError === 403) {
-            getNotification('error', 'Email chưa được kich hoạt!');
+            getNotification('error', 'Email chưa được kich hoạt hoặc đã bị khóa!');
         } else {
             getNotification('error', 'Đã xảy ra lỗi, vui lòng thử lại sau!');
         }
