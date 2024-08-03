@@ -14,7 +14,7 @@
     display: flex;
     position: relative;
     align-items: center;
-    padding: 20px;
+    padding: 5px;
     border: 1px solid #ddd;
     border-radius: 10px;
     background: #fff;
@@ -32,10 +32,11 @@
     flex-direction: column;
     gap: 10px;
     margin-left: 20px;
-    flex-grow: 1; /* Allows the content to grow and take up space */
+    flex-grow: 1;
 }
 
 .avatar {
+    margin-left: 10px;
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -78,11 +79,11 @@
     position: absolute;
     right: 10px;
     top: 50%;
-    transform: translateY(-50%); /* Centers the container vertically */
+    transform: translateY(-50%); 
 }
 
 .button {
-    padding: 8px 12px;
+    padding: 6px 10px;
     border: none;
     background-color: #007bff;
     color: white;
@@ -113,4 +114,66 @@
     &:hover {
         background-color: #c82333;
     }
+}
+.toggleSwitch {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin: 0 10px;
+}
+
+.toggleSwitch input {
+    display: none;
+}
+
+.toggleSwitch label {
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    background-color: #ccc;
+    border-radius: 12px;
+    transition: background-color 0.3s;
+}
+
+.toggleSwitch label:before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.toggleSwitch input:checked + label {
+    background-color: #4caf50;
+}
+
+.toggleSwitch input:checked + label:before {
+    transform: translateX(26px);
+}
+
+.tooltip {
+    visibility: hidden;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; 
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.toggleSwitch:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
 }
