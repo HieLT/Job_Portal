@@ -15,7 +15,7 @@ class CompanyService {
     async getAllCompanys() : Promise<ICompany[]> {
         try {
             const companys = await companyModel.find().populate('account', 'email').select(
-                '_id name logo website_url founded_year createdAt'
+                '_id name logo website_url founded_year createdAt is_deleted'
             ).exec();
             return companys;
         } catch (error) {
