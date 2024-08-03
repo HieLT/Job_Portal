@@ -53,6 +53,10 @@ class CompanyController {
             if (account) {
                 if (account.role === "Company" && account.company) {
                     const company = await companyService.getProfile(String(account.company));
+                    if (company && company.is_deleted) {
+                        res.status(401).send({message: 'Company has been deleted. Please log in again'});
+                        return;
+                    }
                     res.status(200).send(company);
                 }
                 else {
@@ -82,6 +86,11 @@ class CompanyController {
             if (account && account.role === "Company") {
                 const {logo} = req.body;
                 const logoUrl = await firebaseService.uploadImage(logo);
+                const profile = await companyService.getProfile(String(account.company));
+                if (profile && profile.is_deleted) {
+                    res.status(401).send({message: 'Company has been deleted. Please log in again'});
+                    return;
+                }
                 const company = await companyService.updateLogo(String(account.company), logoUrl);
                 res.status(200).send(company);
             }
@@ -99,6 +108,11 @@ class CompanyController {
             const email = req.user;
             const account = await accountModel.findOne({email});
             if (account && account.role === "Company") {
+                const profile = await companyService.getProfile(String(account.company));
+                if (profile && profile.is_deleted) {
+                    res.status(401).send({message: 'Company has been deleted. Please log in again'});
+                    return;
+                }
                 const company = await companyService.updateProfile(String(account.company), req.body);
                 res.status(200).send(company);
             }
