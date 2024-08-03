@@ -85,6 +85,13 @@ class ChatService {
         try {
             const conversation = await chatMessageModel.findOne({
                 participants: {$size: 2, $all: [from, to]}
+            }).populate({
+                path: 'participants',
+                select: 'company candidate',
+                populate: {
+                    path: 'company candidate',
+                    select: '_id first_name last_name avatar name logo'
+                }
             }).exec();
 
             if (conversation) {
