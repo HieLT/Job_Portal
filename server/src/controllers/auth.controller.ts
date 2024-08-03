@@ -51,6 +51,7 @@ class Auth {
                             expiresIn: '1h'
                         });
                         const dataUser = {
+                            _id: user._id,
                             email: user.email,
                             role: user.role,
                             token,
@@ -148,6 +149,7 @@ class Auth {
                 }
                 res.status(200).send({
                     account: {
+                        _id: account._id,
                         email: account.email,
                         role: account.role,
                         verified: account.verified,

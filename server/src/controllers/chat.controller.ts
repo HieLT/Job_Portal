@@ -41,7 +41,7 @@ class ChatController {
             const account = await accountModel.findOne({email});
             if (account) {
                 const {recipient} = req.query;
-                const messages = await chatService.startConversation(String(account.company) || String(account.candidate), String(recipient));
+                const messages = await chatService.startConversation(String(account._id), String(recipient));
                 res.status(200).send(messages);
             }
             else {

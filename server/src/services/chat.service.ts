@@ -92,7 +92,8 @@ class ChatService {
             }
             else {
                 const newConversation = new chatMessageModel({
-                    participants: [from, to]
+                    participants: [from, to],
+                    messages: []
                 });
                 await newConversation.save();
                 return newConversation;
