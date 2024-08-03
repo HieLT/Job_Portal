@@ -4,6 +4,7 @@ import authentication from '../middleware/authentication';
 
 const chatRouter = express.Router();
 
-chatRouter.get('/get-history-chat', [authentication], chatController.getHistoryChat);
+// chatRouter.get('/get-history-chat', [authentication], chatController.getHistoryChat);
+chatRouter.get('/start-conversation', [authentication], chatController.startConversation);
 
 export default chatRouter;
