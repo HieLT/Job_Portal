@@ -42,8 +42,8 @@ io.on('connection', async (socket: Socket) => {
     socket.on('text_message', async (data: any) => {
         try {
             const {message, id_conversation, id_sender, id_recipient} = data;
-            const sender = await accountModel.findByIdAndDelete(id_sender).select('socket_id');
-            const recipient = await accountModel.findByIdAndDelete(id_recipient).select('socket_id');
+            const sender = await accountModel.findById(id_sender).select('socket_id');
+            const recipient = await accountModel.findById(id_recipient).select('socket_id');
             const newMessage = {
                 to: id_recipient,
                 from: id_sender,

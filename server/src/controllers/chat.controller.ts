@@ -41,8 +41,21 @@ class ChatController {
             const account = await accountModel.findOne({email});
             if (account) {
                 const {recipient} = req.query;
-                const messages = await chatService.startConversation(String(account._id), String(recipient));
-                res.status(200).send(messages);
+                let accountRecipent = null;
+                if (account.role === "Candidate") {
+                    accountRecipent = await accountModel.findOne({company: recipient});
+                }
+                else if (account.role === "Company") {
+                    accountRecipent = await accountModel.findOne({candidate: recipient});
+                }
+
+                if (accountRecipent) {
+                    const messages = await chatService.startConversation(String(account._id), String(accountRecipent._id));
+                    res.status(200).send(messages);
+                }
+                else {
+                    res.status(401).send({message: 'Recipient not found'});
+                }
             }
             else {
                 res.status(401).send({message: 'Account not found'});
