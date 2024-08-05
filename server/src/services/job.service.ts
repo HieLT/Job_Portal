@@ -14,10 +14,20 @@ class JobService {
         }
     }
 
-    async getAllJobs() : Promise<IJob[]> {
+    async getAllJobs(page: number) : Promise<{}> {
         try {
-            const jobs = await jobModel.find().exec();
-            return jobs;
+            const numberPage = page || 1;
+            const size = 10;
+            const skip = (numberPage - 1) * size;
+            const totalJobs = await jobModel.countDocuments();
+            const jobs = await jobModel.find().skip(skip).limit(size).exec();
+            return {
+                jobs: jobs.slice().sort(() => Math.random() - 0.5),
+                totalJobs,
+                totalPages: Math.ceil(totalJobs / size),
+                page,
+                size: 10
+            };
         }
         catch (error) {
             throw error;

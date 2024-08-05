@@ -67,8 +67,9 @@ class JobController {
 
     async getAllJobs(req: Request, res: Response) : Promise<void> {
         try {
-            const jobs = await jobService.getAllJobs();
-            res.status(200).send(jobs.slice().sort(() => Math.random() -0.5));
+            const {page} = req.query;
+            const jobs = await jobService.getAllJobs(Number(page));
+            res.status(200).send(jobs);
         }
         catch (error: any) {
             res.status(500).send({message: error.message});
