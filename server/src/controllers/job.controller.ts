@@ -138,8 +138,8 @@ class JobController {
 
     async searchJob(req: Request, res: Response) : Promise<void> {
         try {
-            const {key, type, experience_required, category} = req.query;
-            const jobs = await jobService.searchJob(String(key), String(type), String(experience_required), String(category));
+            const {key, type, experience_required, category, page} = req.query;
+            const jobs = await jobService.searchJob(String(key), String(type), String(experience_required), String(category), Number(page));
             res.status(200).send(jobs);
         }
         catch (error:any) {

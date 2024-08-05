@@ -25,7 +25,7 @@ class JobService {
                 jobs: jobs.slice().sort(() => Math.random() - 0.5),
                 totalJobs,
                 totalPages: Math.ceil(totalJobs / size),
-                page,
+                page: numberPage,
                 size: 10
             };
         }
@@ -74,11 +74,11 @@ class JobService {
         key: string | null,
         type: string | null,
         experience_required: string | null,
-        category: string | null
-    ): Promise<IJob[]> {
+        category: string | null,
+        page: number
+    ): Promise<{}> {
         try {
             const searchCriteria: any = {};
-
             if (key) {
                 searchCriteria.$or = [
                     { title: { $regex: key, $options: 'i' } },
@@ -100,9 +100,20 @@ class JobService {
                 }
             }
 
+            const numberPage = page || 1;
+            const size = 10;
+            const skip = (page - 1) * 10;
             const jobs = await jobModel.find(searchCriteria)
-            .populate('company_id category_id').select('_id title description type salary position status expired_at experience_required company_id category_id is_deleted createdAt number_of_recruitment').exec();
-            return jobs;
+            .populate('company_id category_id').select('_id title description type salary position status expired_at experience_required company_id category_id is_deleted createdAt number_of_recruitment')
+            .skip(skip).limit(size)
+            .exec();
+            return {
+                totalJobs: jobs.length,
+                jobs: jobs.slice().sort(() => Math.random() - 0.5),
+                page: numberPage,
+                totalPages: Math.ceil(jobs.length / size),
+                size
+            };
         } catch (error) {
             throw new Error("Failed to fetch jobs");
         }
