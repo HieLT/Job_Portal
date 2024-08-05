@@ -1,3 +1,4 @@
+import categoryModel from "../models/category.model";
 import jobModel from "../models/job.model";
 import { IJob } from "../models/job.model";
 
@@ -58,6 +59,48 @@ class JobService {
             throw error;
         }
     }
+
+    async searchJob(key: string) : Promise<IJob[]> {
+        try {
+            const jobs = await jobModel.find({
+                $or: [
+                    {title: {$regex: key, $options: 'i'}},
+                    {description: {$regex: key, $options: 'i'}}
+                ]
+            }).exec();
+            return jobs;
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+
+    async filterJob(type: string | null, experience_required: string | null, category: string | null): Promise<IJob[]> {
+        try {
+            const filter: any = {};
+    
+            if (type) {
+                filter.type = type;
+            }
+            if (experience_required) {
+                filter.experience_required = experience_required;
+            }
+            if (category) {
+                const categoryDocument = await categoryModel.findOne({ name: category });
+                if (categoryDocument) {
+                    filter.category_id = categoryDocument._id;
+                } else {
+                    return [];
+                }
+            }
+    
+            const jobs = await jobModel.find(filter).exec();
+            return jobs;
+        } catch (error) {
+            throw new Error("Failed to fetch jobs");
+        }
+    }
+    
 
     async checkJob(id: string, company: string) : Promise<boolean> {
         try {
