@@ -60,47 +60,43 @@ class JobService {
         }
     }
 
-    async searchJob(key: string) : Promise<IJob[]> {
+    async  searchJob(
+        key: string | null,
+        type: string | null,
+        experience_required: string | null,
+        category: string | null
+    ): Promise<IJob[]> {
         try {
-            const jobs = await jobModel.find({
-                $or: [
-                    {title: {$regex: key, $options: 'i'}},
-                    {description: {$regex: key, $options: 'i'}}
-                ]
-            }).exec();
-            return jobs;
-        }
-        catch (error) {
-            throw error;
-        }
-    }
+            const searchCriteria: any = {};
 
-    async filterJob(type: string | null, experience_required: string | null, category: string | null): Promise<IJob[]> {
-        try {
-            const filter: any = {};
-    
+            if (key) {
+                searchCriteria.$or = [
+                    { title: { $regex: key, $options: 'i' } },
+                    { description: { $regex: key, $options: 'i' } }
+                ];
+            }
             if (type) {
-                filter.type = type;
+                searchCriteria.type = type;
             }
             if (experience_required) {
-                filter.experience_required = experience_required;
+                searchCriteria.experience_required = experience_required;
             }
             if (category) {
                 const categoryDocument = await categoryModel.findOne({ name: category });
                 if (categoryDocument) {
-                    filter.category_id = categoryDocument._id;
+                    searchCriteria.category_id = categoryDocument._id;
                 } else {
                     return [];
                 }
             }
-    
-            const jobs = await jobModel.find(filter).exec();
+
+            const jobs = await jobModel.find(searchCriteria)
+            .populate('company_id category_id').select('_id title description type salary position status expired_at experience_required company_id category_id is_deleted createdAt number_of_recruitment').exec();
             return jobs;
         } catch (error) {
             throw new Error("Failed to fetch jobs");
         }
-    }
-    
+    }      
 
     async checkJob(id: string, company: string) : Promise<boolean> {
         try {
