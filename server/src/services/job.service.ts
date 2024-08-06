@@ -27,7 +27,31 @@ class JobService {
             return {
                 jobs: jobs,
                 totalJobs,
-                totalPages: Math.ceil(jobs.length / size),
+                totalPages: Math.ceil(totalJobs / size),
+                page: numberPage,
+                size: 10
+            };
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+
+    async getAllJobsOpen(page: number) : Promise<{}> {
+        try {
+            const numberPage = page || 1;
+            const size = 10;
+            const skip = (numberPage - 1) * size;
+            const jobs = await jobModel.find({is_deleted: false, status: 'Open'})
+            .skip(skip).limit(size).exec();
+            const totalJobs = jobs.length;
+            jobs.sort(function(a: any, b:any){
+                return b.createdAt.getTime() - a.createdAt.getTime();
+            });
+            return {
+                jobs: jobs,
+                totalJobs,
+                totalPages: Math.ceil(totalJobs / size),
                 page: numberPage,
                 size: 10
             };
@@ -81,7 +105,7 @@ class JobService {
         page: number
     ): Promise<{}> {
         try {
-            const searchCriteria: any = {};
+            const searchCriteria: any = {is_deleted: false, status: 'Open'};
             if (key) {
                 searchCriteria.$or = [
                     { title: { $regex: key, $options: 'i' } },

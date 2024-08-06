@@ -76,6 +76,17 @@ class JobController {
         }
     }
 
+    async getAllJobsOpen(req: Request, res: Response) : Promise<void> {
+        try {
+            const {page} = req.query;
+            const jobs = await jobService.getAllJobsOpen(Number(page));
+            res.status(200).send(jobs);
+        }
+        catch (error: any) {
+            res.status(500).send({message: error.message});
+        }
+    }
+
     async getTotalCandidateApplied(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;
