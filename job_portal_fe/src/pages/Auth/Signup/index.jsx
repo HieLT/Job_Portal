@@ -163,6 +163,12 @@ function Signup() {
                 <span>Bạn đã có tài khoản? &nbsp;</span>
                 <span onClick={() => navigate('/login')} className={'underline'}>Đăng nhập ngay</span>
             </div>
+
+            <div className={'text-center text-sm mt-2 underline cursor-pointer'}
+                 onClick={() => navigate('/')}
+            >
+                Quay lại trang chủ
+            </div>
         </AuthLayout>
     );
 }

@@ -6,6 +6,9 @@ import {
     requestVerifyEmail,
     requestVerifyEmailFail,
     requestVerifyEmailSuccess,
+    startRequestForgotPassword,
+    startRequestForgotPasswordFail,
+    startRequestForgotPasswordSuccess,
     startRequestGetMe,
     startRequestGetMeFail,
     startRequestGetMeSuccess,
@@ -60,15 +63,25 @@ export const getMe = () => async (dispatch, getState) => {
     })
 }
 
-export const resetPassword = (data) => async (dispatch, getState) => {
+export const requestForgotPassword = (email) => async (dispatch, getState) => {
     return callApi({
         method: 'post',
+        apiPath: `auth/request/reset-password`,
+        actionTypes: [startRequestForgotPassword, startRequestForgotPasswordSuccess, startRequestForgotPasswordFail],
+        variables: {email},
+        dispatch,
+        getState
+    })
+}
+
+export const resetPassword = (data) => async (dispatch, getState) => {
+    return callApi({
+        method: 'put',
         apiPath: `auth/reset-password`,
         actionTypes: [startRequestResetPassword, startRequestResetPasswordSuccess, startRequestResetPasswordFail],
         variables: {
-            code: data.token,
-            password: data.password,
-            password_confirmation: data.confirmPassword,
+            token: data.token,
+            password: data.password
         },
         dispatch,
         getState

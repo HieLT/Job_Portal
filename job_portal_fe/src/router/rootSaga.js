@@ -7,6 +7,7 @@ import loadJobManagementSaga from "../states/modules/jobManagement/saga.js";
 import loadJobSaga from "../states/modules/job/saga.js";
 import loadAppliedJobsSaga from "../states/modules/appliedJobs/saga.js";
 import loadCompanyDashboardSaga from "../states/modules/companyDashboard/saga.js";
+import loadConversationSaga from "../states/modules/conversation/saga.js";
 
 export const ROUTE_SAGAS = [];
 ROUTE_SAGAS['LOAD_HOME_PAGE'] = loadHomeSaga
@@ -18,3 +19,4 @@ ROUTE_SAGAS['LOAD_COMPANY_JOBS_PAGE'] = loadJobManagementSaga
 ROUTE_SAGAS['LOAD_APPLICANT_PAGE'] = loadApplicantSaga
 ROUTE_SAGAS['LOAD_APPLIED_JOBS_PAGE'] = loadAppliedJobsSaga
 ROUTE_SAGAS['LOAD_COMPANY_DASHBOARD_PAGE'] = loadCompanyDashboardSaga
+ROUTE_SAGAS['LOAD_CONVERSATION_PAGE'] = loadConversationSaga

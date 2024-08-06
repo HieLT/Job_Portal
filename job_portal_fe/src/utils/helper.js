@@ -11,6 +11,8 @@ import {validateCandidate} from "./validates/validateCandidate.js";
 import {validateCompany} from "./validates/validateCompany.js";
 import {validateJob} from "./validates/validateJob.js";
 import _ from "lodash";
+import {validateChangePassword} from "./validates/validateChangePassword.js";
+import dayjs from "dayjs";
 
 export const VALIDATE_EMAIL_REGEX = /^[a-zA-Z0-9][a-zA-Z0-9_.+-]{1,}@[a-z0-9]{1,}(\.[a-z0-9]{1,}){1,2}$/
 export const VALIDATE_PASSWORD_REGEX = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{6,50}$/
@@ -151,6 +153,9 @@ export const handleCheckValidateConfirm = (data, errors, type) => {
             case 'job':
                 validate = validateJob(data, key, dataError);
                 break;
+            case 'changePassword':
+                validate = validateChangePassword(data, key, dataError);
+                break;
             default:
                 validate = isValidate(data, key, dataError);
                 break;
@@ -224,6 +229,10 @@ export const convertISOStringToDate = (isoString) => {
     return moment(isoString).format('DD/MM/YYYY')
 }
 
+export const convertISOStringToDateTime = (isoString) => {
+    return moment(isoString).format('HH:mm:ss DD-MM-YYYY')
+}
+
 export const isPositiveNumber = (number) => {
     return !(isNaN(number) || !Number.isInteger(Number(number)) || Number(number) <= 0)
 }
@@ -269,4 +278,23 @@ export const handleFormatMoney = (str) => {
         style: 'currency',
         currency: 'VND',
     }).format(str) : ''
+}
+
+export const filterDistinctValueByKeyInObjectArray = (arr, key) => {
+    const keys = new Set()
+    return arr?.filter(el => !keys.has(el[key]) && keys.add(el[key]))
+}
+
+export const downloadFile = async (fileUrl) => {
+    const nameFile = fileUrl.split('/').pop();
+    const response = await fetch(fileUrl);
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = nameFile;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
 }
