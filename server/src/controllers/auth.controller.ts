@@ -265,7 +265,7 @@ class Auth {
                 res.status(200).send({message: 'Please check your email. Then click the link in the inbox to reset your password'});
             }
             else {
-                res.status(401).send({message: 'Account not found'});
+                res.status(404).send({message: 'Account not found'});
             }
         }
         catch(error:any) {
