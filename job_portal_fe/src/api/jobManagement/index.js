@@ -11,11 +11,20 @@ import {
     startRequestPostJob,
     startRequestPostJobFail,
     startRequestPostJobSuccess,
-    startRequestUpdateJob, startRequestUpdateJobFail, startRequestUpdateJobStatus, startRequestUpdateJobSuccess
+    startRequestUpdateJob,
+    startRequestUpdateJobFail,
+    startRequestUpdateJobStatus,
+    startRequestUpdateJobSuccess
 } from "../../states/modules/jobManagement/index.js";
 import {
+    requestConfirmDownloadedResumeFail,
+    requestConfirmDownloadedResumeSuccess,
+    requestConfirmSeenResumeFail,
+    requestConfirmSeenResumeSuccess,
     requestGetAppliedCandidateFail,
     requestGetAppliedCandidateSuccess,
+    startRequestConfirmDownloadedResume,
+    startRequestConfirmSeenResume,
     startRequestGetAppliedCandidate
 } from "../../states/modules/applicant/index.js";
 import store from "../../states/configureStore.js";
@@ -80,6 +89,34 @@ export const getAppliedCandidate = () => (dispatch, getState) => {
         apiPath: `job/candidate-applied?id_job=${location.params.id}`,
         actionTypes: [startRequestGetAppliedCandidate, requestGetAppliedCandidateSuccess, requestGetAppliedCandidateFail],
         variables: {},
+        dispatch,
+        getState
+    })
+}
+
+export const confirmSeenResume = ({applicationId, jobId}) => (dispatch, getState) => {
+    return callApi({
+        method: 'put',
+        apiPath: `application/update-seen-at`,
+        actionTypes: [startRequestConfirmSeenResume, requestConfirmSeenResumeSuccess, requestConfirmSeenResumeFail],
+        variables: {
+            id_application: applicationId,
+            id_job: jobId
+        },
+        dispatch,
+        getState
+    })
+}
+
+export const confirmDownloadedResume = ({applicationId, jobId}) => (dispatch, getState) => {
+    return callApi({
+        method: 'put',
+        apiPath: `application/update-downloaded-at`,
+        actionTypes: [startRequestConfirmDownloadedResume, requestConfirmDownloadedResumeSuccess, requestConfirmDownloadedResumeFail],
+        variables: {
+            id_application: applicationId,
+            id_job: jobId
+        },
         dispatch,
         getState
     })

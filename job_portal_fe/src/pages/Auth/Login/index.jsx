@@ -136,6 +136,12 @@ function Login() {
                 <span onClick={() => navigate('/signup')} className={'underline'}>Đăng ký</span>
             </div>
 
+            <div className={'text-center text-sm mt-2 underline cursor-pointer'}
+                 onClick={() => navigate('/')}
+            >
+                Quay lại trang chủ
+            </div>
+
             <div className={'border-t-2 mt-8 text-center text-sm'}>
                 <p className={'mt-2'}>Hoặc</p>
                 <div className={styles.btnLoginWithGoogle}>

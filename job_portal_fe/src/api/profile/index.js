@@ -16,16 +16,25 @@ import {
     startRequestUpdateCompanySuccess,
     startRequestUploadCandidateAvatar,
     startRequestUploadCandidateAvatarFail,
-    startRequestUploadCandidateAvatarSuccess, startRequestUploadCompanyLogo
+    startRequestUploadCandidateAvatarSuccess,
+    startRequestUploadCompanyLogo
 } from "../../states/modules/profile/information/index.js";
 import {
     requestGetResumesFail,
     requestGetResumesSuccess,
-    startRequestDeleteCv, startRequestDeleteCvFail, startRequestDeleteCvSuccess, startRequestGetResumes,
+    startRequestDeleteCv,
+    startRequestDeleteCvFail,
+    startRequestDeleteCvSuccess,
+    startRequestGetResumes,
     startRequestUploadCv,
     startRequestUploadCvFail,
     startRequestUploadCvSuccess
 } from "../../states/modules/profile/cv/index.js";
+import {
+    requestChangePasswordFail,
+    requestChangePasswordSuccess,
+    startRequestChangePassword
+} from "../../states/modules/profile/password/index.js";
 
 export const createCandidate = (data) => async (dispatch, getState) => {
     return callApi({
@@ -134,6 +143,24 @@ export const getMyResumes = () => async (dispatch, getState) => {
             requestGetResumesFail
         ],
         variables: {},
+        dispatch,
+        getState
+    })
+}
+
+export const requestChangePassword = (data) => async (dispatch, getState) => {
+    return callApi({
+        method: 'put',
+        apiPath: `/auth/change-password`,
+        actionTypes: [
+            startRequestChangePassword,
+            requestChangePasswordSuccess,
+            requestChangePasswordFail
+        ],
+        variables: {
+            oldPassword: data.currentPassword,
+            newPassword: data.newPassword
+        },
         dispatch,
         getState
     })

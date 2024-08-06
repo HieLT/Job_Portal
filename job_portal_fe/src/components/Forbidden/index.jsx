@@ -7,7 +7,7 @@ export default function Forbidden() {
             <Result
                 status="403"
                 title="403"
-                subTitle="Xin lỗi, bạn không có quyền truy cập trang này."
+                subTitle="Xin lỗi, bạn không có quyền truy cập trang hoặc thực hiện chức năng này."
             />
         </div>
     )

@@ -4,10 +4,10 @@ import {
     requestSignupSuccess,
     requestVerifyEmailFail,
     setErrorSignup,
-    setVerifyResult,
+    setVerifyResult, startRequestForgotPasswordFail, startRequestForgotPasswordSuccess,
     startRequestGetMeFail,
     startRequestLoginFail,
-    startRequestLoginSuccess
+    startRequestLoginSuccess, startRequestResetPasswordFail, startRequestResetPasswordSuccess
 } from "./index.js";
 import {setAuthToken} from "../../../utils/localStorage";
 import {goToPage} from "../app/index.js";
@@ -47,7 +47,11 @@ function* handleActions() {
         } else if (statusError === 404 || statusError === 401) {
             getNotification('error', 'Người dùng không tồn tại!');
         } else if (statusError === 403) {
-            getNotification('error', 'Email chưa được kich hoạt hoặc đã bị khóa!');
+            if (action.payload.data.message === 'Your account has been deleted') {
+                getNotification('error', 'Tài khoản của bạn đã bị khóa!');
+            } else {
+                getNotification('error', 'Email chưa được kich hoạt!');
+            }
         } else {
             getNotification('error', 'Đã xảy ra lỗi, vui lòng thử lại sau!');
         }
@@ -90,6 +94,31 @@ function* handleActions() {
                 type: 0,
                 message: 'Xác thực email thất bại'
             }))
+        }
+    })
+
+    yield takeLatest(startRequestForgotPasswordSuccess, function () {
+        getNotification('success', 'Đường dẫn cập nhật mật khẩu đã được gửi đến email của bạn')
+    })
+
+    yield takeLatest(startRequestForgotPasswordFail, function (action) {
+        if (action.payload.status === 404) {
+            getNotification('error', 'Không có tài khoản nào dùng email này')
+        } else {
+            getNotification('error', 'Đã có lỗi xảy ra, vui lòng thử lại sau')
+        }
+    })
+
+    yield takeLatest(startRequestResetPasswordSuccess, function* () {
+        getNotification('success', 'Đặt lại mật khẩu thành công')
+        yield put(goToPage({path: '/login'}))
+    })
+
+    yield takeLatest(startRequestResetPasswordFail, function (action) {
+        if (action.payload.status === 400) {
+            getNotification('error', 'Mã xác thực không hợp lệ')
+        } else {
+            getNotification('error', 'Đã có lỗi xảy ra, vui lòng thử lại sau')
         }
     })
 }

@@ -4,9 +4,11 @@ import './styles.scss';
 import {Breadcrumb, Popover} from "antd";
 import contentInfo from './components/PopoverProfile';
 import ImageUser from '../../../../src/assets/images/logos/user_default.png'
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {USER_ROLE} from "../../../utils/constants.js";
 import {useNavigate} from "react-router-dom";
+import {CommentOutlined} from '@ant-design/icons'
+import {goToPage} from "../../../states/modules/app/index.js";
 
 const Header = ({isHeaderOnly}) => {
     const openFullScreen = () => {
@@ -30,12 +32,14 @@ const Header = ({isHeaderOnly}) => {
     }
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const authUser = useSelector((state) => state.auth.authUser);
     const isAuthSuccess = useSelector((state) => state.auth.isAuthSuccess);
     const breadcrumb = useSelector(state => state.app.breadcrumb);
 
     const isCandidateAndHasAvatar = (authUser?.account?.role === USER_ROLE['CANDIDATE'] && authUser.profile?.avatar)
     const isCompanyAndHasLogo = (authUser?.account?.role === USER_ROLE['COMPANY'] && authUser.profile?.logo)
+    const isAdmin = authUser?.account?.role === USER_ROLE['ADMIN']
 
     return (
         <header className={`${styles.headerWrap} ${isHeaderOnly && '!bg-[white]'}`}>
@@ -65,22 +69,34 @@ const Header = ({isHeaderOnly}) => {
 
                 <div className={`${styles.itemHeaderRight}`}>
                     {
-                        isAuthSuccess ?
-                            <Popover className={`popover-info-wrap`} placement="bottomRight" content={contentInfo}
-                                     trigger="click">
-                                <div className={styles.infoWrap}>
-                                    <div className={styles.avatarWrap}>
-                                        <img src={isCandidateAndHasAvatar ? authUser?.profile?.avatar :
-                                            (isCompanyAndHasLogo ? authUser?.profile?.logo : ImageUser)
-                                        }
-                                             alt="" onError={(e) => {
-                                            e.currentTarget.onerror = null;
-                                            e.currentTarget.src = ImageUser;
-                                        }}/>
+                        isAuthSuccess ? <div className={'flex items-center'}>
+                                {
+                                    !isAdmin ?
+                                        <div
+                                            className={'w-9 flex items-center justify-center h-9 p-2 rounded-[50%] mr-5'}
+                                            onClick={() => dispatch(goToPage({path: '/conversations'}))}
+                                        >
+                                            <CommentOutlined style={{color: 'black', fontSize: '25px'}}/>
+                                        </div>
+                                        : ''
+                                }
+                                <Popover className={`popover-info-wrap`} placement="bottomRight" content={contentInfo}
+                                         trigger="click">
+                                    <div className={styles.infoWrap}>
+                                        <div className={styles.avatarWrap}>
+                                            <img src={isCandidateAndHasAvatar ? authUser?.profile?.avatar :
+                                                (isCompanyAndHasLogo ? authUser?.profile?.logo : ImageUser)
+                                            }
+                                                 alt="" onError={(e) => {
+                                                e.currentTarget.onerror = null;
+                                                e.currentTarget.src = ImageUser;
+                                            }}/>
+                                        </div>
                                     </div>
-                                </div>
-                            </Popover> : <div onClick={() => navigate('/login')}
-                                              className={'font-semibold text-base'}>
+                                </Popover>
+                            </div> :
+                            <div onClick={() => navigate('/login')}
+                                 className={'font-semibold text-base'}>
                                 Đăng nhập
                             </div>
                     }

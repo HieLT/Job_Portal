@@ -3,10 +3,15 @@ import './styles.scss'
 import HeaderOnly from "../../../layouts/HeaderOnly/index.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {goToPage, setBreadcrumb} from "../../../states/modules/app/index.js";
-import {Avatar, Badge, Select, Skeleton, Tag, Tooltip} from "antd";
+import {Badge, Image, Select, Skeleton, Tag, Tooltip} from "antd";
 import DefaultLogo from '../../../assets/images/logos/user_default.png'
 import {CreditCardOutlined, EyeOutlined} from '@ant-design/icons'
-import {handleFindLabelByValue, handleSplitSalary} from "../../../utils/helper.js";
+import {
+    convertISOStringToDate,
+    convertISOStringToDateTime,
+    handleFindLabelByValue,
+    handleSplitSalary
+} from "../../../utils/helper.js";
 import {EMPLOYEE_TYPE, JOB_EXPERIENCE, JOB_STATUS} from "../../../utils/constants.js";
 import moment from "moment";
 
@@ -42,30 +47,29 @@ export default function AppliedJobs() {
         }
     }
 
-    const a = [
-        // {
-        //     _id: '1',
-        //     title: 'Principal Designer, Design Systems',
-        //     experience_required: 'NOT REQUIRED',
-        //     logo: '',
-        //     type: 'FREELANCE',
-        //     position: 'Nhan vien',
-        //     salary: '10000',
-        //     createdAt: '2024-07-25T18:13:30.444Z',
-        //     status: 'Closed'
-        // },
-        // {
-        //     _id: '2',
-        //     title: 'Principal Designer, Design Systems',
-        //     experience_required: '1-3 YEARS',
-        //     logo: '',
-        //     type: 'FULL-TIME',
-        //     position: 'Nhan vien',
-        //     salary: '10000',
-        //     createdAt: '2024-07-25T18:13:30.444Z',
-        //     status: 'Open'
-        // },
-    ]
+    const handleFindColorAndLabelByResumeStatus = (application, key) => {
+        let status = 'applied'
+        if (application?.seen_at && !application?.downloaded_at) {
+            status = 'seen'
+        } else if (application?.downloaded_at) {
+            status = 'downloaded'
+        }
+
+        const statusColorAndLabel = {
+            color: {
+                applied: 'cyan',
+                seen: 'geekblue',
+                downloaded: 'gold'
+            },
+            label: {
+                applied: 'Đã ứng tuyển',
+                seen: 'Công ty đã xem hồ sơ',
+                downloaded: 'Công ty đã tải hồ sơ'
+            }
+        }
+
+        return key === 'color' ? statusColorAndLabel['color'][status] : statusColorAndLabel['label'][status]
+    }
 
     return <HeaderOnly>
         <div className={'py-8 px-20'}>
@@ -97,24 +101,32 @@ export default function AppliedJobs() {
                             const job = item.job_id
                             const company = job.company_id
                             const content = <div key={item._id}
-                                                 className={'flex items-center justify-between px-8 py-5 w-full bg-[white] rounded-md h-[130px] border-[1px] mb-6'}
+                                                 className={'flex items-center justify-between px-8 py-5 w-full bg-[white] rounded-md h-[180px] border-[1px] mb-6'}
                             >
-                                <div className={'h-full w-[90px]'}>
-                                    <Avatar src={company.logo || DefaultLogo} shape={'square'}
-                                            className={'w-full h-full'}/>
+                                <div className={'h-full w-[130px]'}>
+                                    <Image src={company.logo || DefaultLogo} width={'100%'} height={'100%'}/>
                                 </div>
                                 <div className={'flex-1 mx-6'}>
                                     <div className={'flex items-center'}>
-                                        <div className={'font-semibold text-[16px]'}>{job.title}</div>
+                                        <div className={'font-semibold text-[17px]'}>{job.title}</div>
                                         &nbsp;
                                         <div className={'text-[15px]'}>
-                                            ({handleFindLabelByValue(JOB_EXPERIENCE, job.experience_required)} kinh nghiệm)
+                                            ({handleFindLabelByValue(JOB_EXPERIENCE, job.experience_required)} kinh
+                                            nghiệm)
                                         </div>
                                     </div>
+                                    <div className={'font-medium text-gray-500 text-[15px] mt-1.5'}>
+                                        {company.name?.toUpperCase()}
+                                    </div>
                                     <div className={'flex items-center mt-1.5 text-[15px]'}>
-                                        <div className={'font-medium w-[30%]'}>Vị trí: {job.position}</div>
+                                        <Tooltip title={job.position}>
+                                            <div
+                                                className={'font-medium w-[30%] whitespace-nowrap overflow-hidden overflow-ellipsis'}>
+                                                Vị trí: {job.position}
+                                            </div>
+                                        </Tooltip>
                                         <div className={'flex items-center ml-[50px]'}>
-                                            <Tag className={'font-semibold text-[14px]'}
+                                            <Tag className={'font-semibold !text-[14px]'}
                                                  color={handleFindColorByEmployeeType(job.type)}>
                                                 {handleFindLabelByValue(EMPLOYEE_TYPE, job.type)}
                                             </Tag>
@@ -124,8 +136,26 @@ export default function AppliedJobs() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className={'text-[14px] mt-1.5 font-medium'}>
-                                        Ngày ứng tuyển: {moment(job.createdAt).format('DD/MM/YYYY')}
+                                    <div className={'flex items-center'}>
+                                        <div className={'text-[15px] mt-1.5 font-medium text-gray-500'}>
+                                            CV đã ứng tuyển:
+                                            <a href={item.resume_path} target={'_blank'}
+                                               className={'underline text-[#4d94ff] hover:text-[#1a75ff] ml-1'}
+                                               rel="noreferrer"
+                                            >
+                                                CV tải lên
+                                            </a>
+                                        </div>
+                                        <div className={'flex items-center ml-[93px]'}>
+                                            <Tag className={'font-semibold !text-[14px]'}
+                                                 color={handleFindColorAndLabelByResumeStatus(item, 'color')}
+                                            >
+                                                {handleFindColorAndLabelByResumeStatus(item, 'label')}
+                                            </Tag>
+                                        </div>
+                                    </div>
+                                    <div className={'text-[15px] mt-1.5 font-medium'}>
+                                        Ngày ứng tuyển: {convertISOStringToDateTime(item.createdAt)}
                                     </div>
                                 </div>
                                 <div className={'w-1/12'}>
@@ -147,7 +177,8 @@ export default function AppliedJobs() {
                             }
 
                             return content
-                        }) : <i className={'font-semibold text-[17px] text-gray-500'}>Bạn chưa ứng tuyển công việc nào</i>
+                        }) : <i className={'font-semibold text-[17px] text-gray-500'}>Bạn chưa ứng tuyển công việc
+                            nào</i>
                     )
                 }
             </div>

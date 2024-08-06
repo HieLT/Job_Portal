@@ -11,6 +11,7 @@ import InformationTab from "./components/InformationTab/index.jsx";
 import _ from "lodash";
 import {setTab} from "../../../states/modules/profile/index.js";
 import ResumeTab from "./components/ResumeTab/index.jsx";
+import ChangePassword from "../../Auth/ChangePassword/index.jsx";
 
 export default function CandidateProfile() {
     const dispatch = useDispatch()
@@ -81,8 +82,7 @@ export default function CandidateProfile() {
                         {
                             label: 'Đổi mật khẩu',
                             key: 'password',
-                            children: 'Tab 3',
-                            disabled: true
+                            children: <ChangePassword/>
                         },
                     ]}
                 />

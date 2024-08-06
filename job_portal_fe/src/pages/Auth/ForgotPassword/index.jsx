@@ -7,8 +7,9 @@ import IconWarning from "../../../assets/images/icons/light/warning.svg";
 import InlineSVG from "react-inlinesvg";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {setErrorForgotPassword, setErrorResetPassword} from "../../../states/modules/auth/index.js";
+import {setErrorForgotPassword} from "../../../states/modules/auth/index.js";
 import {handleCheckValidateConfirm} from "../../../utils/helper.js";
+import {requestForgotPassword} from "../../../api/auth/index.js";
 
 function ForgotPassword() {
     const navigate = useNavigate();
@@ -24,6 +25,7 @@ function ForgotPassword() {
     }, [dispatch])
 
     const handleChangeInput = (value) => {
+        dispatch(setErrorForgotPassword({email: ''}))
         setEmail(value)
     }
 
@@ -34,10 +36,10 @@ function ForgotPassword() {
     }
 
     const handleConfirmRequestForgotPassword = () => {
-        let validate = handleCheckValidateConfirm(email, errorForgotPassword);
-        dispatch(setErrorResetPassword(validate.dataError))
+        let validate = handleCheckValidateConfirm({email}, errorForgotPassword);
+        dispatch(setErrorForgotPassword(validate.dataError))
         if (!validate.isError) {
-            // TODO: call api request forgot password link
+            dispatch(requestForgotPassword(email))
         }
     }
 
@@ -57,7 +59,7 @@ function ForgotPassword() {
                 />
                 {
                     errorForgotPassword && errorForgotPassword.email?.length > 0 ?
-                        <span className={'error'}>
+                        <span className={'error !text-[yellow]'}>
             <div className={'icon'}>
               <InlineSVG src={IconWarning} width={14} height="auto"/>
             </div>
@@ -79,8 +81,15 @@ function ForgotPassword() {
                 </Button>
             </Flex>
 
-            <div className={styles.forgot}>
-                <span onClick={() => navigate('/login')} className={'underline'}>Trở lại trang đăng nhập</span>
+            <div className={'mt-8'}>
+                <div className={styles.forgot}>
+                    <span onClick={() => navigate('/login')} className={'underline'}>Trở lại trang đăng nhập</span>
+                </div>
+                <div className={'text-center text-sm mb-10 mt-2 underline cursor-pointer'}
+                     onClick={() => navigate('/')}
+                >
+                    Quay lại trang chủ
+                </div>
             </div>
         </AuthLayout>
     );

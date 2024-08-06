@@ -20,6 +20,7 @@ import JobManagement from "../pages/Company/JobManagement/index.jsx";
 import Applicants from "../pages/Company/JobManagement/components/Applicants/index.jsx";
 import JobDetail from "../pages/Home/components/JobDetail/index.jsx"
 import AppliedJobs from "../pages/Candidate/AppliedJobs/index.jsx";
+import Conversation from "../pages/Conversation/index.jsx";
 
 const router = createBrowserRouter([
     {
@@ -44,7 +45,7 @@ const router = createBrowserRouter([
         )
     },
     {
-        path: '/reset-password',
+        path: '/auth/reset-password/:token',
         element: <ResetPassword/>,
         loader: ({request, params}) => rootLoader(
             {request, params}, false, 'LOAD_AUTH_PAGE'
@@ -146,6 +147,13 @@ const router = createBrowserRouter([
         element: <AppliedJobs />,
         loader: ({ request, params }) => rootLoader(
             { request, params }, true, 'LOAD_APPLIED_JOBS_PAGE', USER_ROLE['CANDIDATE']
+        )
+    },
+    {
+        path: '/conversations',
+        element: <Conversation />,
+        loader: ({ request, params }) => rootLoader(
+            { request, params }, true, 'LOAD_CONVERSATION_PAGE'
         )
     },
 ]);

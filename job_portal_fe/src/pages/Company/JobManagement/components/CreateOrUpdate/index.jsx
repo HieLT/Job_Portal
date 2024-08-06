@@ -118,7 +118,7 @@ export default function CreateOrUpdate(props) {
                 data[type] = value
             }
         } else if (type === 'expired_at') {
-            data[type] = value ? value.toISOString() : ''
+            data[type] = value ? moment(value.toISOString()).startOf('day').toISOString() : ''
         } else {
             data[type] = value
         }

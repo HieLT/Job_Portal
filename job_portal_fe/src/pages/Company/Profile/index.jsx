@@ -11,6 +11,7 @@ import InformationTab from "./components/InformationTab/index.jsx";
 import InlineSVG from "react-inlinesvg";
 import Location from '../../../assets/images/icons/duotone/location.svg'
 import _ from "lodash";
+import ChangePassword from "../../Auth/ChangePassword/index.jsx";
 
 export default function CompanyProfile() {
     const authUser = useSelector(state => state.auth.authUser)
@@ -83,7 +84,7 @@ export default function CompanyProfile() {
                         {
                             label: 'Đổi mật khẩu',
                             key: 'password',
-                            children: 'Tab 3',
+                            children: <ChangePassword/>
                         },
                     ]}
                 />

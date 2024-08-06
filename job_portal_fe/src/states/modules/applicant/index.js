@@ -13,7 +13,7 @@ const applicantSlice = createSlice({
             jobId: action.payload.data
         }),
 
-        /* Get applied candidates for a jobManagement */
+        /* Get applied candidates for a job */
         startRequestGetAppliedCandidate: (state) => ({
             ...state,
             isLoadingGetAppliedCandidate: true
@@ -27,11 +27,37 @@ const applicantSlice = createSlice({
             ...state,
             isLoadingGetAppliedCandidate: false
         }),
+
+        startRequestConfirmSeenResume: (state) => ({
+            ...state
+        }),
+        requestConfirmSeenResumeSuccess: (state) => ({
+            ...state
+        }),
+        requestConfirmSeenResumeFail: (state) => ({
+            ...state
+        }),
+
+        startRequestConfirmDownloadedResume: (state) => ({
+            ...state
+        }),
+        requestConfirmDownloadedResumeSuccess: (state) => ({
+            ...state
+        }),
+        requestConfirmDownloadedResumeFail: (state) => ({
+            ...state
+        })
     }
 })
 
 export const {
     startRequestGetAppliedCandidate, requestGetAppliedCandidateSuccess, requestGetAppliedCandidateFail,
+    startRequestConfirmSeenResume,
+    requestConfirmSeenResumeSuccess,
+    requestConfirmSeenResumeFail,
+    startRequestConfirmDownloadedResume,
+    requestConfirmDownloadedResumeSuccess,
+    requestConfirmDownloadedResumeFail,
 } = applicantSlice.actions
 
 export default applicantSlice.reducer;

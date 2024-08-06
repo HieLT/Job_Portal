@@ -14,6 +14,7 @@ function PopoverProfile() {
 
     const isUpdatedCompany = authUser?.account?.role === USER_ROLE['COMPANY'] && !_.isEmpty(authUser?.profile)
     const isUpdatedCandidate = authUser?.account?.role === USER_ROLE['CANDIDATE'] && !_.isEmpty(authUser?.profile)
+    const isAdmin = authUser?.account?.role === USER_ROLE['ADMIN']
 
     const handleConfirmLogout = () => {
         removeAuthToken();
@@ -53,14 +54,23 @@ function PopoverProfile() {
                             </li> : ''
                         )
                     }
-                    <li
-                        onClick={() => navigate('/account/profile')}
-                        className={`${styles.itemInfoWrap}`}
-                    >
-                        <div>
-                            <span className={styles.text}>Hồ sơ cá nhân</span>
-                        </div>
-                    </li>
+                    {
+                        !isAdmin ? <li
+                            onClick={() => navigate('/account/profile')}
+                            className={`${styles.itemInfoWrap}`}
+                        >
+                            <div>
+                                <span className={styles.text}>Hồ sơ cá nhân</span>
+                            </div>
+                        </li> : <li
+                            onClick={() => navigate('/admin/dashboard')}
+                            className={`${styles.itemInfoWrap}`}
+                        >
+                            <div>
+                                <span className={styles.text}>Tổng quan</span>
+                            </div>
+                        </li>
+                    }
                     <li
                         onClick={() => handleConfirmLogout()}
                         className={styles.itemInfoWrap}
