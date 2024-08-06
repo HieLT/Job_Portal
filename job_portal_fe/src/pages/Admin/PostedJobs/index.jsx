@@ -3,7 +3,7 @@ import styles from "./styles.module.scss";
 import MainLayout from "../../../layouts/MainLayout";
 import { setTitlePage } from '../../../states/modules/app';
 import { useSelector, useDispatch } from "react-redux";
-import { getAllJob } from "../../../api/home";
+import { GetJob } from "../../../api/home";
 import JobDetail from "./Components/JobDetail/index"; 
 
 const AdminPostedJobs = () => {
@@ -13,7 +13,7 @@ const AdminPostedJobs = () => {
 
     useEffect(() => {
         dispatch(setTitlePage('Danh sách công việc'));
-        dispatch(getAllJob());
+        dispatch(GetJob());
     }, [dispatch]);
 
     const handleSeeDetail = (job) => {
