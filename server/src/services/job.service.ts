@@ -20,7 +20,13 @@ class JobService {
             const size = 10;
             const skip = (numberPage - 1) * size;
             const totalJobs = await jobModel.countDocuments();
-            const jobs = await jobModel.find().skip(skip).limit(size).exec();
+            const jobs = await jobModel.find()
+            .populate({
+                path: 'company_id category_id',
+                select: '_id name logo description location phone website_url founded_year headcount createAt is_deleted'
+            })
+            .select('_id title description type salary position status expired_at experience_required company_id category_id is_deleted createdAt number_of_recruitment')
+            .skip(skip).limit(size).exec();
             jobs.sort(function(a: any, b:any){
                 return b.createdAt.getTime() - a.createdAt.getTime();
             });
@@ -43,6 +49,11 @@ class JobService {
             const size = 10;
             const skip = (numberPage - 1) * size;
             const jobs = await jobModel.find({is_deleted: false, status: 'Open'})
+            .populate({
+                path: 'company_id category_id',
+                select: '_id name logo description location phone website_url founded_year headcount createAt is_deleted'
+            })
+            .select('_id title description type salary position status expired_at experience_required company_id category_id is_deleted createdAt number_of_recruitment')
             .skip(skip).limit(size).exec();
             const totalJobs = jobs.length;
             jobs.sort(function(a: any, b:any){
@@ -139,7 +150,11 @@ class JobService {
             const size = 10;
             const skip = (numberPage - 1) * 10;
             const jobs = await jobModel.find(searchCriteria)
-            .populate('company_id category_id').select('_id title description type salary position status expired_at experience_required company_id category_id is_deleted createdAt number_of_recruitment')
+            .populate({
+                path: 'company_id category_id',
+                select: '_id name logo description location phone website_url founded_year headcount createAt is_deleted'
+            })
+            .select('_id title description type salary position status expired_at experience_required company_id category_id is_deleted createdAt number_of_recruitment')
             .skip(skip).limit(size)
             .exec();
             jobs.sort(function(a: any, b:any){
