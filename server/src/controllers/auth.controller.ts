@@ -258,7 +258,7 @@ class Auth {
 
     async requestResetPassword(req: Request, res: Response) : Promise<void>{
         try {
-            const email = req.user;
+            const {email} = req.body;
             const account = await accountModel.findOne({email});
             if (account) {
                 await mail.sendResetPassword(account);
