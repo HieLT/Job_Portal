@@ -21,10 +21,13 @@ class JobService {
             const skip = (numberPage - 1) * size;
             const totalJobs = await jobModel.countDocuments();
             const jobs = await jobModel.find().skip(skip).limit(size).exec();
+            jobs.sort(function(a: any, b:any){
+                return b.createdAt.getTime() - a.createdAt.getTime();
+            });
             return {
-                jobs: jobs.slice().sort(() => Math.random() - 0.5),
+                jobs: jobs,
                 totalJobs,
-                totalPages: Math.ceil(totalJobs / size),
+                totalPages: Math.ceil(jobs.length / size),
                 page: numberPage,
                 size: 10
             };
@@ -107,9 +110,12 @@ class JobService {
             .populate('company_id category_id').select('_id title description type salary position status expired_at experience_required company_id category_id is_deleted createdAt number_of_recruitment')
             .skip(skip).limit(size)
             .exec();
+            jobs.sort(function(a: any, b:any){
+                return b.createdAt.getTime() - a.createdAt.getTime();
+            });
             return {
-                totalJobs: jobs.length,
-                jobs: jobs.slice().sort(() => Math.random() - 0.5),
+                totalJobs: await jobModel.countDocuments(),
+                jobs: jobs,
                 page: numberPage,
                 totalPages: Math.ceil(jobs.length / size),
                 size
