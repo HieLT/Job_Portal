@@ -55,14 +55,14 @@ class JobService {
             })
             .select('_id title description type salary position status expired_at experience_required company_id category_id is_deleted createdAt number_of_recruitment')
             .skip(skip).limit(size).exec();
-            const totalJobs = jobs.length;
+            const totalJobs = await jobModel.find({is_deleted: false, status: 'Open'});
             jobs.sort(function(a: any, b:any){
                 return b.createdAt.getTime() - a.createdAt.getTime();
             });
             return {
                 jobs: jobs,
-                totalJobs,
-                totalPages: Math.ceil(totalJobs / size),
+                totalJobs: totalJobs.length,
+                totalPages: Math.ceil(totalJobs.length / size),
                 page: numberPage,
                 size: 10
             };
@@ -149,6 +149,7 @@ class JobService {
             const numberPage = page ? page : 1;
             const size = 10;
             const skip = (numberPage - 1) * 10;
+            const totalJobs = await jobModel.find(searchCriteria);
             const jobs = await jobModel.find(searchCriteria)
             .populate({
                 path: 'company_id category_id',
@@ -161,10 +162,10 @@ class JobService {
                 return b.createdAt.getTime() - a.createdAt.getTime();
             });
             return {
-                totalJobs: jobs.length,
+                totalJobs: totalJobs.length,
                 jobs: jobs,
                 page: numberPage,
-                totalPages: Math.ceil(jobs.length / size),
+                totalPages: Math.ceil(totalJobs.length / size),
                 size
             };
         } catch (error) {
