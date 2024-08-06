@@ -5,6 +5,9 @@ const homeSlice = createSlice({
     initialState: {
         keySearch: '',
         jobs: [],
+        totalJobs:'',
+        totalPages:'' , 
+        page:'',
         jobdetail: {},
     },
     reducers: {
@@ -12,14 +15,17 @@ const homeSlice = createSlice({
             ...state,
             keySearch: action.payload
         }),
-        startRequestGetAllJob : (state) => ({
+        startRequestGetJob : (state) => ({
             ...state , 
         }),
-        startRequestGetAllJobSuccess : (state,action) => ({
+        startRequestGetJobSuccess : (state,action) => ({
             ...state , 
-            jobs : action.payload
+            jobs : action.payload.jobs,
+            totalJobs :action.payload.totalJobs,
+            totalPages :action.payload.totalPages,
+            page:action.payload.page
         }),
-        startRequestGetAllJobFail : (state) => ({
+        startRequestGetJobFail : (state) => ({
             ...state , 
             jobs :[]
         }),
@@ -38,7 +44,7 @@ const homeSlice = createSlice({
 })
 
 export const {
-    startRequestGetAllJob,startRequestGetAllJobSuccess,startRequestGetAllJobFail,
+    startRequestGetJob,startRequestGetJobSuccess,startRequestGetJobFail,
     startRequestGetDetailJob,startRequestGetDetailJobSuccess,startRequestGetDetailJobFail,
 } = homeSlice.actions
 

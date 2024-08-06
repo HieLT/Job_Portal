@@ -1,15 +1,21 @@
 import {
-    startRequestGetAllJob , startRequestGetAllJobSuccess , startRequestGetAllJobFail,
+    startRequestGetJob , startRequestGetJobSuccess , startRequestGetJobFail,
     startRequestGetDetailJob,startRequestGetDetailJobSuccess,startRequestGetDetailJobFail
 } from "../../states/modules/home/index.js"
 import callApi from "../callApi";
 
 
-export const getAllJob = () => (dispatch , getState) => {
+export const GetJob = ({key='' , experience_required='', category='' , type='' , page=1}) => (dispatch , getState) => {
+    if (!experience_required) experience_required ='';
+    if (!category) category='';
+    if (!type) type='';
+    console.log("key:",key,"experience_required:",experience_required,"category:",category,"type:",type,"page:",page);
+    
     return callApi({
         method: 'get',
-        apiPath : 'job/get-all',
-        actionTypes :[startRequestGetAllJob,startRequestGetAllJobSuccess,startRequestGetAllJobFail],
+        apiPath : 'job/search',
+        actionTypes :[startRequestGetJob,startRequestGetJobSuccess,startRequestGetJobFail],
+        variables:{key, experience_required, category,type,page},
         dispatch,
         getState
     })

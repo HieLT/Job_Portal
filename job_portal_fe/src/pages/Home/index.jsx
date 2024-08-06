@@ -1,60 +1,130 @@
-import React, { useEffect } from 'react';
-import styles from './styles.module.scss';
+import React, { useEffect, useRef, useState } from 'react';
+import { Input, Select, Button, Pagination } from 'antd';
 import HeaderOnly from '../../layouts/HeaderOnly';
 import ResultField from "./components/ResultField/index.jsx";
 import { setBreadcrumb } from '../../states/modules/app/index.js';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { GetJob } from '../../api/home/index.js';
+import styles from './styles.module.scss';
+
+const { Option } = Select;
+
+const Type = ['FULL-TIME', 'INTERNSHIP', 'PART-TIME'];
+const Experience = ['LESS THAN 1 YEAR', 'NOT REQUIRED', '1-3 YEARS', 'MORE THAN 3 YEARS'];
 
 const HomePage = () => {
     const dispatch = useDispatch();
+    const jobs = useSelector((state) => state.home.jobs);
+    const currentPage = useSelector((state) => state.home.page);
+    const totalPages = useSelector((state) => state.home.totalPages);
+    const Categories = useSelector((state) => state.jobManagement.categories)
+
+    const [searchInput, setSearchInput] = useState('');
+    const [searchType, setSearchType] = useState('');
+    const [searchExperience, setSearchExperience] = useState('');
+    const [searchCategory, setSearchCategory] = useState('');
+
 
     useEffect(() => {
-        dispatch(setBreadcrumb([
-            {
-                title: 'Trang chủ'
-            }
-        ]))
-    }, [dispatch])
+        dispatch(setBreadcrumb([{ title: 'Trang chủ' }]));
+    }, [dispatch]);
+
+    const handleSearch = async () => {
+        await dispatch(GetJob({
+            key: searchInput,
+            experience_required: searchExperience,
+            category: searchCategory,
+            type: searchType,
+        }));
+    };
+
+    const handlePageChange = async (page) => {
+        if (page >= 1 && page <= totalPages) {
+            await dispatch(GetJob({
+                key: searchInput,
+                experience_required: searchExperience,
+                category: searchCategory,
+                type: searchType,
+                page: page
+            }));
+            window.scroll({
+                top: 0, 
+                left: 0, 
+                behavior: 'smooth' 
+               });
+        }
+    };
 
     return (
         <HeaderOnly>
             <div className={styles.container}>
                 <div className={styles.inputGroup}>
-                    <input
-                        type="text"
-                        placeholder="Tìm công ty, việc làm"
-                        className={styles.input}
-                    />
-                    <div className={styles.selectWrapper}>
-                        <svg xmlns="http://www.w3.org/2000/svg" className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 2a6 6 0 00-6 6c0 4 6 12 6 12s6-8 6-12a6 6 0 00-6-6z"/>
-                        </svg>
-                        <select className={styles.select}>
-                            <option value="">Thành phố</option>
-                            <option value="nyc">New York</option>
-                            <option value="sf">San Francisco</option>
-                            <option value="la">Los Angeles</option>
-                        </select>
+                    <div className={styles.leftContainer}>
+                        <Input
+                            placeholder="Tìm công ty, việc làm"
+                            value={searchInput}
+                            onChange={(e) => setSearchInput(e.target.value)}
+                        />
                     </div>
-                    <div className={styles.selectWrapper}>
-                        <svg xmlns="http://www.w3.org/2000/svg" className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2h-6l-2-2h-4l-2 2z"/>
-                        </svg>
-                        <select className={styles.select}>
-                            <option value="">Danh mục</option>
-                            <option value="dev">Development</option>
-                            <option value="design">Design</option>
-                            <option value="marketing">Marketing</option>
-                        </select>
+                    <div className={styles.rightContainer}>
+                        <Select
+                            options={Categories.map((category) => {
+                                return {
+                                    label: category.name,
+                                    value: category.name
+                                }
+                            })}
+                            allowClear={true}
+                            placeholder='Ngành Nghề'
+                            value={searchCategory ? searchCategory : null}
+                            onChange={(value) => setSearchCategory(value)}
+                            style={{ width: '200px' }}
+                        />
+                        <Select
+                            options={Experience.map((exp) => {
+                                return {
+                                    label : exp,
+                                    value : exp
+                                }
+                            })}
+                            placeholder='Kinh Nghiệm'
+                            allowClear={true}
+                            value={searchExperience? searchExperience : null}
+                            onChange={(value) => setSearchExperience(value)}
+                            style={{ width: '200px' }}
+                        />
+
+                        <Select
+                            id="type"
+                            value={searchType ? searchType : null}
+                            options={Type.map((typ) => {
+                                return {
+                                    label : typ,
+                                    value : typ
+                                }    
+                            })}
+                            allowClear={true}
+                            placeholder="Hình Thức"
+                            onChange={(value) => setSearchType(value)}
+                            style={{ width: '200px' }}
+                        />
+
+                        <Button type="primary" onClick={handleSearch}>
+                            Tìm kiếm
+                        </Button>
                     </div>
-                    <button className={`${styles.button} ${styles.buttonFind}`}>
-                        Tìm kiếm
-                    </button>
-                    <button className={`${styles.button} ${styles.buttonFilter}`}>
-                        Tìm kiếm nâng cao
-                    </button>
                 </div>
-                <ResultField/>
+                <ResultField jobs={jobs}  />
+                {jobs?.length > 0 ? (
+                    <div className='flex items-center justify-center mt-5'>
+                        <Pagination
+                        current={currentPage}
+                        total={totalPages * 10} 
+                        onChange={handlePageChange}
+                        pageSize={10}
+                    />
+                    </div>
+                ) : ''} 
             </div>
         </HeaderOnly>
     );

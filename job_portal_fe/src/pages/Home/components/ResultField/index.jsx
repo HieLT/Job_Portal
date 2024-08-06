@@ -1,30 +1,26 @@
 import React from 'react';
 import styles from './styles.module.scss';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+const isJobExpired = (expiryDateString) => {
+  const expiryDate = new Date(expiryDateString);
+  const today = new Date();
+  return isNaN(expiryDate.getTime()) || expiryDate < today;
+}
 
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toISOString().split('T')[0];
-};
+const ResultField = (props) => {
+  const { jobs } = props;
 
-
-
-
-const ResultField = () => {
-  const jobs = useSelector((state) => state.home.jobs);
-  const isJobExpired = (expiryDateString) => {
-    const expiryDate = new Date(expiryDateString);
-    const today = new Date();
-    return expiryDate < today;
-  };
+  const filteredJobs = jobs.filter(
+    (job) => !isJobExpired(job.expired_at) && job.status === 'Open' && !job.is_deleted
+  );
 
   return (
     <div className={styles.resultField}>
-      {jobs
-        .filter((job) => !isJobExpired(job.expired_at) && job.status === 'Open' && job.is_deleted === false)  
-        .map((job) => (
+      {filteredJobs.length === 0 ? (
+        <p className={styles.noJobsMessage}>No jobs available</p>
+      ) : (
+        filteredJobs.map((job) => (
           <Link key={job._id} to={`/job/${job._id}`} className={styles.jobCard}>
             <div className={styles.jobHeader}>
               <h3 className={styles.jobTitle}>{job.title}</h3>
@@ -36,7 +32,8 @@ const ResultField = () => {
               <p className={styles.jobSalary}>Lương: {job.salary}</p>
             </div>
           </Link>
-        ))}
+        ))
+      )}
     </div>
   );
 };
