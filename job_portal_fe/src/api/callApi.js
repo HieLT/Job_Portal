@@ -46,7 +46,7 @@ export default async function callApi(
                 dispatch(goToPage({path: '/login'}));
                 dispatch(setAuthSuccess(false))
             } else if (response.status === 403) {
-                dispatch(goToPage({path: '/'}));
+                dispatch(goToPage({path: '/forbidden'}));
             }
             return response
         })

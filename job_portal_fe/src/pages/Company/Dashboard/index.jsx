@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {setBreadcrumb, setTitlePage} from "../../../states/modules/app/index.js";
 import {handleFindLabelByValue} from "../../../utils/helper.js";
 import {EMPLOYEE_TYPE, JOB_STATUS} from "../../../utils/constants.js";
-import {Switch, Tooltip} from "antd";
+import {Skeleton, Switch, Tooltip} from "antd";
 import TableDefault from "../../../components/Table/index.jsx";
 import {updateStatus} from "../../../api/companyDashboard/index.js";
 import styles from './styles.module.scss'
@@ -13,6 +13,8 @@ import moment from "moment";
 
 export default function CompanyDashboard() {
     const dispatch = useDispatch()
+    const quantity = useSelector(state => state.companyDashboard.quantity)
+    const isLoadingGetQuantity = useSelector(state => state.companyDashboard.isLoadingGetQuantity)
     const isLoadingGetJobsAboutToExpire = useSelector(state => state.companyDashboard.isLoadingGetJobsAboutToExpire)
     const jobsAboutToExpire = useSelector(state => state.companyDashboard.jobsAboutToExpire)
     const isLoadingUpdateJobStatus = useSelector(state => state.companyDashboard.isLoadingUpdateJobStatus)
@@ -86,7 +88,10 @@ export default function CompanyDashboard() {
                 <div className={'p-6 bg-[#3385ff] h-[150px] rounded-md text-[white]'}>
                     <div className={'font-semibold mt-[-5px]'}>Việc làm</div>
                     <div className={'flex justify-between items-center mt-[-4px]'}>
-                        <div className={'text-4xl'}>1</div>
+                        {
+                            isLoadingGetQuantity ? <Skeleton.Input active /> :
+                                <div className={'text-4xl'}>{quantity.jobs}</div>
+                        }
                         <svg className="icon me-n2 svg-icon-ti-ti-briefcase" style={{opacity: ".1"}}
                              xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -102,7 +107,10 @@ export default function CompanyDashboard() {
                 <div className={'bg-[#2fb344] h-[150px] p-6 rounded-md text-[white] mt-7'}>
                     <div className={'font-semibold mt-[-5px]'}>Ứng viên</div>
                     <div className={'flex justify-between items-center mt-[-4px]'}>
-                        <div className={'text-4xl'}>1</div>
+                        {
+                            isLoadingGetQuantity ? <Skeleton.Input active/> :
+                                <div className={'text-4xl'}>{quantity.applicants}</div>
+                        }
                         <svg className="icon me-n2 svg-icon-ti-ti-building" style={{opacity: ".1"}}
                              xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

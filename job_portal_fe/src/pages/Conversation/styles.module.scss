@@ -1,0 +1,47 @@
+.companyWrap {
+    scrollbar-gutter: stable;
+
+    &::-webkit-scrollbar {
+        @apply w-[5px] transition-all duration-200
+    }
+
+    &::-webkit-scrollbar-track {
+        @apply bg-transparent rounded-md
+    }
+
+    &::-webkit-scrollbar-thumb {
+        @apply bg-transparent rounded-lg transition-all duration-200
+    }
+
+    &::-webkit-scrollbar-thumb:vertical {
+        @apply bg-black-75
+    }
+
+    @apply overflow-y-hidden hover:overflow-y-auto overflow-x-hidden mt-4 h-[calc(100%_-55px)]
+}
+
+.conversationsWrap {
+    scrollbar-gutter: stable;
+
+    &::-webkit-scrollbar {
+        @apply w-[5px] transition-all duration-200
+    }
+
+    &::-webkit-scrollbar-track {
+        @apply bg-transparent rounded-md
+    }
+
+    &::-webkit-scrollbar-thumb {
+        @apply bg-transparent rounded-lg transition-all duration-200
+    }
+
+    &::-webkit-scrollbar-thumb:vertical {
+        @apply bg-black-75
+    }
+
+    @apply overflow-y-hidden hover:overflow-y-auto overflow-x-hidden mt-4 h-[calc(100%_-55px)]
+}
+
+.chatWrap {
+    @apply h-[calc(100%_-_125px)]
+}

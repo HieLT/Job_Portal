@@ -96,6 +96,7 @@ const authSlice = createSlice({
             isLoadingGetMe: false,
             authUser: {}
         }),
+
         setErrorForgotPassword: (state, action) => ({
             ...state,
             errorForgotPassword: action.payload
@@ -112,6 +113,7 @@ const authSlice = createSlice({
             ...state,
             isLoadingBtnForgotPassword: false
         }),
+
         setErrorResetPassword: (state, action) => ({
             ...state,
             errorResetPassword: action.payload
@@ -128,6 +130,7 @@ const authSlice = createSlice({
             ...state,
             isLoadingBtnResetPassword: false
         }),
+
         setAuthSuccess: (state, action) => ({
             ...state,
             isAuthSuccess: action.payload

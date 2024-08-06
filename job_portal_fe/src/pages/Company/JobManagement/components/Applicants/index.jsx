@@ -12,6 +12,8 @@ import DownloadIcon from '../../../../../assets/images/icons/duotone/download.sv
 import DetailIcon from '../../../../../assets/images/icons/duotone/detail.svg'
 import {EllipsisOutlined} from '@ant-design/icons'
 import InlineSVG from "react-inlinesvg";
+import {confirmDownloadedResume, confirmSeenResume} from "../../../../../api/jobManagement/index.js";
+import {downloadFile, getNotification} from "../../../../../utils/helper.js";
 
 export default function Applicants() {
     const isLoadingGetApplicant = useSelector(state => state.applicant.isLoadingGetAppliedCandidate)
@@ -75,7 +77,12 @@ export default function Applicants() {
             render: (text, record) => (
                 <div className={'flex items-center justify-between'}>
                     <div className={'text-[#4d94ff] max-w-[100%] whitespace-nowrap overflow-hidden overflow-ellipsis'}>
-                        <a rel="noopener noreferrer" target={'_blank'} href={text}>{text}</a>
+                        <div onClick={() => handleClickViewResume(record)} className={'cursor-pointer'}>
+                            Hồ sơ của&nbsp;
+                            <span className={'font-semibold'}>
+                                {record.candidate_id.first_name + ' ' + record.candidate_id.last_name}
+                            </span>
+                        </div>
                     </div>
                     <div className={styles.optionWrap}
                          onClick={() => setVisibleOptions((visibleOptions && visibleOptions === record._id)
@@ -85,12 +92,12 @@ export default function Applicants() {
                         {
                             (visibleOptions && visibleOptions === record._id) ?
                                 <div className={styles.dropDownWrap} onMouseLeave={() => setVisibleOptions(null)}>
-                                    <a rel="noopener noreferrer" target={'_blank'} href={text}
-                                       className={'hover:bg-[#f9f9f9] flex items-center justify-start p-2 rounded-md hover:fill-[#5B8DEF] hover:text-[#000]'}>
+                                    <div onClick={() => handleClickViewResume(record)}
+                                         className={'hover:bg-[#f9f9f9] flex items-center justify-start p-2 rounded-md hover:fill-[#5B8DEF] hover:text-[#000]'}>
                                         <InlineSVG src={DetailIcon} height={17} width={17} className={'mr-1.5'}/>
                                         Xem
-                                    </a>
-                                    <div className={styles.downloadWrap} onClick={() => handleDownloadResume(text)}>
+                                    </div>
+                                    <div className={styles.downloadWrap} onClick={() => handleDownloadResume(record)}>
                                         <InlineSVG src={DownloadIcon} height={17} width={17} className={'mr-1.5'}/>
                                         Tải xuống
                                     </div>
@@ -100,13 +107,6 @@ export default function Applicants() {
                 </div>
             )
         },
-        // {
-        //     title: 'Hành động',
-        //     dataIndex: 'action',
-        //     key: 'action',
-        //     width: 120,
-        //     align: 'center',
-        // },
     ];
     const dispatch = useDispatch()
 
@@ -123,18 +123,28 @@ export default function Applicants() {
         ]))
     }, [dispatch])
 
-    const handleDownloadResume = async (fileUrl) => {
-        const nameFile = fileUrl.split('/').pop();
-        const response = await fetch(fileUrl);
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = nameFile;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
+    const handleDownloadResume = (application) => {
+        if (!application?.downloaded_at) {
+            dispatch(confirmDownloadedResume({
+                applicationId: application._id,
+                jobId: application.job_id
+            }))
+        } else {
+            downloadFile(application.resume_path)
+                .then(() => getNotification('success', 'Tải xuống thành công'))
+                .catch(() => getNotification('error', 'Đã có lỗi xảy ra, vui lòng thử lại sau'))
+        }
+    }
+
+    const handleClickViewResume = (application) => {
+        if (!application?.seen_at) {
+            dispatch(confirmSeenResume({
+                applicationId: application._id,
+                jobId: application.job_id
+            }))
+        } else {
+            window.open(application.resume_path)
+        }
     }
 
     return <MainLayout>

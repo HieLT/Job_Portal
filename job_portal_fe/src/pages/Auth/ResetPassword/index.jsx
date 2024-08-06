@@ -17,7 +17,7 @@ function ResetPassword() {
     const dispatch = useDispatch();
     const [dataResetPassword, setDataResetPassword] = useState({
         token: '',
-        password: '',
+        newPassword: '',
         confirmPassword: ''
     });
     const errorResetPassword = useSelector(state => state.auth.errorResetPassword);
@@ -26,12 +26,17 @@ function ResetPassword() {
 
     useEffect(() => {
         dispatch(setErrorResetPassword({
-            password: '',
+            newPassword: '',
             confirmPassword: ''
         }))
     }, [dispatch])
 
     const handleChangeInput = (e, type) => {
+        dispatch(setErrorResetPassword({
+            ...errorResetPassword,
+            [type]: ''
+        }))
+
         let value = e.target.value;
         let data = _.cloneDeep(dataResetPassword);
         data[type] = value
@@ -39,61 +44,61 @@ function ResetPassword() {
     }
 
     const handleKeyDown = (event) => {
-        if (errorResetPassword.password.length !== 0 || errorResetPassword.confirmPassword.length !== 0) {
-            dispatch(setErrorResetPassword({
-                password: '',
-                confirmPassword: ''
-            }))
-        }
-
         if (event.key === 'Enter') {
             handleConfirmResetPassword()
         }
     }
 
     const handleConfirmResetPassword = () => {
-        let validate = handleCheckValidateConfirm(dataResetPassword, errorResetPassword);
+        let validate = handleCheckValidateConfirm(dataResetPassword, errorResetPassword, 'changePassword');
         dispatch(setErrorResetPassword(validate.dataError))
         if (!validate.isError) {
-            dispatch(resetPassword({...dataResetPassword, token: location.query.token}));
+            dispatch(resetPassword({
+                password: dataResetPassword.newPassword,
+                token: location.params?.token
+            }));
         }
     }
 
     return (
-        <AuthLayout title={'Đặt lại mật khẩu'} description={'Cổng thông tin việc làm'}>
-            <div className={`input-wrap mt-5`}>
+        <AuthLayout title={'Đặt lại mật khẩu'} description={'Cổng thông tin việc làm'} height={'h-screen'}
+                    width={'w-[900px]'} childrenHeight={'h-[550px]'}>
+            <div className={`input-wrap mt-5 base-input-password`}>
                 <div className={'label-wrap'}>
                     Mật khẩu
                 </div>
                 <Input.Password
-                    className={`base-input ${errorResetPassword && errorResetPassword.password.length > 0 ? 'error-input' : ''}`}
+                    className={`${errorResetPassword && errorResetPassword.newPassword?.length > 0 ? 'error-input' : ''}`}
                     placeholder={'Mật khẩu'}
-                    value={dataResetPassword.password}
-                    onChange={(e) => handleChangeInput(e, 'password')}
+                    value={dataResetPassword.newPassword}
+                    onChange={(e) => handleChangeInput(e, 'newPassword')}
                     onKeyDown={(e) => handleKeyDown(e)}
                 />
                 {
-                    errorResetPassword && errorResetPassword.password.length > 0 ?
-                        <span className={'error'}>
+                    errorResetPassword && errorResetPassword.newPassword?.length > 0 ?
+                        <span className={'error !text-[yellow]'}>
             <div className={'icon'}>
               <InlineSVG src={IconWarning} width={14} height="auto"/>
             </div>
-                            {errorResetPassword.password}
+                            {errorResetPassword.newPassword}
           </span> : ''
                 }
             </div>
 
-            <div className={`input-wrap mt-5`}>
+            <div className={`input-wrap mt-5 base-input-password`}>
+                <div className={'label-wrap'}>
+                    Xác nhận mật khẩu
+                </div>
                 <Input.Password
-                    className={`base-input ${errorResetPassword && errorResetPassword.confirmPassword.length > 0 ? 'error-input' : ''}`}
-                    placeholder={'Nhập lại Mật khẩu'}
+                    className={`${errorResetPassword && errorResetPassword.confirmPassword?.length > 0 ? 'error-input' : ''}`}
+                    placeholder={'Nhập lại mật khẩu'}
                     value={dataResetPassword.confirmPassword}
                     onChange={(e) => handleChangeInput(e, 'confirmPassword')}
                     onKeyDown={(e) => handleKeyDown(e)}
                 />
                 {
-                    errorResetPassword && errorResetPassword.confirmPassword.length > 0 ?
-                        <span className={'error'}>
+                    errorResetPassword && errorResetPassword.confirmPassword?.length > 0 ?
+                        <span className={'error !text-[yellow]'}>
             <div className={'icon'}>
               <InlineSVG src={IconWarning} width={14} height="auto"/>
             </div>
@@ -108,16 +113,21 @@ function ResetPassword() {
                     type="primary"
                     size={'large'}
                     onClick={() => handleConfirmResetPassword()}
-                    className={`main-btn-primary`}
+                    className={`auth-btn font-semibold`}
                     block
-                >Đặt lại mật khẩu
+                >
+                    Đặt lại mật khẩu
                 </Button>
             </Flex>
 
             <div className={styles.forgot}>
-                Trở lại trang <span onClick={() => navigate('/login')}>Đăng nhập</span>
+                <span onClick={() => navigate('/login')} className={'underline'}>Trở lại trang đăng nhập</span>
             </div>
-
+            <div className={'text-center text-sm mb-10 mt-2 underline cursor-pointer'}
+                 onClick={() => navigate('/')}
+            >
+                Quay lại trang chủ
+            </div>
         </AuthLayout>
     );
 }

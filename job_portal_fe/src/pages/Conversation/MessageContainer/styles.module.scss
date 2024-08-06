@@ -1,0 +1,22 @@
+.messageWrap {
+    @apply flex-1 overflow-y-auto mx-[-20px] px-[20px] pb-[20px] overflow-x-hidden;
+    scrollbar-gutter: stable;
+
+    &::-webkit-scrollbar {
+        @apply w-[5px] transition-all duration-200
+    }
+
+    &::-webkit-scrollbar-track {
+        @apply bg-transparent rounded-md
+    }
+
+    &::-webkit-scrollbar-thumb {
+        @apply bg-transparent rounded-lg transition-all duration-200
+    }
+
+    &::-webkit-scrollbar-thumb:vertical {
+        @apply bg-black-75
+    }
+
+    @apply mt-4 overflow-y-auto overflow-x-hidden h-full
+}
