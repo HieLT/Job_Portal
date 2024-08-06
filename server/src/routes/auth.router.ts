@@ -9,7 +9,7 @@ authRouter.post('/register', authController.register);
 authRouter.post('/login', authController.login);
 authRouter.get('/logged-in', [authentication], authController.checkLoggedIn);
 authRouter.put('/auth/change-password', [authentication], authController.changePassword);
-authRouter.post('/auth/request/reset-password', [authentication], authController.requestResetPassword);
+authRouter.post('/auth/request/reset-password', authController.requestResetPassword);
 authRouter.put('/auth/reset-password', authController.resetPassword);
 
 authRouter.get('/auth/google', (req, res, next) => authController.loginGoogle(req, res, next));
