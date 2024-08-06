@@ -116,7 +116,15 @@ class JobService {
                 searchCriteria.type = type;
             }
             if (experience_required) {
-                searchCriteria.experience_required = experience_required;
+                if (experience_required === 'LESS THAN 1 YEAR') {
+                    searchCriteria.experience_required = [
+                        'NOT REQUIRED',
+                        'LESS THAN 1 YEAR'
+                    ];
+                }
+                else {
+                    searchCriteria.experience_required = experience_required;
+                }
             }
             if (category) {
                 const categoryDocument = await categoryModel.findOne({ name: category });
@@ -127,9 +135,9 @@ class JobService {
                 }
             }
 
-            const numberPage = page || 1;
+            const numberPage = page ? page : 1;
             const size = 10;
-            const skip = (page - 1) * 10;
+            const skip = (numberPage - 1) * 10;
             const jobs = await jobModel.find(searchCriteria)
             .populate('company_id category_id').select('_id title description type salary position status expired_at experience_required company_id category_id is_deleted createdAt number_of_recruitment')
             .skip(skip).limit(size)
@@ -138,7 +146,7 @@ class JobService {
                 return b.createdAt.getTime() - a.createdAt.getTime();
             });
             return {
-                totalJobs: await jobModel.countDocuments(),
+                totalJobs: jobs.length,
                 jobs: jobs,
                 page: numberPage,
                 totalPages: Math.ceil(jobs.length / size),
