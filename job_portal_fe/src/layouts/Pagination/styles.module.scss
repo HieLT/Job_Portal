@@ -1,0 +1,17 @@
+.paginationContainer {
+    @apply flex items-center justify-center space-x-2;
+    margin-top: 10px; 
+  }
+  
+  .pageButton {
+    @apply p-2 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300 disabled:opacity-50;
+  }
+  
+  .arrowIcon {
+    @apply w-6 h-6;
+  }
+  
+  .pageInfo {
+    @apply text-gray-700;
+  }
+  
