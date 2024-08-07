@@ -97,7 +97,7 @@ const JobDetail = () => {
                                 <h2><strong>Yêu cầu kinh nghiệm</strong></h2>
                                 <p>{job.experience_required}</p>
                             </div>
-                            {user?.account?.role !== 'Company' && !isJobExpired(job.expired_at) && !isJobClosed && (
+                            {user?.account?.role === 'Candidate' && !isJobExpired(job.expired_at) && !isJobClosed && (
                                 <div className={styles.applyButtonContainer}>
                                     <button className={styles.applyButton} onClick={handleApplyClick}>Ứng tuyển ngay
                                     </button>
