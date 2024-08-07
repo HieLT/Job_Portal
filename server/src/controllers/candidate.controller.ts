@@ -52,6 +52,10 @@ class CandidateController {
                 let candidate = null;
                 if (account.role === "Candidate" && account.candidate) {
                     candidate = await candidateService.getCandidateById(String(account.candidate));
+                    if (candidate && candidate.is_deleted) {
+                        res.status(401).send({message: 'This account has been deleted. Please log in again'});
+                        return;
+                    }
                 } 
                 else {
                     const {id_candidate} = req.query;
@@ -78,11 +82,16 @@ class CandidateController {
             const account = await accountModel.findOne({email});
             if (account) {
                 if (account.role === "Candidate" && account.candidate) {
+                    const profile = await candidateService.getCandidateById(String(account.candidate));
+                    if (profile && profile.is_deleted) {
+                        res.status(401).send({message: 'This account has been deleted. Please log in again'});
+                        return;
+                    }
                     const resumes = await candidateService.getAllResume(String(account.candidate));
                     res.status(200).send(resumes);
                 }
                 else {
-                    res.status(401).send({message: 'Account not found'});
+                    res.status(403).send({message: "You are not authorized to get all jobs"});
                 }
             }
             else {
@@ -105,6 +114,11 @@ class CandidateController {
                     res.status(400).send({message: 'No file Uploaded'});
                 }
                 else {
+                    const profile = await candidateService.getCandidateById(String(account.candidate));
+                    if (profile && profile.is_deleted) {
+                        res.status(401).send({message: 'This account has been deleted. Please log in again'});
+                        return;
+                    }
                     const candidate = await candidateModel.findById(id_candidate).populate({
                         path: 'resume_path',
                         model: 'File'
@@ -148,6 +162,10 @@ class CandidateController {
             if (account && account.role === "Candidate") {
                 const {id_resume} = req.body;
                 const candidate = await candidateModel.findById(account.candidate);
+                if (candidate && candidate.is_deleted) {
+                    res.status(401).send({message: 'This account has been deleted. Please log in again'});
+                    return;
+                }
                 const resumes = candidate?.resume_path;
                 if (!resumes?.includes(id_resume)) {
                     res.status(400).send({message: 'This resume is not off you'});
@@ -174,6 +192,11 @@ class CandidateController {
             if (account && account.role === "Candidate") {
                 const id_candidate = String(account.candidate);
                 const {img} = req.body;
+                const profile = await candidateService.getCandidateById(String(account.candidate));
+                if (profile && profile.is_deleted) {
+                    res.status(401).send({message: 'This account has been deleted. Please log in again'});
+                    return;
+                }
                 const url = await firebaseService.uploadImage(img);
                 await candidateService.uploadAvatar(id_candidate, String(url));
                 res.status(200).send({message: 'Upload avatar successfully'});
@@ -194,6 +217,11 @@ class CandidateController {
             if (account && account.role === "Candidate") {
                 const dataUpdate = req.body;
                 const id_candidate = String(account.candidate);
+                const profile = await candidateService.getCandidateById(id_candidate);
+                if (profile && profile.is_deleted) {
+                    res.status(401).send({message: 'This account has been deleted. Please log in again'});
+                    return;
+                }
                 const candidate = await candidateService.updateCandidate(id_candidate, dataUpdate);
                 res.status(200).send(candidate);
             }
@@ -213,6 +241,23 @@ class CandidateController {
                 const {id_candidate} = req.body;
                 await candidateService.deleteCandidate(id_candidate);
                 res.status(200).send({message: 'Delete candidate success'});
+            }
+            else {
+                res.status(401).send({message: 'Account not found'});
+            }
+        } catch (error:any) {
+            res.status(500).send({message: error.message});
+        }
+    }
+
+    async restoreCandidate(req: Request, res: Response) : Promise<void> {
+        try {
+            const email = req.user;
+            const account = await accountModel.findOne({email});
+            if (account && account.role === "Admin") {
+                const {id_candidate} = req.body;
+                await candidateService.restoreCandidate(id_candidate);
+                res.status(200).send({message: 'Restore candidate success'});
             }
             else {
                 res.status(401).send({message: 'Account not found'});

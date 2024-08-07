@@ -67,8 +67,20 @@ class JobController {
 
     async getAllJobs(req: Request, res: Response) : Promise<void> {
         try {
-            const jobs = await jobService.getAllJobs();
-            res.status(200).send(jobs.slice().sort(() => Math.random() -0.5));
+            const {page} = req.query;
+            const jobs = await jobService.getAllJobs(Number(page));
+            res.status(200).send(jobs);
+        }
+        catch (error: any) {
+            res.status(500).send({message: error.message});
+        }
+    }
+
+    async getAllJobsOpen(req: Request, res: Response) : Promise<void> {
+        try {
+            const {page} = req.query;
+            const jobs = await jobService.getAllJobsOpen(Number(page));
+            res.status(200).send(jobs);
         }
         catch (error: any) {
             res.status(500).send({message: error.message});
@@ -128,6 +140,39 @@ class JobController {
             }
             else {
                 res.status(404).send({message: "Job not found"});
+            }
+        }
+        catch (error:any) {
+            res.status(500).send({message: error.message});
+        }
+    }
+
+    async searchJob(req: Request, res: Response) : Promise<void> {
+        try {
+            const {key, type, experience_required, category, page} = req.query;
+            const jobs = await jobService.searchJob(String(key), String(type), String(experience_required), String(category), Number(page));
+            res.status(200).send(jobs);
+        }
+        catch (error:any) {
+            res.status(500).send({message: error.message});
+        }
+    }
+
+    async getJobApplied(req: Request, res: Response) : Promise<void> {
+        try {
+            const email = req.user;
+            const account = await accountModel.findOne({email});
+            if (account) {
+                if (account.role === "Candidate" && account.candidate) {
+                    const applications = await applicationService.getApplicationOfCandidate(String(account.candidate));
+                    res.status(200).send(applications);
+                }
+                else {
+                    res.status(403).send({message: "You are not authorized to get all jobs"});
+                }
+            }
+            else {
+                res.status(404).send({message: "Account not found"});
             }
         }
         catch (error:any) {
@@ -270,8 +315,30 @@ class JobController {
             if (account) {
                 const {id_job} = req.body;
                 if (account.role === "Company" && account.company && await jobService.checkJob(id_job, String(account.company))) {
-                    await companyService.removeJob(String(account.company), id_job);
                     const answer = await jobService.deleteJob(id_job);
+                    res.status(200).send(answer);
+                }
+                else {
+                    res.status(403).send({message: "You are not authorized to update job"});
+                }
+            }
+            else {
+                res.status(404).send({message: "Account not found"});
+            }
+        }
+        catch (error: any) {
+            res.status(500).send({message: error.message})
+        }
+    }
+
+    async restoreJob(req: Request, res: Response) : Promise<void> {
+        try {
+            const email = req.user;
+            const account = await accountModel.findOne({email});
+            if (account) {
+                const {id_job} = req.body;
+                if (account.role === "Company" && account.company && await jobService.checkJob(id_job, String(account.company))) {
+                    const answer = await jobService.restoreJob(id_job);
                     res.status(200).send(answer);
                 }
                 else {

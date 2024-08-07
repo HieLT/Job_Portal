@@ -2,11 +2,12 @@ import { Request, Response, NextFunction } from "express";
 import passport from "../config/passport";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import sendVerificationEmail from "../utils/mailValidation";
+import mail from "../utils/mail";
 import candidateService from "../services/candidate.service";
 import companyService from "../services/company.service";
 import adminService from "../services/admin.service";
 import accountModel from "../models/account.model";
+import accountService from "../services/account.service";
 
 class Auth {
     async register(req: Request, res: Response) : Promise<void> {
@@ -27,7 +28,7 @@ class Auth {
                     socket_id: ''
                 });
                 await newUser.save();
-                await sendVerificationEmail(newUser);
+                await mail.sendVerificationEmail(newUser);
     
                 res.status(201).send({
                     message: 'User registered successfully. Please check your email to verify your account.'
@@ -51,6 +52,7 @@ class Auth {
                             expiresIn: '1h'
                         });
                         const dataUser = {
+                            _id: user._id,
                             email: user.email,
                             role: user.role,
                             token,
@@ -68,6 +70,11 @@ class Auth {
                         else if (user.admin && user.role === "Admin") {
                             // get profile admin
                             profile = await adminService.getProfile(String(user.admin));
+                        }
+
+                        if (profile && profile.is_deleted) {
+                            res.status(403).send({message: 'Your account has been deleted'});
+                            return;
                         }
                         res.status(200).send({
                             account: dataUser,
@@ -143,6 +150,7 @@ class Auth {
                 }
                 res.status(200).send({
                     account: {
+                        _id: account._id,
                         email: account.email,
                         role: account.role,
                         verified: account.verified,
@@ -213,7 +221,93 @@ class Auth {
             });
         });
     }
+
+    async changePassword(req: Request, res: Response) : Promise<void> {
+        try {
+            const email = req.user;
+            const account = await accountModel.findOne({email});
+            if (account) {
+                if (!account.isGoogleAccount) {
+                    const {oldPassword, newPassword} = req.body;
+                    if (oldPassword === newPassword) {
+                        res.status(400).send({message: 'New password must be different from old password'});
+                        return;
+                    }
+                    const comparePass = await bcrypt.compare(oldPassword, account.password!);
+                    if (comparePass) {
+                        const hashedPassword = await bcrypt.hash(newPassword, 10);
+                        await accountService.changePassword(String(account._id), hashedPassword);
+                        res.status(200).send({message: 'Password changed'});
+                    }
+                    else {
+                        res.status(400).send({message: 'Incorrect password'});
+                    }
+                }
+                else {
+                    res.status(400).send({message: 'This account is created by Google'});
+                }
+            }
+            else {
+                res.status(401).send({message: 'Account not found'});
+            }
+        }
+        catch (error: any) {
+            res.status(500).send({message: error.message});
+        }
+    }
+
+    async requestResetPassword(req: Request, res: Response) : Promise<void>{
+        try {
+            const {email} = req.body;
+            const account = await accountModel.findOne({email});
+            if (account) {
+                await mail.sendResetPassword(account);
+                res.status(200).send({message: 'Please check your email. Then click the link in the inbox to reset your password'});
+            }
+            else {
+                res.status(404).send({message: 'Account not found'});
+            }
+        }
+        catch(error:any) {
+            res.status(500).send({message: error.message});
+        }
+    }
+
+    async resetPassword(req: Request, res: Response) : Promise<void> {
+        try {
+            const {token, password} = req.body;
+            const account = await accountModel.findOne({verificationToken: token});
+            if (account) {
+                const hashedPassword = await bcrypt.hash(password, 10);
+                await accountService.changePassword(String(account._id), hashedPassword);
+                account.verificationToken = undefined;
+                await account.save();
+                res.status(200).send({message: 'Password reseted'});
+            }
+            else {
+                res.status(400).send({message: 'Invalid token'});
+            }
+        }
+        catch(error:any) {
+            res.status(500).send({message: error.message});
+        }
+    }
     
+    // async logout(req: Request, res: Response) {
+    //     try {
+    //         const email = req.user;
+    //         const account = await accountModel.findOne({email});
+    //         if (account) {
+    //             res.status(200).send({message: 'Logout successful'});
+    //         }
+    //         else {
+    //             res.status(401).send({message: 'Account not found'});
+    //         }
+    //     }
+    //     catch(error: any) {
+    //         res.status(500).send({message: error.message});
+    //     }
+    // }
 }
 
 export default new Auth();

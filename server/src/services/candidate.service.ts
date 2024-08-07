@@ -16,7 +16,7 @@ class CandidateService {
     async getCandidates() : Promise<ICandidate[]> {
         try {
             const candidates = await candidateModel.find().populate('account', 'email').select(
-                '_id first_name last_name phone avatar birth'
+                '_id first_name last_name phone avatar gender birth is_deleted'
             ).exec();
             return candidates;
         } catch (error) {
@@ -93,7 +93,20 @@ class CandidateService {
 
     async deleteCandidate(id: string) : Promise<{message: string}> {
         try {
-            await candidateModel.findByIdAndDelete(id).exec();
+            await candidateModel.findByIdAndUpdate(id, {
+                is_deleted: true
+            }).exec();
+            return {message: 'Candidate deleted successfully'};
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async restoreCandidate(id: string) : Promise<{message: string}> {
+        try {
+            await candidateModel.findByIdAndUpdate(id, {
+                is_deleted: false
+            }).exec();
             return {message: 'Candidate deleted successfully'};
         } catch (error) {
             throw error;

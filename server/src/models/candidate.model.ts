@@ -51,7 +51,8 @@ const Candidate = new Schema<ICandidate>({
         required: true
     },
     is_deleted: {
-        type: Boolean
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

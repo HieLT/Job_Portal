@@ -15,6 +15,17 @@ class AccountService {
             throw error;
         }
     }
+
+    async changePassword(id: string, password: string) : Promise<{message: string}> {
+        try {
+            await accountModel.findByIdAndUpdate(id, {
+                password
+            });
+            return {message: 'Password changed'};
+        } catch (error) {
+            throw error;
+        }
+    }
 };
 
 export default new AccountService();

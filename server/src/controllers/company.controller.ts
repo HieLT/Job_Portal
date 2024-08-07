@@ -53,6 +53,10 @@ class CompanyController {
             if (account) {
                 if (account.role === "Company" && account.company) {
                     const company = await companyService.getProfile(String(account.company));
+                    if (company && company.is_deleted) {
+                        res.status(401).send({message: 'Company has been deleted. Please log in again'});
+                        return;
+                    }
                     res.status(200).send(company);
                 }
                 else {
@@ -75,11 +79,40 @@ class CompanyController {
         }
     }
 
+    async updateLogo(req: Request, res: Response) : Promise<void> {
+        try {
+            const email = req.user;
+            const account = await accountModel.findOne({email});
+            if (account && account.role === "Company") {
+                const {logo} = req.body;
+                const logoUrl = await firebaseService.uploadImage(logo);
+                const profile = await companyService.getProfile(String(account.company));
+                if (profile && profile.is_deleted) {
+                    res.status(401).send({message: 'Company has been deleted. Please log in again'});
+                    return;
+                }
+                const company = await companyService.updateLogo(String(account.company), logoUrl);
+                res.status(200).send(company);
+            }
+            else {
+                res.status(401).send({message: 'Account not found'});
+            }
+        }
+        catch (error:any) {
+            res.status(500).send({message: error.message});
+        }
+    }
+
     async updateProfile(req: Request, res: Response) : Promise<void> {
         try {
             const email = req.user;
             const account = await accountModel.findOne({email});
             if (account && account.role === "Company") {
+                const profile = await companyService.getProfile(String(account.company));
+                if (profile && profile.is_deleted) {
+                    res.status(401).send({message: 'Company has been deleted. Please log in again'});
+                    return;
+                }
                 const company = await companyService.updateProfile(String(account.company), req.body);
                 res.status(200).send(company);
             }
@@ -96,9 +129,28 @@ class CompanyController {
         try {
             const email = req.user;
             const account = await accountModel.findOne({email});
-            if (account && account.role === "Company") {
-                await companyService.deleteCompany(String(account.company));
+            if (account && account.role === "Admin") {
+                const {id_company} = req.body;
+                await companyService.deleteCompany(id_company);
                 res.status(200).send({message: 'Delete company success'});
+            }
+            else {
+                res.status(401).send({message: 'Account not found'});
+            }
+        }
+        catch(error: any) {
+            res.status(500).send({message: error.message});
+        }
+    }
+
+    async restoreCompany(req: Request, res: Response) : Promise<void> {
+        try {
+            const email = req.user;
+            const account = await accountModel.findOne({email});
+            if (account && account.role === "Admin") {
+                const {id_company} = req.body;
+                await companyService.restoreCompany(id_company);
+                res.status(200).send({message: 'Restore company success'});
             }
             else {
                 res.status(401).send({message: 'Account not found'});

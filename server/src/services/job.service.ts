@@ -1,3 +1,4 @@
+import categoryModel from "../models/category.model";
 import jobModel from "../models/job.model";
 import { IJob } from "../models/job.model";
 
@@ -13,10 +14,58 @@ class JobService {
         }
     }
 
-    async getAllJobs() : Promise<IJob[]> {
+    async getAllJobs(page: number) : Promise<{}> {
         try {
-            const jobs = await jobModel.find().exec();
-            return jobs;
+            const numberPage = page || 1;
+            const size = 10;
+            const skip = (numberPage - 1) * size;
+            const totalJobs = await jobModel.countDocuments();
+            const jobs = await jobModel.find()
+            .populate({
+                path: 'company_id category_id',
+                select: '_id name logo description location phone website_url founded_year headcount createAt is_deleted'
+            })
+            .select('_id title description type salary position status expired_at experience_required company_id category_id is_deleted createdAt number_of_recruitment')
+            .skip(skip).limit(size).exec();
+            jobs.sort(function(a: any, b:any){
+                return b.createdAt.getTime() - a.createdAt.getTime();
+            });
+            return {
+                jobs: jobs,
+                totalJobs,
+                totalPages: Math.ceil(totalJobs / size),
+                page: numberPage,
+                size: 10
+            };
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+
+    async getAllJobsOpen(page: number) : Promise<{}> {
+        try {
+            const numberPage = page || 1;
+            const size = 10;
+            const skip = (numberPage - 1) * size;
+            const jobs = await jobModel.find({is_deleted: false, status: 'Open'})
+            .populate({
+                path: 'company_id category_id',
+                select: '_id name logo description location phone website_url founded_year headcount createAt is_deleted'
+            })
+            .select('_id title description type salary position status expired_at experience_required company_id category_id is_deleted createdAt number_of_recruitment')
+            .skip(skip).limit(size).exec();
+            const totalJobs = await jobModel.find({is_deleted: false, status: 'Open'});
+            jobs.sort(function(a: any, b:any){
+                return b.createdAt.getTime() - a.createdAt.getTime();
+            });
+            return {
+                jobs: jobs,
+                totalJobs: totalJobs.length,
+                totalPages: Math.ceil(totalJobs.length / size),
+                page: numberPage,
+                size: 10
+            };
         }
         catch (error) {
             throw error;
@@ -59,6 +108,71 @@ class JobService {
         }
     }
 
+    async  searchJob(
+        key: string | null,
+        type: string | null,
+        experience_required: string | null,
+        category: string | null,
+        page: number
+    ): Promise<{}> {
+        try {
+            const searchCriteria: any = {is_deleted: false, status: 'Open'};
+            if (key) {
+                searchCriteria.$or = [
+                    { title: { $regex: key, $options: 'i' } },
+                    { description: { $regex: key, $options: 'i' } }
+                ];
+            }
+            if (type) {
+                searchCriteria.type = type;
+            }
+            if (experience_required) {
+                if (experience_required === 'LESS THAN 1 YEAR') {
+                    searchCriteria.experience_required = [
+                        'NOT REQUIRED',
+                        'LESS THAN 1 YEAR'
+                    ];
+                }
+                else {
+                    searchCriteria.experience_required = experience_required;
+                }
+            }
+            if (category) {
+                const categoryDocument = await categoryModel.findOne({ name: category });
+                if (categoryDocument) {
+                    searchCriteria.category_id = categoryDocument._id;
+                } else {
+                    return [];
+                }
+            }
+
+            const numberPage = page ? page : 1;
+            const size = 10;
+            const skip = (numberPage - 1) * 10;
+            const totalJobs = await jobModel.find(searchCriteria);
+            const jobs = await jobModel.find(searchCriteria)
+            .populate({
+                path: 'company_id category_id',
+                select: '_id name logo description location phone website_url founded_year headcount createAt is_deleted'
+            })
+            .select('_id title description type salary position status expired_at experience_required company_id category_id is_deleted createdAt number_of_recruitment')
+            .skip(skip).limit(size)
+            .exec();
+            jobs.sort(function(a: any, b:any){
+                return b.createdAt.getTime() - a.createdAt.getTime();
+            });
+            return {
+                totalJobs: totalJobs.length,
+                jobs: jobs,
+                page: numberPage,
+                totalPages: Math.ceil(totalJobs.length / size),
+                size
+            };
+        } catch (error) {
+            throw new Error("Failed to fetch jobs");
+        }
+    }      
+
     async checkJob(id: string, company: string) : Promise<boolean> {
         try {
             const job = await jobModel.findById(id).exec();
@@ -98,8 +212,22 @@ class JobService {
 
     async deleteJob(id: string) : Promise<{message: string}> {
         try {   
-            await jobModel.findByIdAndDelete(id);
+            await jobModel.findByIdAndUpdate(id, {
+                is_deleted: true
+            });
             return {message: 'Job deleted'};
+        }
+        catch(error) {
+            throw error;
+        }
+    }
+
+    async restoreJob(id: string) : Promise<{message: string}> {
+        try {   
+            await jobModel.findByIdAndUpdate(id, {
+                is_deleted: false
+            });
+            return {message: 'Job restored'};
         }
         catch(error) {
             throw error;

@@ -36,7 +36,10 @@ const Company = new Schema<ICompany>({
         ref: 'Account',
         required: true
     },
-    is_deleted: {type: Boolean}
+    is_deleted: {
+        type: Boolean,
+        default: false
+    }
 }, {
     timestamps: true
 });

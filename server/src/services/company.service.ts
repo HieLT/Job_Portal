@@ -1,4 +1,5 @@
 import companyModel, {ICompany} from "../models/company.model";
+import jobService from "./job.service";
 
 class CompanyService {
     async createCompany(company: Partial<ICompany>) : Promise<ICompany> {
@@ -14,7 +15,7 @@ class CompanyService {
     async getAllCompanys() : Promise<ICompany[]> {
         try {
             const companys = await companyModel.find().populate('account', 'email').select(
-                '_id name logo website_url founded_year createdAt'
+                '_id name logo website_url founded_year createdAt is_deleted'
             ).exec();
             return companys;
         } catch (error) {
@@ -41,10 +42,50 @@ class CompanyService {
         }
     }
 
+    async updateLogo(id: string, logo: string) : Promise<ICompany | null> {
+        try {
+            const updatedCompany = await companyModel.findByIdAndUpdate(id, {
+                logo: logo
+            }, {new: true}).exec();
+            return updatedCompany;
+        }
+        catch(error) {
+            throw error;
+        }
+    }
+
     async deleteCompany(id: string) : Promise<{message: string}> {
         try {
-            await companyModel.findByIdAndDelete(id).exec();
+            await companyModel.findByIdAndUpdate(id, {
+                is_deleted: true
+            }, {new: true}).exec();
+            const company = await companyModel.findById(id);
+            const jobs = company?.jobs;
+            if (jobs) {
+                for (const job of jobs) {
+                    await jobService.deleteJob(String(job));
+                }
+            }
             return {message: "Company has been deleted"};
+        }
+        catch(error) {
+            throw error;
+        }
+    }
+
+    async restoreCompany(id: string) : Promise<{message: string}> {
+        try {
+            await companyModel.findByIdAndUpdate(id, {
+                is_deleted: false
+            }, {new: true}).exec();
+            const company = await companyModel.findById(id);
+            const jobs = company?.jobs;
+            if (jobs) {
+                for (const job of jobs) {
+                    await jobService.restoreJob(String(job));
+                }
+            }
+            return {message: "Company has been restored"};
         }
         catch(error) {
             throw error;
