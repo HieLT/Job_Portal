@@ -4,179 +4,41 @@
     min-height: 100vh;
 }
 
-.barContainer {
+.cardList {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.bar {
-    display: flex;
+.card {
     position: relative;
+    display: flex;
     align-items: center;
-    padding: 5px;
-    border: 1px solid #ddd;
+    padding: 10px;
     border-radius: 10px;
-    background: #fff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: background 0.3s ease, box-shadow 0.3s ease;
-
-    &:hover {
-        background: #fafafa;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-    }
 }
 
-.barContent {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    gap: 20px;
-}
-
-.barLogo {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-left: 10px;
-}
-
-.barInfo {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.barTitle {
-    font-size: 1.75rem;
-    font-weight: bold;
-    color: #333;
-    margin: 0;
-}
-
-.barDescription {
-    font-size: 1rem;
-    color: #666;
-    margin: 5px 0;
-}
-
-.barDate {
-    font-size: 0.875rem;
-    color: #999;
-}
-
-.barWebsite {
-    font-size: 0.875rem;
-    color: #007bff;
-    text-decoration: none;
-    transition: color 0.3s ease;
-
-    &:hover {
-        color: #0056b3;
-        text-decoration: underline;
-    }
-}
-
-.buttonContainer {
-    display: flex;
-    gap: 10px;
-    margin-right: 10px;
+.avatar {
+    margin-bottom: 10px;
 }
 
 .button {
-    padding: 6px 10px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 0.875rem;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: background-color 0.3s ease;
+    margin-right: 30px;
+}
 
-    &:hover {
-        background-color: #0056b3;
+@media (max-width: 480px) {
+    .card {
+        padding: 10px;
+        
     }
-}
 
-.green {
-    background-color: #28a745;
-
-    &:hover {
-        background-color: #218838;
+    .avatar {
+        width: 50px;
+        height: 50px;
     }
-}
 
-.red {
-    background-color: #dc3545;
-
-    &:hover {
-        background-color: #c82333;
+    .button {
+        font-size: 14px;
     }
-}
-.toggleSwitch {
-    position: relative;
-    display: flex;
-    align-items: center;
-    margin: 0 10px;
-}
-
-.toggleSwitch input {
-    display: none;
-}
-
-.toggleSwitch label {
-    cursor: pointer;
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 24px;
-    background-color: #ccc;
-    border-radius: 12px;
-    transition: background-color 0.3s;
-}
-
-.toggleSwitch label:before {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 20px;
-    height: 20px;
-    background-color: #fff;
-    border-radius: 50%;
-    transition: transform 0.3s;
-}
-
-.toggleSwitch input:checked + label {
-    background-color: #4caf50;
-}
-
-.toggleSwitch input:checked + label:before {
-    transform: translateX(26px);
-}
-
-.tooltip {
-    visibility: hidden;
-    background-color: #555;
-    color: #fff;
-    text-align: center;
-    border-radius: 5px;
-    padding: 5px;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%; 
-    left: 50%;
-    margin-left: -60px;
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.toggleSwitch:hover .tooltip {
-    visibility: visible;
-    opacity: 1;
 }

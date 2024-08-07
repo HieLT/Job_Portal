@@ -4,10 +4,9 @@ import HeaderOnly from '../../layouts/HeaderOnly';
 import ResultField from "./components/ResultField/index.jsx";
 import { setBreadcrumb } from '../../states/modules/app/index.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { GetJob } from '../../api/home/index.js';
+import { getJob } from '../../api/home/index.js';
 import styles from './styles.module.scss';
 
-const { Option } = Select;
 
 const Type = ['FULL-TIME', 'INTERNSHIP', 'PART-TIME'];
 const Experience = ['LESS THAN 1 YEAR', 'NOT REQUIRED', '1-3 YEARS', 'MORE THAN 3 YEARS'];
@@ -30,7 +29,7 @@ const HomePage = () => {
     }, [dispatch]);
 
     const handleSearch = async () => {
-        await dispatch(GetJob({
+        await dispatch(getJob({
             key: searchInput,
             experience_required: searchExperience,
             category: searchCategory,
@@ -40,7 +39,7 @@ const HomePage = () => {
 
     const handlePageChange = async (page) => {
         if (page >= 1 && page <= totalPages) {
-            await dispatch(GetJob({
+            await dispatch(getJob({
                 key: searchInput,
                 experience_required: searchExperience,
                 category: searchCategory,

@@ -14,9 +14,9 @@ const CompanyDetail = ({ isOpen,company, onClose }) => {
                 </div>
                 <div className={styles.modalBody}>
                     <p><strong>Website:</strong> <a href={company?.website_url} target="_blank" rel="noopener noreferrer">{company?.website_url}</a></p>
-                    <p><strong>Founded:</strong> {company?.founded_year}</p>
+                    <p><strong>Ngày Thành Lập:</strong> {company?.founded_year}</p>
                     <p><strong>Email:</strong> {company?.account?.email}</p>
-                    <p><strong>Created At:</strong> {new Date(company.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
+                    <p><strong>Ngày được khởi tạo:</strong> {new Date(company.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
                 </div>
             </div>
         </div>

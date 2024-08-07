@@ -5,12 +5,10 @@ import {
 import callApi from "../callApi";
 
 
-export const GetJob = ({key='' , experience_required='', category='' , type='' , page=1}) => (dispatch , getState) => {
+export const getJob = ({key='' , experience_required='', category='' , type='' , page=1}) => (dispatch , getState) => {
     if (!experience_required) experience_required ='';
     if (!category) category='';
     if (!type) type='';
-    console.log("key:",key,"experience_required:",experience_required,"category:",category,"type:",type,"page:",page);
-    
     return callApi({
         method: 'get',
         apiPath : 'job/search',

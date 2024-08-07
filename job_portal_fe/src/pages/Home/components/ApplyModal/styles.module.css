@@ -97,8 +97,3 @@ textarea {
     transform: translateY(-2px);
 }
 
-.submitButton:disabled {
-    background-color: #ddd;
-    cursor: not-allowed;
-    transform: none;
-}

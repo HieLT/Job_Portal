@@ -79,7 +79,11 @@ const JobDetail = () => {
                             </div>
                             <div className={styles.jobSectionItem}>
                                 <h2><strong>Ngày Đăng</strong></h2>
-                                <p>{new Date(job.createdAt).toISOString().split('T')[0]}</p>
+                                <p>{new Date(job.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
+                            </div>
+                            <div className={styles.jobSectionItem}>
+                                <h2><strong>Ngày Hết Hạn</strong></h2>
+                                <p>{new Date(job.expired_at).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
                             </div>
                             <div className={styles.jobSectionItem}>
                                 <h2><strong>Vị trí</strong></h2>
@@ -108,10 +112,12 @@ const JobDetail = () => {
                         {company?.logo && <img src={company.logo} alt="Company Logo" className={styles.companyLogo}/>}
                     </div>
                     <div className={styles.companyInfo}>
-                        <p><strong>Tên:</strong> {company?.name || "Not Available"}</p>
-                        <p><strong>Vị trí:</strong> {company?.location || "Not Available"}</p>
-                        <p><strong>Liên hệ:</strong> {company?.phone || "Not Available"}</p>
-                        <p><strong>Thành lập từ:</strong> {company?.founded_year || "Not Available"}</p>
+                        <p><strong>Tên:</strong> {company?.name }</p>
+                        <p><strong>Địa điểm:</strong> {company?.location}</p>
+                        <p><strong>Liên hệ:</strong> {company?.phone }</p>
+                        <p><strong>Website:</strong> <a href={company?.website_url} target="_blank" rel="noopener noreferrer">{company?.website_url}</a></p>
+
+
                     </div>
                 </div>
             </div>

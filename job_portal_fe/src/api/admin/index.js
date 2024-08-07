@@ -5,7 +5,7 @@ import {
     startRequestRestoreCandidate, requestRestoreCandidateSuccess, requestRestoreCandidateFail,
     startRequestDeleteCompany, requestDeleteCompanySuccess, requestDeleteCompanyFail,
     startRequestRestoreCompany, requestRestoreCompanySuccess, requestRestoreCompanyFail,
-
+    startRequestGetJob,startRequestGetJobSuccess,startRequestGetJobFail
 } from "../../states/modules/admin/index.js"
 import callApi from "../callApi";
 
@@ -109,6 +109,18 @@ export const restoreJob = (id) =>(dispatch, getState) =>{
         apiPath : 'admin/restore-company',
         actionTypes :[startRequestRestoreCompany,requestRestoreCompanySuccess,requestRestoreCompanyFail],
         variables : {id_company:id},
+        dispatch,
+        getState
+    })
+}
+
+export const getJobAdmin = (page) => (dispatch , getState) => {
+    
+    return callApi({
+        method: 'get',
+        apiPath : 'admin/get-jobs',
+        actionTypes :[startRequestGetJob,startRequestGetJobSuccess,startRequestGetJobFail],
+        variables: {page:page},
         dispatch,
         getState
     })

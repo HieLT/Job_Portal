@@ -14,8 +14,8 @@ const CandidateDetail = ({ isOpen, candidate, onClose }) => {
                 </div>
                 <div className={styles.modalBody}>
                     <p><strong>Email:</strong> {candidate?.account?.email}</p>
-                    <p><strong>Phone:</strong> {candidate?.phone}</p>
-                    <p><strong>Birthdate:</strong> {new Date(candidate?.birth).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
+                    <p><strong>Điện Thoại:</strong> {candidate?.phone}</p>
+                    <p><strong>Ngày Sinh:</strong> {new Date(candidate?.birth).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
                 </div>
             </div>
         </div>

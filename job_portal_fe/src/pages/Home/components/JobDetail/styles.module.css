@@ -3,6 +3,7 @@
     grid-template-columns: 3fr 1fr;
     gap: 20px;
     padding: 20px;
+    justify-content: center;
 }
 
 .jobSection {
@@ -97,7 +98,7 @@
     margin: 4px 2px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
+}z
 
 .applyButton:hover {
     background-color: #45a049; 
