@@ -1,0 +1,41 @@
+.customCardActions {
+    .ant-card-actions {
+        position: absolute;
+        right: 0; 
+        display: flex;
+        align-items: center;
+    }
+
+    .ant-card-actions > li {
+        margin: 0;
+    }
+
+    .ant-btn {
+        margin-right: 20px; 
+    }
+}
+
+@media (max-width: 480px) {
+    .customCardActions {
+        
+        .ant-card-meta-title{
+            @apply whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[100px]
+        }
+        
+        .ant-card-actions {
+            @apply absolute bottom-[10px] flex justify-center items-center w-full flex-row 
+        }
+
+        .ant-card-meta-description {
+            p{
+                @apply whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[100px]
+            }
+        }
+        .ant-btn {
+            @apply mr-0
+        }
+        @apply h-[200px]
+        
+    }
+    
+}

@@ -1,179 +1,100 @@
 .container {
-    padding: 20px;
-    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-    min-height: 100vh;
+    @apply p-4;
 }
 
 .barContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    @apply flex flex-col gap-4;
 }
 
-.bar {
-    display: flex;
-    position: relative;
-    align-items: center;
-    padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    background: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: background 0.3s ease, box-shadow 0.3s ease;
+.card {
+    @apply rounded-lg shadow-md;
+}
 
-    &:hover {
-        background: #fafafa;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+.cardTitle {
+    @apply text-xl;
+}
+
+.buttonLink {
+    @apply text-blue-500 font-bold;
+}
+
+.buttonLink:hover {
+    @apply text-blue-400;
+}
+
+.paragraph {
+    @apply text-sm;
+}
+
+.modal {
+    @apply max-w-3xl;
+}
+
+.modalHeader {
+    @apply bg-gray-100;
+}
+
+.modalTitle {
+    @apply text-xl;
+}
+
+.modalBody {
+    @apply p-6;
+}
+
+
+@media (max-width: 639px) {
+    .barContainer {
+        @apply flex-col;
+    }
+
+    .card {
+        @apply p-4;
+    }
+
+    .cardTitle {
+        @apply text-lg;
+    }
+
+    .buttonLink {
+        @apply text-base;
     }
 }
 
-.barContent {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-left: 20px;
-    flex-grow: 1;
-}
 
-.avatar {
-    margin-left: 10px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+@media (min-width: 640px) and (max-width: 767px) {
+    .barContainer {
+        @apply grid grid-cols-2 gap-4;
+    }
 
-.barTitle {
-    font-size: 1.75rem;
-    font-weight: bold;
-    color: #333;
-    margin: 0;
-}
+    .card {
+        @apply p-6;
 
-.barSubtitle {
-    font-size: 1rem;
-    color: #666;
-}
+        .cardTitle {
+            @apply text-xl;
+        }
 
-.barInfo {
-    font-size: 0.875rem;
-    color: #999;
-}
-
-.barWebsite {
-    font-size: 0.875rem;
-    color: #007bff;
-    text-decoration: none;
-    transition: color 0.3s ease;
-
-    &:hover {
-        color: #0056b3;
-        text-decoration: underline;
+        .buttonLink {
+            @apply text-lg;
+        }
     }
 }
 
-.buttonContainer {
-    display: flex;
-    gap: 10px;
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%); 
-}
+@media (min-width: 768px) and (max-width: 1023px) {
+    .barContainer {
+        @apply grid grid-cols-3 gap-6;
+    }
 
-.button {
-    padding: 6px 10px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 0.875rem;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: background-color 0.3s ease;
+    .card {
+        @apply p-8;
+    }
 
-    &:hover {
-        background-color: #0056b3;
+    .cardTitle {
+        @apply text-2xl;
+    }
+
+    .buttonLink {
+        @apply text-xl;
     }
 }
 
-.green {
-    background-color: #28a745;
-
-    &:hover {
-        background-color: #218838;
-    }
-}
-
-.red {
-    background-color: #dc3545;
-
-    &:hover {
-        background-color: #c82333;
-    }
-}
-.toggleSwitch {
-    display: flex;
-    align-items: center;
-    position: relative;
-    margin: 0 10px;
-}
-
-.toggleSwitch input {
-    display: none;
-}
-
-.toggleSwitch label {
-    cursor: pointer;
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 24px;
-    background-color: #ccc;
-    border-radius: 12px;
-    transition: background-color 0.3s;
-}
-
-.toggleSwitch label:before {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 20px;
-    height: 20px;
-    background-color: #fff;
-    border-radius: 50%;
-    transition: transform 0.3s;
-}
-
-.toggleSwitch input:checked + label {
-    background-color: #4caf50;
-}
-
-.toggleSwitch input:checked + label:before {
-    transform: translateX(26px);
-}
-
-.tooltip {
-    visibility: hidden;
-    background-color: #555;
-    color: #fff;
-    text-align: center;
-    border-radius: 5px;
-    padding: 5px;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%; 
-    left: 50%;
-    margin-left: -60px;
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.toggleSwitch:hover .tooltip {
-    visibility: visible;
-    opacity: 1;
-}

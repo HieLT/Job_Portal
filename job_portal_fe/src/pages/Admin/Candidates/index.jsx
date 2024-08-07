@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import styles from "./styles.module.scss";
+import { useSelector, useDispatch } from "react-redux";
+import { Card, Button, Switch, Tooltip, Avatar } from "antd";
 import MainLayout from "../../../layouts/MainLayout";
 import { setTitlePage } from "../../../states/modules/app";
-import { useSelector, useDispatch } from "react-redux";
-import { getAllCandidate } from "../../../api/admin";
+import { getAllCandidate, deleteCandidate, restoreCandidate } from "../../../api/admin";
 import CandidateDetail from "./Components/CandidateDetail/index";
-import { deleteCandidate, restoreCandidate } from "../../../api/admin";
+import styles from './styles.module.scss';
+import './styles.scss'
 
 const AdminCandidates = () => {
     const dispatch = useDispatch();
@@ -16,7 +17,7 @@ const AdminCandidates = () => {
     useEffect(() => {
         dispatch(setTitlePage('Danh sách ứng viên'));
         dispatch(getAllCandidate());
-    }, []);
+    }, [dispatch]);
 
     useEffect(() => {
         if (candidates) {
@@ -39,15 +40,10 @@ const AdminCandidates = () => {
     const handleChangeStatus = async (id) => {
         if (status[id] === false) {
             await dispatch(deleteCandidate(id));
-            dispatch(getAllCandidate());
         } else if (status[id] === true) {
             await dispatch(restoreCandidate(id));
-            dispatch(getAllCandidate());
         }
-        setStatus(prevStatus => ({
-            ...prevStatus,
-            [id]: !prevStatus[id]
-        }));
+        dispatch(getAllCandidate());
     };
 
     const getTooltipText = (id) => {
@@ -57,41 +53,42 @@ const AdminCandidates = () => {
     return (
         <MainLayout>
             <div className={styles.container}>
-                <div className={styles.barContainer}>
+                <div className={styles.cardList}>
                     {candidates.map(candidate => (
-                        <div key={candidate._id} className={styles.bar}>
-                            <img
-                                src={candidate.avatar}
-                                alt={`${candidate.first_name} ${candidate.last_name}`}
-                                className={styles.avatar}
-                            />
-                            <div className={styles.barContent}>
-                                <h2 className={styles.barTitle}>{`${candidate.first_name} ${candidate.last_name}`}</h2>
-                                <p className={styles.barSubtitle}>{candidate.email}</p>
-                                <p className={styles.barInfo}>Liên lạc: {candidate.phone}</p>
-                                <p className={styles.barInfo}>Sinh nhật: {new Date(candidate.birth).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
-                            </div>
-                            <div className={styles.buttonContainer}>
-                                <button onClick={() => handleSeeDetail(candidate)} className={styles.button}>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M12 2C6.48 2 2 12 2 12s4.48 10 10 10 10-10 10-10S17.52 2 12 2zm0 17.9c-4.14 0-7.72-3.28-9.13-7.9 1.41-4.62 5-7.9 9.13-7.9 4.14 0 7.72 3.28 9.13 7.9-1.41 4.62-5 7.9-9.13 7.9zm-1-5.9h2V7h-2v7zm0 4h2v-2h-2v2z" />
-                                    </svg>
+                        <Card
+                            key={candidate._id}
+                            className={`${styles.card} customCardActions`}
+                            hoverable
+                            cover={
+                                <Avatar src={candidate.avatar} size={60} className={styles.avatar} />
+                            }
+                            actions={[
+                                <Button 
+                                    type="primary" 
+                                    className={styles.button} 
+                                    onClick={() => handleSeeDetail(candidate)}
+                                >
                                     Chi tiết
-                                </button>
-                                <div className={styles.toggleSwitch}>
-                                    <input
-                                        type="checkbox"
-                                        id={`status-toggle-${candidate._id}`}
+                                </Button>,
+                                <Tooltip title={getTooltipText(candidate._id)} key="status-toggle">
+                                    <Switch
                                         checked={!status[candidate._id]}
                                         onChange={() => handleChangeStatus(candidate._id)}
                                     />
-                                    <label htmlFor={`status-toggle-${candidate._id}`} className={styles.slider}></label>
-                                    <div className={styles.tooltip}>
-                                        {getTooltipText(candidate._id)}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                </Tooltip>
+                            ]}
+                        >
+                            <Card.Meta
+                                title={`${candidate.first_name} ${candidate.last_name}`}
+                                description={
+                                    <>
+                                        <p>{candidate.email}</p>
+                                        <p>Liên lạc: {candidate.phone}</p>
+                                        <p>Sinh nhật: {new Date(candidate.birth).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p>
+                                    </>
+                                }
+                            />
+                        </Card>
                     ))}
                 </div>
                 {selectedCandidate && (

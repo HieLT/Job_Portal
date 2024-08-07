@@ -1,8 +1,8 @@
 import {all, fork, put} from "redux-saga/effects";
-import { GetJob } from "../../../api/home";
+import { getJob } from "../../../api/home";
 import { getCategories } from "../../../api/jobManagement/index";
 function* loadRouteData() {
-    yield put(GetJob('','','','',1))
+    yield put(getJob('','','','',1))
     yield put(getCategories())
 }
 

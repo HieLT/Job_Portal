@@ -27,7 +27,10 @@ const homeSlice = createSlice({
         }),
         startRequestGetJobFail : (state) => ({
             ...state , 
-            jobs :[]
+            jobs :[],
+            totalJobs :'',
+            totalPages :'',
+            page:''
         }),
         startRequestGetDetailJob : (state) => ({
             ...state , 

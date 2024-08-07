@@ -5,7 +5,12 @@ const homeSlice = createSlice({
     name: 'admin',
     initialState: {
         allCompany:[],
-        allCandidate:[]
+        allCandidate:[],
+        jobs: [],
+        totalJobs:'',
+        totalPages:'' , 
+        page:'',
+        jobdetail: {},
     },
     reducers: {
         startRequestGetAllCompany : (state) =>({
@@ -89,6 +94,23 @@ const homeSlice = createSlice({
         requestRestoreJobFail :(state) =>({
             ...state,
         }),
+        startRequestGetJob : (state) => ({
+            ...state , 
+        }),
+        startRequestGetJobSuccess : (state,action) => ({
+            ...state , 
+            jobs : action.payload.jobs,
+            totalJobs :action.payload.totalJobs,
+            totalPages :action.payload.totalPages,
+            page:action.payload.page
+        }),
+        startRequestGetJobFail : (state) => ({
+            ...state , 
+            jobs :[],
+            totalJobs :'',
+            totalPages :'',
+            page:''
+        }),
     }
 })
 
@@ -100,7 +122,9 @@ export const {
     startRequestDeleteCompany, requestDeleteCompanySuccess, requestDeleteCompanyFail,
     startRequestRestoreCompany, requestRestoreCompanySuccess, requestRestoreCompanyFail,
     startRequestDeleteJob, requestDeleteJobSuccess, requestDeleteJobFail,
-    startRequestRestoreJob, requestRestoreJobSuccess, requestRestoreJobFail
+    startRequestRestoreJob, requestRestoreJobSuccess, requestRestoreJobFail,
+    startRequestGetJob,startRequestGetJobSuccess,startRequestGetJobFail
+    
 } = homeSlice.actions
 
 export default homeSlice.reducer;
