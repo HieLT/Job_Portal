@@ -9,6 +9,6 @@
 1. **Clone repo:**
    git clone https://github.com/HieLT/Job_Portal.git
 2. **Chạy project:**
-   cd server
-   npm install
-   npm start
+   * cd server
+   * npm install
+   * npm start
