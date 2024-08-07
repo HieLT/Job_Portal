@@ -141,11 +141,11 @@ export default function InformationTab() {
             <div className={styles.title}>
                 <p className={''}>Cập nhật thông tin</p>
             </div>
-            <div className={'px-10 py-7'}>
+            <div className={styles.contentWrap}>
                 {
                     isLoadingGetMe ? <Skeleton active={isLoadingGetMe}/> : <>
-                        <div className={'flex justify-between'}>
-                            <div className={'w-1/4 flex flex-col items-center justify-start mt-12 ml-5'}>
+                        <div className={styles.childrenWrap}>
+                            <div className={styles.uploadWrap}>
                                 <div className={'w-fit border-[3px] rounded-[50%] h-fit hover:border-dashed'}>
                                     <Upload
                                         name="avatar"
@@ -196,9 +196,9 @@ export default function InformationTab() {
                                 }
                             </div>
 
-                            <div className={'w-2/3'}>
-                                <div className={'flex items-start justify-between'}>
-                                    <div className={'flex flex-col w-2/5 justify-start'}>
+                            <div className={styles.personalInfoWrap}>
+                                <div className={styles.rightWrap}>
+                                    <div className={styles.detailWrap}>
                                         <div className={`input-wrap`}>
                                             <div className={'label-wrap'}>
                                                 Tên công ty <span className={'required'}>*</span>
@@ -262,7 +262,7 @@ export default function InformationTab() {
                                         </div>
                                     </div>
 
-                                    <div className={'flex flex-col justify-start w-2/5'}>
+                                    <div className={styles.detailWrap}>
                                         <div className={`input-wrap`}>
                                             <div className={'label-wrap'}>
                                                 Địa chỉ <span className={'required'}>*</span>

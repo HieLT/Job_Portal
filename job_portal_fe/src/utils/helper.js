@@ -268,7 +268,11 @@ export const handleSplitSalary = (salary) => {
         const range = salary.split('-')
         return handleFormatMoney(range[0]) + ' - ' + handleFormatMoney(range[1])
     } else if (salary !== 'Thỏa thuận') {
-        return handleFormatMoney(salary)
+        let rawSalary = salary
+        if (rawSalary?.includes('.')) {
+            rawSalary = salary?.replaceAll('.', '')
+        }
+        return handleFormatMoney(rawSalary)
     }
     return salary
 }

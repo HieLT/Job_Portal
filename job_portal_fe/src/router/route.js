@@ -3,7 +3,6 @@ import {createBrowserRouter} from 'react-router-dom';
 import Home from '../pages/Home';
 import {rootLoader} from "./rootLoader.js";
 import Login from "../pages/Auth/Login";
-import AdminManagement from "../pages/AdminManagement/index.jsx";
 import AdminDashboard from "../pages/Admin/Dashboard/index.jsx";
 import AdminPostedJobs from "../pages/Admin/PostedJobs/index.jsx";
 import AdminCandidates from "../pages/Admin/Candidates/index.jsx";
@@ -63,13 +62,6 @@ const router = createBrowserRouter([
         element: <Home/>,
         loader: ({request, params}) => rootLoader(
             {request, params}, false, 'LOAD_HOME_PAGE'
-        )
-    },
-    {
-        path: '/admins',
-        element: <AdminManagement/>,
-        loader: ({request, params}) => rootLoader(
-            {request, params}, true, 'LOAD_USER_PAGE', USER_ROLE['ADMIN']
         )
     },
     {

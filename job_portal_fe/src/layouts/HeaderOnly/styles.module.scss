@@ -19,15 +19,25 @@
         }
 
         .mainWrapWithConditionSideBarClose {
-            @apply w-full ml-[64px]
+            @apply w-full
         }
 
-        @media only screen and (max-width: 1024px) {
+        @media (min-width: 600px) and (max-width: 1024px) {
             .mainWrap {
-                @apply w-[calc(100%_-_64px)] ml-[64px] h-full transition-all duration-500
+                @apply w-full h-full transition-all duration-500
             }
             .mainWrapWithConditionSideBarClose {
-                @apply w-[calc(100%_-_64px)] ml-[64px]
+                @apply w-full ml-[64px]
+            }
+        }
+
+        @media (max-width: 428px) and (min-width: 350px){
+            .mainWrap {
+                .mainContentWrap {
+                    @apply bg-gray-115 pt-[68px] px-5 pb-[40px] min-h-screen
+                }
+
+                @apply w-full h-full transition-all duration-500
             }
         }
 

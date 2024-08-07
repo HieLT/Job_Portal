@@ -53,3 +53,9 @@
 
     @apply relative bg-[#f1f1f4] w-4 h-4 rounded-md flex items-center justify-center p-3 cursor-pointer hover:bg-[#e0e0e4] ml-6
 }
+
+@media (max-width: 428px) and (min-width: 350px){
+    .listWrap {
+        @apply p-4
+    }
+}

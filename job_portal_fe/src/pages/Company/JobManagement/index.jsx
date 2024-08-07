@@ -22,6 +22,7 @@ import ApplicantIcon from '../../../assets/images/icons/duotone/applicant.svg'
 import IconSearch from '../../../assets/images/icons/duotone/magnifying-glass.svg'
 import {handleFindLabelByValue, handleSplitSalary} from "../../../utils/helper.js";
 import {updateJobStatus} from "../../../api/jobManagement/index.js";
+import {setActiveConversation} from "../../../states/modules/conversation/index.js";
 
 export default function JobManagement() {
     const [isTypeModalCreate, setIsTypeModalCreate] = useState(true);
@@ -30,12 +31,15 @@ export default function JobManagement() {
     const isLoadingGetJobs = useSelector(state => state.jobManagement.isLoadingGetJobs);
     const isLoadingUpdateStatus = useSelector(state => state.jobManagement.isLoadingUpdateStatus);
     const dispatch = useDispatch();
+    const [isMobileScreen, setIsMobileScreen] = useState(false)
+
     const columns = [
         {
             title: 'Tiêu đề',
             dataIndex: 'title',
             key: 'title',
             showSorterTooltip: false,
+            width: isMobileScreen ? 100 : 200,
             sorter: (a, b) => a.age - b.age,
             render: (text) => <span className={'font-bold'}>{text}</span>
         },
@@ -44,6 +48,7 @@ export default function JobManagement() {
             dataIndex: 'salary',
             key: 'salary',
             showSorterTooltip: false,
+            width: isMobileScreen ? 200 : '',
             sorter: (a, b) => a.age - b.age,
             render: (text) => handleSplitSalary(text)
         },
@@ -67,6 +72,7 @@ export default function JobManagement() {
             title: 'Loại công việc',
             dataIndex: 'type',
             key: 'type',
+            width: isMobileScreen ? 100 : '',
             showSorterTooltip: false,
             render: (text) => handleFindLabelByValue(EMPLOYEE_TYPE, text)
         },
@@ -93,14 +99,16 @@ export default function JobManagement() {
             key: 'applied_candidates',
             showSorterTooltip: false,
             align: 'center',
+            width: isMobileScreen ? 100 : '',
             render: (text) => (text?.length || 0) + ' ứng viên'
         },
         {
             title: 'Hành động',
             dataIndex: 'action',
             key: 'action',
-            width: 120,
+            width: isMobileScreen ? 100 : 120,
             align: 'center',
+            fixed: 'right',
             render: (text, record) =>
                 <div className={'flex items-center justify-center'}>
                     <div className={styles.btnAction} onClick={() => openModalEdit(record)}>
@@ -123,6 +131,14 @@ export default function JobManagement() {
 
     useEffect(() => {
         dispatch(setTitlePage('Quản lý công việc'))
+    }, [dispatch])
+
+    useEffect(() => {
+        if (window.innerWidth >= 360 && window.innerWidth <= 768) {
+            setIsMobileScreen(true)
+        } else {
+            setIsMobileScreen(false)
+        }
     }, [dispatch])
 
     const handleReloadData = () => {

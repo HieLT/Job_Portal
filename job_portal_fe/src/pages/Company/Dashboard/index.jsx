@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import './styles.scss'
 import MainLayout from "../../../layouts/MainLayout/index.jsx";
 import {useDispatch, useSelector} from "react-redux";
@@ -18,12 +18,14 @@ export default function CompanyDashboard() {
     const isLoadingGetJobsAboutToExpire = useSelector(state => state.companyDashboard.isLoadingGetJobsAboutToExpire)
     const jobsAboutToExpire = useSelector(state => state.companyDashboard.jobsAboutToExpire)
     const isLoadingUpdateJobStatus = useSelector(state => state.companyDashboard.isLoadingUpdateJobStatus)
+    const [isMobileScreen, setIsMobileScreen] = useState(false)
     const columns = [
         {
             title: 'Tiêu đề',
             dataIndex: 'title',
             key: 'title',
             showSorterTooltip: false,
+            width: isMobileScreen ? 100 : '',
             sorter: (a, b) => a.age - b.age,
             render: (text) => <span className={'font-bold'}>{text}</span>
         },
@@ -41,6 +43,7 @@ export default function CompanyDashboard() {
             dataIndex: 'type',
             key: 'type',
             showSorterTooltip: false,
+            width: isMobileScreen ? 100 : '',
             render: (text) => handleFindLabelByValue(EMPLOYEE_TYPE, text)
         },
         {
@@ -48,15 +51,26 @@ export default function CompanyDashboard() {
             dataIndex: 'expired_at',
             key: 'expired_at',
             showSorterTooltip: false,
+            width: isMobileScreen ? 100 : '',
             render: (text) => moment(text).format('DD/MM/YYYY')
+        },
+        {
+            title: 'Số lượng đã ứng tuyển',
+            dataIndex: 'applied_candidates',
+            key: 'applied_candidates',
+            showSorterTooltip: false,
+            align: 'center',
+            width: isMobileScreen ? 100 : '',
+            render: (text) => (text?.length || 0) + ' ứng viên'
         },
         {
             title: 'Trạng thái',
             dataIndex: 'status',
             key: 'status',
             showSorterTooltip: false,
-            width: 130,
+            width: isMobileScreen ? 60 : 130,
             align: 'center',
+            fixed: 'right',
             render: (text, record) => <Tooltip title={`Bấm để ${text === JOB_STATUS['OPEN'] ? 'đóng' : 'mở'}`}>
                 <Switch className={'main-switch'} checked={text === JOB_STATUS['OPEN']}
                         loading={isLoadingUpdateJobStatus}
@@ -67,19 +81,16 @@ export default function CompanyDashboard() {
                 />
             </Tooltip>
         },
-        {
-            title: 'Số lượng đã ứng tuyển',
-            dataIndex: 'applied_candidates',
-            key: 'applied_candidates',
-            showSorterTooltip: false,
-            align: 'center',
-            render: (text) => (text?.length || 0) + ' ứng viên'
-        }
     ];
 
     useEffect(() => {
         dispatch(setTitlePage('Tổng quan'))
         dispatch(setBreadcrumb([]))
+        if (window.innerWidth >= 360 && window.innerWidth <= 768) {
+            setIsMobileScreen(true)
+        } else {
+            setIsMobileScreen(false)
+        }
     }, [dispatch])
 
     return <MainLayout>

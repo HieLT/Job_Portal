@@ -103,8 +103,8 @@ export default function ResumeTab() {
                 {
                     isLoadingGetResumes ? <Skeleton active/> :
                         <div>
-                            <div className={'mt-3 input-wrap flex justify-between w-full'}>
-                                <div className={'w-[50%]'}>
+                            <div className={styles.tabContainer}>
+                                <div className={styles.halfPart}>
                                     <Upload
                                         name="file"
                                         disabled={_.isEmpty(authUser?.profile)}
@@ -158,7 +158,7 @@ export default function ResumeTab() {
                                         }
                                     </div>
                                 </div>
-                                <div className={'w-[50%]'}>
+                                <div className={styles.halfPartRight}>
                                     <div className={'font-semibold text-lg mb-5'}>Tải lên gần đây</div>
                                     {
                                         !_.isEmpty(myResumes) ?
@@ -166,12 +166,12 @@ export default function ResumeTab() {
                                                 <div key={item._id}
                                                      className={'flex items-center justify-between mb-3.5'}>
                                                     <a href={String(item.file_url)} target={'_blank'}
-                                                       className={'flex items-center w-full justify-start text-[15px] font-medium'}
+                                                       className={'flex items-center w-[80%] justify-start text-[15px] font-medium'}
                                                        rel="noreferrer"
                                                     >
                                                         <InlineSVG src={FileIcon} width={24} height={24}/>
                                                         <div
-                                                            className={'ml-2.5 max-w-[80%] whitespace-nowrap overflow-hidden overflow-ellipsis'}>
+                                                            className={'ml-2.5 w-full whitespace-nowrap overflow-hidden overflow-ellipsis'}>
                                                             {item.file_name}
                                                         </div>
                                                     </a>

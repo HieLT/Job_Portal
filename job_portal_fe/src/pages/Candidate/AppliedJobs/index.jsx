@@ -6,13 +6,9 @@ import {goToPage, setBreadcrumb} from "../../../states/modules/app/index.js";
 import {Badge, Image, Select, Skeleton, Tag, Tooltip} from "antd";
 import DefaultLogo from '../../../assets/images/logos/user_default.png'
 import {CreditCardOutlined, EyeOutlined} from '@ant-design/icons'
-import {
-    convertISOStringToDate,
-    convertISOStringToDateTime,
-    handleFindLabelByValue,
-    handleSplitSalary
-} from "../../../utils/helper.js";
+import {convertISOStringToDateTime, handleFindLabelByValue, handleSplitSalary} from "../../../utils/helper.js";
 import {EMPLOYEE_TYPE, JOB_EXPERIENCE, JOB_STATUS} from "../../../utils/constants.js";
+import styles from './styles.module.scss'
 import moment from "moment";
 
 export default function AppliedJobs() {
@@ -72,9 +68,9 @@ export default function AppliedJobs() {
     }
 
     return <HeaderOnly>
-        <div className={'py-8 px-20'}>
-            <div className={'flex justify-between items-center'}>
-                <div className={'font-semibold text-[19px]'}>
+        <div className={styles.container}>
+            <div className={styles.headerWrap}>
+                <div className={styles.title}>
                     Công việc đã ứng tuyển
                 </div>
                 <Select
@@ -101,42 +97,44 @@ export default function AppliedJobs() {
                             const job = item.job_id
                             const company = job.company_id
                             const content = <div key={item._id}
-                                                 className={'flex items-center justify-between px-8 py-5 w-full bg-[white] rounded-md h-[180px] border-[1px] mb-6'}
+                                                 className={styles.jobCardWrap}
                             >
-                                <div className={'h-full w-[130px]'}>
+                                <div className={styles.imageWrap}>
                                     <Image src={company.logo || DefaultLogo} width={'100%'} height={'100%'}/>
                                 </div>
-                                <div className={'flex-1 mx-6'}>
-                                    <div className={'flex items-center'}>
-                                        <div className={'font-semibold text-[17px]'}>{job.title}</div>
-                                        &nbsp;
+                                <div className={styles.infoWrap}>
+                                    <div className={styles.headerInfoWrap}>
+                                        <div className={`${styles.titleContent} hover:underline cursor-pointer`}
+                                            onClick={() => dispatch(goToPage({path: `/job/${job._id}`}))}
+                                        >
+                                            {job.title}
+                                        </div>
                                         <div className={'text-[15px]'}>
-                                            ({handleFindLabelByValue(JOB_EXPERIENCE, job.experience_required)} kinh
-                                            nghiệm)
+                                            ({handleFindLabelByValue(JOB_EXPERIENCE, job.experience_required)} kinh nghiệm)
                                         </div>
                                     </div>
-                                    <div className={'font-medium text-gray-500 text-[15px] mt-1.5'}>
+                                    <div className={styles.company}>
                                         {company.name?.toUpperCase()}
                                     </div>
-                                    <div className={'flex items-center mt-1.5 text-[15px]'}>
+                                    <div className={styles.detailInfoWrap}>
                                         <Tooltip title={job.position}>
                                             <div
-                                                className={'font-medium w-[30%] whitespace-nowrap overflow-hidden overflow-ellipsis'}>
+                                                className={styles.position}>
                                                 Vị trí: {job.position}
                                             </div>
                                         </Tooltip>
-                                        <div className={'flex items-center ml-[50px]'}>
+                                        <div className={styles.salaryAndJobTypeWrap}>
                                             <Tag className={'font-semibold !text-[14px]'}
                                                  color={handleFindColorByEmployeeType(job.type)}>
                                                 {handleFindLabelByValue(EMPLOYEE_TYPE, job.type)}
                                             </Tag>
-                                            <div className={'flex items-center ml-6 font-medium'}>
+                                            <div className={styles.salary}>
                                                 <CreditCardOutlined/>
                                                 <div className={'ml-2'}>{handleSplitSalary(job.salary)}</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className={'flex items-center'}>
+                                    <div className={styles.resumeWrap}>
                                         <div className={'text-[15px] mt-1.5 font-medium text-gray-500'}>
                                             CV đã ứng tuyển:
                                             <a href={item.resume_path} target={'_blank'}
@@ -146,7 +144,7 @@ export default function AppliedJobs() {
                                                 CV tải lên
                                             </a>
                                         </div>
-                                        <div className={'flex items-center ml-[93px]'}>
+                                        <div className={styles.resumeStatusWrap}>
                                             <Tag className={'font-semibold !text-[14px]'}
                                                  color={handleFindColorAndLabelByResumeStatus(item, 'color')}
                                             >
@@ -154,23 +152,26 @@ export default function AppliedJobs() {
                                             </Tag>
                                         </div>
                                     </div>
-                                    <div className={'text-[15px] mt-1.5 font-medium'}>
+                                    <div className={styles.appliedDate}>
                                         Ngày ứng tuyển: {convertISOStringToDateTime(item.createdAt)}
                                     </div>
                                 </div>
-                                <div className={'w-1/12'}>
-                                    <Tooltip title={'Chi tiết'}>
-                                        <div
-                                            onClick={() => dispatch(goToPage({path: `/job/${job._id}`}))}
-                                            className={'w-[50px] h-[50px] p-3.5 rounded-[50%] bg-[#daede8] cursor-pointer flex items-center justify-center'}
-                                        >
-                                            <EyeOutlined style={{fontSize: '20px', color: '#048565'}}/>
-                                        </div>
-                                    </Tooltip>
-                                </div>
+                                {
+                                    !(window.innerWidth >= 360 && window.innerWidth <= 768) ?
+                                        <div className={styles.detailBtn}>
+                                            <Tooltip title={'Chi tiết'}>
+                                                <div
+                                                    onClick={() => dispatch(goToPage({path: `/job/${job._id}`}))}
+                                                    className={'w-[50px] h-[50px] p-3.5 rounded-[50%] bg-[#daede8] cursor-pointer flex items-center justify-center'}
+                                                >
+                                                    <EyeOutlined style={{fontSize: '20px', color: '#048565'}}/>
+                                                </div>
+                                            </Tooltip>
+                                        </div> : ''
+                                }
                             </div>
 
-                            if (item.status === JOB_STATUS['CLOSED']) {
+                            if (item.status === JOB_STATUS['CLOSED'] || moment(item.createdAt)?.isBefore(moment())) {
                                 return <Badge.Ribbon text={'Đã đóng'} key={item._id} color={"red"}>
                                     {content}
                                 </Badge.Ribbon>

@@ -3,3 +3,14 @@
         @apply h-[calc(100vh_-_350px)]
     }
 }
+
+@media (max-width: 428px) and (min-width: 350px){
+    .bottom-table-custom {
+        .ant-table-header {
+            @apply h-[90px]
+        }
+        .ant-table-body {
+            @apply max-h-[calc(100vh_-_430px)] min-h-[calc(100vh_-_430px)]
+        }
+    }
+}

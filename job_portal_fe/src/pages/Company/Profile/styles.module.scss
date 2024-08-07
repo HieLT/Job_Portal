@@ -3,16 +3,30 @@
         @apply border-[#17c653]
     }
 
-    .info {
-        a {
-            @apply hover:text-[#1b84ff]
+    .infoWrap {
+        .info {
+            a {
+                @apply hover:text-[#1b84ff]
+            }
+
+            @apply flex justify-center items-center
         }
 
-        @apply flex justify-center items-center
+        @apply flex justify-center items-center text-[#78829d] mt-2.5
     }
 
     background-image: url("../../../assets/images/logos/hero-bg.png");
     background-size: cover;
     background-position: 50%;
     @apply h-[300px] flex items-center justify-center flex-col
+}
+
+@media (max-width: 428px) and (min-width: 350px){
+    .infoWrap {
+        div {
+            @apply mr-0
+        }
+
+        @apply flex justify-center flex-col items-center mb-5
+    }
 }
