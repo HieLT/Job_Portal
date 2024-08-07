@@ -45,3 +45,15 @@
 .chatWrap {
     @apply h-[calc(100%_-_125px)]
 }
+
+.messageFrameWrap {
+    @apply h-full p-8
+}
+
+.hiddenFrameWrap {
+    @apply hidden #{!important}
+}
+
+.visibleFrameWrap {
+    @apply h-full p-8 w-full #{!important}
+}

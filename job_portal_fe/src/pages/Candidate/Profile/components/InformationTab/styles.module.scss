@@ -14,6 +14,7 @@
         outline: none;
         border: none;
     }
+
     border-radius: 6px;
     background-color: #f9f9f9;
     width: 100%;
@@ -24,5 +25,55 @@
 .deleteBtn {
     svg {
         @apply hover:fill-[red] cursor-pointer
+    }
+}
+
+.childrenContainer {
+    .uploadContainer {
+        @apply w-1/4 flex flex-col items-center mt-12 ml-5
+    }
+
+    .personalInfoContainer {
+        .rightColumn {
+            .leftPart {
+                @apply flex flex-col w-2/5 justify-start
+            }
+
+            .rightPart {
+                @apply flex flex-col justify-start w-2/5
+            }
+
+            @apply flex items-start justify-between
+        }
+
+        @apply w-2/3
+    }
+
+    @apply flex justify-between
+}
+
+@media (max-width: 428px) and (min-width: 350px) {
+    .childrenContainer {
+        .uploadContainer {
+            @apply w-full flex flex-col items-center mt-0 ml-0 mb-8
+        }
+
+        .personalInfoContainer {
+            .rightColumn {
+                .leftPart {
+                    @apply w-full
+                }
+
+                .rightPart {
+                    @apply w-full
+                }
+
+                @apply flex-col
+            }
+
+            @apply w-full
+        }
+
+        @apply flex-col
     }
 }

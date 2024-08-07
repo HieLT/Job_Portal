@@ -36,10 +36,11 @@ export default function Conversation() {
     const [scrollToBottom, setScrollToBottom] = useState(false)
     const [sendMessage, setSendMessage] = useState('')
     const inputRef = useRef()
+    const [companies, setCompanies] = useState([])
+    const [isMobileScreen, setIsMobileScreen] = useState(false)
 
     const hasAvatarOrLogo = activeConversation?.avatar || activeConversation?.logo
-    const isCandidate = authUser?.account.role === USER_ROLE['CANDIDATE']
-    const [companies, setCompanies] = useState([])
+    const isCandidate = authUser?.account?.role === USER_ROLE['CANDIDATE']
 
     const handleChangeInput = (value, type) => {
         setSendMessage(type === 'text' ? value : prevState => prevState + value.native)
@@ -113,12 +114,24 @@ export default function Conversation() {
         }
     }, [appliedCompanies, authUser, conversations])
 
+    useEffect(() => {
+        dispatch(setActiveConversation({}))
+        if (window.innerWidth >= 360 && window.innerWidth <= 768) {
+            setIsMobileScreen(true)
+        } else {
+            setIsMobileScreen(false)
+        }
+    }, [dispatch])
+
     return <HeaderOnly>
         <div className={'h-[calc(100vh_-_132px)] mt-6'}>
-            <div className={'h-full flex items-center rounded-md bg-[white] shadow-[0_3px_4px_4px_#00000008]'}>
+            <div
+                className={`h-full ${!isMobileScreen ? 'flex' : ''} items-center rounded-md bg-[white] shadow-[0_3px_4px_4px_#00000008]`}>
 
                 {/* Conversations */}
-                <div className={`${isCandidate ? 'w-1/4' : 'w-1/3'} p-8 border-r-[1px] h-full flex flex-col`}>
+                <div className={`p-8 border-r-[1px] h-full flex flex-col
+                    ${isMobileScreen ? (!_.isEmpty(activeConversation) ? 'hidden' : 'w-full') : `${isCandidate ? 'w-1/4' : 'w-1/3'}`}`}
+                >
                     <Input
                         prefix={<img src={IconSearch} className={`w-3.5 mr-1.5`} alt=""/>}
                         className={`main-input`}
@@ -168,30 +181,43 @@ export default function Conversation() {
                 </div>
 
                 {/* Message */}
-                <div className={`${isCandidate ? 'w-1/2' : 'w-2/3'} h-full p-8`}>
+                <div
+                    className={`${isMobileScreen ? (!_.isEmpty(activeConversation) ? styles.visibleFrameWrap : styles.hiddenFrameWrap) : `${isCandidate ? 'w-1/2' : 'w-2/3'} p-8 w-full h-full`}`}>
                     {
                         isLoadingGetOldMessages ? <Skeleton active/> :
                             (
                                 !_.isEmpty(activeConversation) ?
                                     <div className={'h-full relative'}>
-                                        <div className={'flex items-center border-b-[1px] pb-5'}>
-                                            <Avatar
-                                                size={'large'}
-                                                src={!hasAvatarOrLogo ? DefaultAvatar : (isCandidate ? activeConversation?.logo : activeConversation?.avatar)}/>
-                                            <div className={'ml-3'}>
-                                                <div className={'font-semibold text-base'}>
-                                                    {isCandidate ? activeConversation.name.toUpperCase() : (activeConversation.first_name + ' ' + activeConversation.last_name)}
+                                        <div className={'flex items-center justify-between border-b-[1px]'}>
+                                            <div className={'flex items-center pb-5'}>
+                                                <Avatar
+                                                    size={'large'}
+                                                    src={!hasAvatarOrLogo ? DefaultAvatar : (isCandidate ? activeConversation?.logo : activeConversation?.avatar)}/>
+                                                <div className={'ml-3'}>
+                                                    <div className={`font-semibold text-base max-w-[60%] whitespace-nowrap overflow-hidden overflow-ellipsis`}>
+                                                        {isCandidate ? activeConversation.name.toUpperCase() : (activeConversation.first_name + ' ' + activeConversation.last_name)}
+                                                    </div>
                                                 </div>
                                             </div>
+                                            {
+                                                isMobileScreen ?
+                                                    <div className={'font-semibold pb-5 text-gray-500 text-[15px]'}
+                                                         onClick={() => dispatch(setActiveConversation({}))}
+                                                    >
+                                                        Quay lại
+                                                    </div> : ''
+                                            }
                                         </div>
                                         <div className={styles.chatWrap}>
                                             <MessageContainer setScrollToBottom={setScrollToBottom}
                                                               receiver={activeConversation}/>
                                         </div>
-                                        {scrollToBottom ?
-                                            <Button shape={'circle'} icon={<DownOutlined/>}
-                                                    onClick={handleScrollToBottom}
-                                                    className={'absolute bottom-[60px] right-0 bg-white'}></Button> : ''}
+                                        {
+                                            scrollToBottom ?
+                                                <Button shape={'circle'} icon={<DownOutlined/>}
+                                                        onClick={handleScrollToBottom}
+                                                        className={'absolute bottom-[60px] right-0 bg-white'}></Button> : ''
+                                        }
                                         <div className={'border-t-[1px] pt-[20px]'}>
                                             <Input
                                                 ref={inputRef}
@@ -231,7 +257,7 @@ export default function Conversation() {
 
                 {/* Applied companies */}
                 {
-                    isCandidate ? <div className={'py-6 pl-4 w-1/4 border-l-[1px] h-full'}>
+                    isCandidate ? <div className={`py-6 pl-4 w-1/4 border-l-[1px] h-full ${isMobileScreen ? '!w-full !pr-4' : ''}`}>
                         {
                             isLoadingGetAppliedCompanies ? <Skeleton active/> :
                                 (

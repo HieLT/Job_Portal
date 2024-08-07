@@ -6,6 +6,31 @@
 
     box-shadow: 0 3px 4px 0 #00000008;
     border: 1px solid #f1f1f4;
+
+    .contentWrap {
+        .childrenWrap {
+            .uploadWrap {
+                @apply w-1/4 flex flex-col items-center justify-start mt-12 ml-5
+            }
+
+            .personalInfoWrap {
+                .rightWrap {
+                    .detailWrap {
+                        @apply flex flex-col w-2/5 justify-start
+                    }
+
+                    @apply flex items-start justify-between
+                }
+
+                @apply w-2/3
+            }
+
+            @apply flex justify-between
+        }
+
+        @apply px-10 py-7
+    }
+
     @apply bg-[white] rounded-[0.75rem] w-full h-full mt-3 pb-6
 }
 
@@ -14,9 +39,38 @@
         outline: none;
         border: none;
     }
+
     border-radius: 6px;
     background-color: #f9f9f9;
     width: 100%;
     height: 100px;
     @apply px-[18px] py-[12px]
+}
+
+@media (max-width: 428px) and (min-width: 350px) {
+    .cardWrap {
+        .contentWrap {
+            .childrenWrap {
+                .uploadWrap {
+                    @apply w-full flex flex-col items-center mt-0 ml-0 mb-8
+                }
+
+                .personalInfoWrap {
+                    .rightWrap {
+                        .detailWrap {
+                            @apply flex flex-col w-full justify-start
+                        }
+
+                        @apply flex items-start justify-between flex-col
+                    }
+
+                    @apply w-full
+                }
+
+                @apply flex-col justify-center items-center
+            }
+
+            @apply px-10 py-10
+        }
+    }
 }

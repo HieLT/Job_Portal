@@ -34,14 +34,14 @@ function AuthLayout(props) {
         <div className={`bg-[#f1f0fe] ${height || 'h-auto'} p-10 flex items-center`}>
             <div className={`${width || ''} ${childrenHeight || ''} rounded-xl ml-auto mr-auto bg-[white] overflow-hidden`}>
                 <div className={styles.authLoginWrap}>
-                    <div className={'w-1/2 m-auto p-8'}>
+                    <div className={styles.themeWrap}>
                         <img src={Theme} alt=""/>
                     </div>
                     <div className={styles.formWrap}>
                         <div className={styles.content}>
                             <div className={styles.header}>{title}</div>
                             <div className={styles.headerDetail}>{description}</div>
-                            <div>
+                            <div className={styles.childrenWrap}>
                                 {children}
                             </div>
                         </div>

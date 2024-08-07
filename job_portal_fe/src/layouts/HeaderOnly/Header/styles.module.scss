@@ -119,12 +119,14 @@
     shadow-[0_10px_30px_0_rgba(82,63,105,0.05)] fixed z-10
 }
 
-@media only screen and (max-width: 375px) {
+@media (max-width: 428px) and (min-width: 350px){
     .headerWrap {
         .headerLeftWrap {
             .btnToggleSideBar {
                 @apply block
             }
         }
+
+        @apply pl-8 px-3
     }
 }

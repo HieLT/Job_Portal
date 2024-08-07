@@ -1,0 +1,129 @@
+.container {
+    .headerWrap {
+        .title {
+            @apply font-semibold text-[19px]
+        }
+
+        @apply flex justify-between items-center
+    }
+
+    .jobCardWrap {
+        .imageWrap {
+            @apply h-full w-[130px]
+        }
+
+        .infoWrap {
+            .company {
+                @apply font-medium text-gray-500 text-[15px] mt-1.5
+            }
+
+            .headerInfoWrap {
+                .titleContent {
+                    @apply font-bold text-[17px] mr-1
+                }
+
+                @apply flex items-center
+            }
+
+            .detailInfoWrap {
+                .position {
+                    @apply font-medium w-[30%] whitespace-nowrap overflow-hidden overflow-ellipsis
+                }
+
+                .salaryAndJobTypeWrap {
+                    .salary {
+                        @apply flex items-center ml-6 font-medium
+                    }
+
+                    @apply flex items-center ml-[50px]
+                }
+
+                @apply flex items-center mt-1.5 text-[15px]
+            }
+
+            .resumeWrap {
+                .resumeStatusWrap {
+                    @apply flex items-center ml-[93px]
+                }
+
+                @apply flex items-center
+            }
+
+            .appliedDate {
+                @apply text-[15px] mt-1.5 font-medium
+            }
+
+            @apply flex-1 mx-6
+        }
+
+        .detailBtn {
+            @apply w-1/12
+        }
+
+        @apply flex items-center justify-between px-8 py-5 w-full bg-[white] rounded-md h-[200px] border-[1px] mb-6
+    }
+
+    @apply py-8 px-20
+}
+
+@media (max-width: 428px) and (min-width: 350px) {
+    .container {
+        .headerWrap {
+            .title {
+                @apply mb-3
+            }
+
+            @apply flex-col
+        }
+
+        .jobCardWrap {
+            .imageWrap {
+                @apply h-fit w-[60px]
+            }
+
+            .infoWrap {
+                .company {
+                    @apply mt-0
+                }
+
+                .headerInfoWrap {
+                    @apply flex-col w-full items-start
+                }
+
+                .detailInfoWrap {
+                    .position {
+                        @apply w-full
+                    }
+
+                    .salaryAndJobTypeWrap {
+                        .salary {
+                            @apply ml-0 mt-1.5
+                        }
+
+                        @apply flex-col items-start ml-0 mt-1 w-full
+                    }
+
+                    @apply flex-col mt-3
+                }
+
+                .resumeWrap {
+                    .resumeStatusWrap {
+                        @apply ml-0 mt-0
+                    }
+
+                    @apply flex-col items-start mt-3
+                }
+
+                .appliedDate {
+                    @apply mt-6 text-gray-500
+                }
+
+                @apply flex-1 mr-0 h-full
+            }
+
+            @apply flex items-start justify-between p-5 w-full bg-[white] rounded-md h-[350px] border-[1px] mb-6
+        }
+
+        @apply py-8 px-2
+    }
+}

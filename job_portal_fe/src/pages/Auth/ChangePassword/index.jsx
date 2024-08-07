@@ -57,7 +57,7 @@ function ChangePassword() {
                 <p className={''}>Đổi mật khẩu</p>
             </div>
             <div className={'px-10 py-7'}>
-                <div className={'w-1/2'}>
+                <div className={styles.contentWrap}>
                     <div className={`input-wrap`}>
                         <div className={'label-wrap'}>
                             Mật khẩu hiện tại <span className={'required'}>*</span>
@@ -123,7 +123,7 @@ function ChangePassword() {
                     </div>
                 </div>
             </div>
-            <div className={'w-full flex justify-start px-10'}>
+            <div className={styles.buttonWrap}>
                 <Flex vertical gap="small">
                     <Button
                         loading={isLoadingChangePassword}

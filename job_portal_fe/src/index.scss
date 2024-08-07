@@ -149,7 +149,7 @@
                 @apply bg-transparent #{!important}
             }
 
-            @apply bg-transparent text-gray-65 #{!important}
+            @apply bg-[white] text-gray-65 #{!important}
         }
     }
 
@@ -158,7 +158,7 @@
     }
 
     .ant-table-cell-row-hover, .ant-table-column-sort {
-        @apply bg-transparent #{!important}
+        @apply bg-[white] #{!important}
     }
 }
 

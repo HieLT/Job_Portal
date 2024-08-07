@@ -12,7 +12,15 @@
             @apply w-[90%]
         }
 
+        .childrenWrap {
+            @apply mt-6
+        }
+
         @apply w-1/2 bg-[#766df4e6] text-white px-16 py-16 flex justify-center items-center
+    }
+
+    .themeWrap {
+        @apply w-1/2 m-auto p-8
     }
 
     .viewWrap {
@@ -38,4 +46,20 @@
     }
 
     @apply flex h-full
+}
+
+@media (max-width: 428px) {
+    .authLoginWrap {
+        .themeWrap {
+            @apply hidden
+        }
+
+        .formWrap {
+            .childrenWrap {
+                @apply mt-6
+            }
+
+            @apply w-full bg-[#766df4e6] text-white py-8 px-4 flex justify-center items-center
+        }
+    }
 }

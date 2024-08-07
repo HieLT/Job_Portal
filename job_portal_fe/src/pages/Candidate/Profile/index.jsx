@@ -47,7 +47,7 @@ export default function CandidateProfile() {
                                     : authUser.profile?.first_name + ' ' + authUser.profile?.last_name
                             }
                         </div>
-                        <div className={'flex justify-center items-center text-[#78829d] mt-2.5'}>
+                        <div className={styles.infoWrap}>
                             <div className={`${styles.info} mr-8`}>
                                 <PhoneOutlined className={'mr-1.5'}/>
                                 {
