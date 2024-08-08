@@ -171,7 +171,7 @@ export default function AppliedJobs() {
                                 }
                             </div>
 
-                            if (item.status === JOB_STATUS['CLOSED'] || moment(item.createdAt)?.isBefore(moment())) {
+                            if (item.status === JOB_STATUS['CLOSED'] || moment(job.expired_at)?.isBefore(moment())) {
                                 return <Badge.Ribbon text={'Đã đóng'} key={item._id} color={"red"}>
                                     {content}
                                 </Badge.Ribbon>
