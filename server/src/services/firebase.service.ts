@@ -1,4 +1,5 @@
 import bucket from "../config/firsebase";
+import isImage from "../helper/checkFile";
 
 interface IFile {
     originalname: string;
@@ -16,6 +17,12 @@ class FirebaseService {
     async uploadFile(file: IFile): Promise<string> {
         try {
             const { originalname, buffer, mimetype } = file;
+            if (mimetype !== 'image/png' && mimetype !== 'image/jpeg' && mimetype !== 'jpg') {
+                throw new Error('Invalid file type');
+            }
+            if (!isImage(buffer)) {
+                throw new Error('Invalid image');
+            }
             const fileName = `resumes/${originalname}`;
             const blob = bucket.file(fileName);
             const blobStream = blob.createWriteStream({
