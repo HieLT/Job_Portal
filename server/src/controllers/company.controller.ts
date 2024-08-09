@@ -53,10 +53,6 @@ class CompanyController {
             if (account) {
                 if (account.role === "Company" && account.company) {
                     const company = await companyService.getProfile(String(account.company));
-                    if (company && company.is_deleted) {
-                        res.status(401).send({message: 'Company has been deleted. Please log in again'});
-                        return;
-                    }
                     res.status(200).send(company);
                 }
                 else {

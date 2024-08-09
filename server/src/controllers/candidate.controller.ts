@@ -52,10 +52,6 @@ class CandidateController {
                 let candidate = null;
                 if (account.role === "Candidate" && account.candidate) {
                     candidate = await candidateService.getCandidateById(String(account.candidate));
-                    if (candidate && candidate.is_deleted) {
-                        res.status(401).send({message: 'This account has been deleted. Please log in again'});
-                        return;
-                    }
                 } 
                 else {
                     const {id_candidate} = req.query;
@@ -108,6 +104,10 @@ class CandidateController {
             const email = req.user;
             const account = await accountModel.findOne({email});
             if (account && account.role === "Candidate") {
+                if (await candidateService.checkCandidate(String(account.candidate))) {
+                    res.status(400).send({message: 'This account has been deleted. Please log in again'});
+                    return;
+                }
                 const id_candidate = String(account.candidate);
                 const {name_resume} = req.body;
                 if (!req.file) {
@@ -115,10 +115,6 @@ class CandidateController {
                 }
                 else {
                     const profile = await candidateService.getCandidateById(String(account.candidate));
-                    if (profile && profile.is_deleted) {
-                        res.status(401).send({message: 'This account has been deleted. Please log in again'});
-                        return;
-                    }
                     const candidate = await candidateModel.findById(id_candidate).populate({
                         path: 'resume_path',
                         model: 'File'

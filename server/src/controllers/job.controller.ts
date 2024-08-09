@@ -5,6 +5,7 @@ import companyService from "../services/company.service";
 import applicationService from "../services/application.service";
 import categoryModel from "../models/category.model";
 import firebaseService from "../services/firebase.service";
+import candidateService from "../services/candidate.service";
 
 class JobController {
 
@@ -38,6 +39,10 @@ class JobController {
             const account = await accountModel.findOne({email});
             if (account) {
                 if (account.role === "Company" && account.company) {
+                    if (await companyService.checkCompany(String(account.company))) {
+                        res.status(400).send({message: 'Company has been blocked'});
+                        return;
+                    }
                     const job = req.body;
                     if (new Date(job.expired_at).getTime() <= Date.now()) {
                         res.status(400).send({message: "Expired date must be greater than current date"});
@@ -115,6 +120,10 @@ class JobController {
             const account = await accountModel.findOne({email});
             if (account) {
                 if (account.role === 'Company') {
+                    if (await companyService.checkCompany(String(account.company))) {
+                        res.status(400).send({message: 'Company has been blocked'});
+                        return;
+                    }
                     const jobs = await jobService.getJobByCompany(String(account.company));
                     res.status(200).send(jobs);
                 }
@@ -164,6 +173,10 @@ class JobController {
             const account = await accountModel.findOne({email});
             if (account) {
                 if (account.role === "Candidate" && account.candidate) {
+                    if (await candidateService.checkCandidate(String(account.candidate))) {
+                        res.status(400).send({message: 'Candidate has been blocked'});
+                        return;
+                    }
                     const applications = await applicationService.getApplicationOfCandidate(String(account.candidate));
                     res.status(200).send(applications);
                 }
@@ -186,6 +199,10 @@ class JobController {
             const account = await accountModel.findOne({email});
             if (account) {
                 if (account.role === 'Candidate') {
+                    if (await candidateService.checkCandidate(String(account.candidate))) {
+                        res.status(400).send({message: 'Candidate has been blocked'});
+                        return;
+                    }
                     const {job_id, candidate_id, cover_letter, resume_path} = req.body;
                     let resume_url = '';
                     if (req.file) {
@@ -235,6 +252,10 @@ class JobController {
             if (account) {
                 const {id_job} = req.query;
                 if (account.role === 'Company' && await jobService.checkJob(String(id_job), String(account.company))) {
+                    if (await companyService.checkCompany(String(account.company))) {
+                        res.status(400).send({message: 'Company has been blocked'});
+                        return;
+                    }
                     const candidateApplied = await applicationService.getAppliedOfJob(String(id_job));
                     if (candidateApplied) {
                         res.status(200).send(candidateApplied);
@@ -263,6 +284,10 @@ class JobController {
             if (account) {
                 const { id_job, dataUpdate } = req.body;
                 if (account.role === "Company" && account.company && await jobService.checkJob(id_job, String(account.company))) {
+                    if (await companyService.checkCompany(String(account.company))) {
+                        res.status(400).send({message: 'Company has been blocked'});
+                        return;
+                    }
                     if (dataUpdate.expired_at) {
                         if (new Date(dataUpdate.expired_at).getTime() <= Date.now()) {
                             res.status(400).send({ message: "Expired date must be greater than current date" });
@@ -295,6 +320,10 @@ class JobController {
             if (account) {
                 const { id_job, status} = req.body;
                 if (account.role === "Company" && account.company && await jobService.checkJob(id_job, String(account.company))) {
+                    if (await companyService.checkCompany(String(account.company))) {
+                        res.status(400).send({message: 'Company has been blocked'});
+                        return;
+                    }
                     const updatedJob = await jobService.updateStatusJob(id_job, status);
                     res.status(200).send(updatedJob);
                 } else {
@@ -315,6 +344,10 @@ class JobController {
             if (account) {
                 const {id_job} = req.body;
                 if (account.role === "Company" && account.company && await jobService.checkJob(id_job, String(account.company))) {
+                    if (await companyService.checkCompany(String(account.company))) {
+                        res.status(400).send({message: 'Company has been blocked'});
+                        return;
+                    }
                     const answer = await jobService.deleteJob(id_job);
                     res.status(200).send(answer);
                 }
@@ -338,6 +371,10 @@ class JobController {
             if (account) {
                 const {id_job} = req.body;
                 if (account.role === "Company" && account.company && await jobService.checkJob(id_job, String(account.company))) {
+                    if (await companyService.checkCompany(String(account.company))) {
+                        res.status(400).send({message: 'Company has been blocked'});
+                        return;
+                    }
                     const answer = await jobService.restoreJob(id_job);
                     res.status(200).send(answer);
                 }

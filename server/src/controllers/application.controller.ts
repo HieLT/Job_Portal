@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import applicationService from "../services/application.service";
 import accountModel from "../models/account.model";
 import jobService from "../services/job.service";
+import companyService from "../services/company.service";
 
 class ApplicationController {
 
@@ -12,6 +13,10 @@ class ApplicationController {
             if (account) {
                 const {id_application, id_job} = req.body;
                 if (account.company && account.role === "Company" && await jobService.checkJob(id_job, String(account.company))) {
+                    if (await companyService.checkCompany(String(account.company))) {
+                        res.status(400).send({message: 'Company has been blocked'});
+                        return;
+                    }
                     const seen_at = new Date();
                     const application = await applicationService.updateSeen(String(id_application), id_job, seen_at);
                     res.status(200).send(application);
@@ -36,6 +41,10 @@ class ApplicationController {
             if (account) {
                 const {id_application, id_job} = req.body;
                 if (account.company && account.role === "Company" && await jobService.checkJob(id_job, String(account.company))) {
+                    if (await companyService.checkCompany(String(account.company))) {
+                        res.status(400).send({message: 'Company has been blocked'});
+                        return;
+                    }
                     const downloaded_at = new Date();
                     const application = await applicationService.updateDownloaded(String(id_application),id_job, downloaded_at);
                     res.status(200).send(application);

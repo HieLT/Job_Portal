@@ -33,6 +33,15 @@ class CandidateService {
         }
     }
 
+    async checkCandidate(id: string) : Promise<boolean> {
+        try {
+            const candidate = await candidateModel.findById(id).exec();
+            return candidate?.is_deleted ? false : true;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async updateCandidate(id: string, candidate: Partial<ICandidate>) : Promise<ICandidate | null> {
         try {
             const updatedCandidate = candidateModel.findByIdAndUpdate(id, candidate, {new: true}).exec();

@@ -32,6 +32,16 @@ class CompanyService {
         }
     }
 
+    async checkCompany(id: string) : Promise<boolean> {
+        try {
+            const company = await companyModel.findById(id).exec();
+            return company?.is_deleted ? false : true;
+        }
+        catch(error) {
+            throw error;
+        }
+    }
+
     async updateProfile(id: string, company: Partial<ICompany>) : Promise<ICompany | null> {
         try {
             const updatedCompany = await companyModel.findByIdAndUpdate(id, company, {new: true}).exec();
